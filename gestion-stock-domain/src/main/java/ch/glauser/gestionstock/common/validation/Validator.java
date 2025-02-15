@@ -121,7 +121,8 @@ public final class Validator {
      * @param notEmptyField Champ à valider
      */
     private void validateNotEmpty(Object object, Field notEmptyField) {
-        if (isNotType(notEmptyField, Collection.class) && isNotType(notEmptyField, String.class)) {
+        if (isNotType(notEmptyField, Collection.class) &&
+            isNotType(notEmptyField, String.class)) {
             throw new TechnicalException("L'annotation @NotEmpty ne peut pas être utilisé sur un champ de type : " + notEmptyField.getType() + ", " + notEmptyField);
         }
 
