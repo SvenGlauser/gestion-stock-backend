@@ -28,7 +28,7 @@ public interface FournisseurService {
      * Crée un fournisseur
      *
      * @param fournisseur Fournisseur à créer
-     * @return Le fournisseur créée
+     * @return Le fournisseur créé
      */
     Fournisseur createFournisseur(Fournisseur fournisseur);
 

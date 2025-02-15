@@ -14,6 +14,6 @@ public class Filter {
 
     public enum Order {
         ASC,
-        DESC;
+        DESC
     }
 }

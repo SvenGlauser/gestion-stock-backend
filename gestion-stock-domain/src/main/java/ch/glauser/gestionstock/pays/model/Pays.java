@@ -15,7 +15,7 @@ public class Pays extends Model {
     @NotEmpty
     private String nom;
     @NotEmpty
-    private String abbreviation;
+    private String abreviation;
 
     @Override
     public Validator validateChild() {

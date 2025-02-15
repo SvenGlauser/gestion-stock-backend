@@ -17,7 +17,7 @@ public interface PaysService {
     Pays getPays(Long id);
 
     /**
-     * Récupère les payss
+     * Récupère les pays
      *
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pays paginée
@@ -28,7 +28,7 @@ public interface PaysService {
      * Crée un pays
      *
      * @param pays Pays à créer
-     * @return Le pays créée
+     * @return Le pays créé
      */
     Pays createPays(Pays pays);
 

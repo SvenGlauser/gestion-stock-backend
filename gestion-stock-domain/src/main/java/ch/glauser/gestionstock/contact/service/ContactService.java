@@ -28,7 +28,7 @@ public interface ContactService {
      * Crée un contact
      *
      * @param contact Contact à créer
-     * @return Le contact créée
+     * @return Le contact créé
      */
     Contact createContact(Contact contact);
 

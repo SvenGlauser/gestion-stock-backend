@@ -17,7 +17,7 @@ public interface PaysRepository {
     Pays getPays(Long id);
 
     /**
-     * Récupère les payss
+     * Récupère les pays
      *
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pays paginée
