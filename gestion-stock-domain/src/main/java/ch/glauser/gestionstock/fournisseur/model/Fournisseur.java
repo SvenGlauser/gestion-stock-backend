@@ -4,6 +4,7 @@ import ch.glauser.gestionstock.adresse.model.Adresse;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.validation.CascadeValidation;
 import ch.glauser.gestionstock.common.validation.NotEmpty;
+import ch.glauser.gestionstock.common.validation.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,4 +22,9 @@ public class Fournisseur extends Model {
 
     @CascadeValidation
     private Adresse adresse;
+
+    @Override
+    public void validate() {
+        Validator.validate(this, Fournisseur.class);
+    }
 }

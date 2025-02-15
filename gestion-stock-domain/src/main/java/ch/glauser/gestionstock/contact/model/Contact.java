@@ -5,11 +5,9 @@ import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.validation.CascadeValidation;
 import ch.glauser.gestionstock.common.validation.NotEmpty;
 import ch.glauser.gestionstock.common.validation.NotNull;
-import ch.glauser.gestionstock.machine.model.Machine;
+import ch.glauser.gestionstock.common.validation.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.List;
 
 /**
  * Model représentant un contact
@@ -30,7 +28,10 @@ public class Contact extends Model {
     @CascadeValidation
     private Adresse adresse;
 
-    private List<Machine> machines;
-
     private String remarques;
+
+    @Override
+    public void validate() {
+        Validator.validate(this, Contact.class);
+    }
 }

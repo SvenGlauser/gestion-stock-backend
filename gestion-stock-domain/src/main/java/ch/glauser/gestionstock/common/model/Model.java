@@ -8,4 +8,9 @@ import lombok.Data;
 @Data
 public abstract class Model {
     private Long id;
+
+    /**
+     * Appelle une méthode de validation
+     */
+    public abstract void validate();
 }

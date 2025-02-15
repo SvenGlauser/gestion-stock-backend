@@ -1,23 +1,23 @@
 package ch.glauser.gestionstock.common.validation;
 
+import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ValidatorTest {
 
     @Test
     void validateWithoutClass() {
-        testValidation(new Object(), null, 1);
+        TestUtils.testValidation(new Object(), null, 1);
     }
 
     @Test
     void validateWithoutObject() {
-        testValidation(null, Object.class, 1);
+        TestUtils.testValidation(null, Object.class, 1);
     }
 
     @Test
@@ -26,7 +26,7 @@ class ValidatorTest {
         test.init();
         test.notNull = null;
 
-        testValidation(test, ValidationClassTest.class, 1);
+        TestUtils.testValidation(test, ValidationClassTest.class, 1);
     }
 
     @Test
@@ -35,7 +35,7 @@ class ValidatorTest {
         test.init();
         test.notEmptyString = "";
 
-        testValidation(test, ValidationClassTest.class, 1);
+        TestUtils.testValidation(test, ValidationClassTest.class, 1);
     }
 
     @Test
@@ -44,7 +44,7 @@ class ValidatorTest {
         test.init();
         test.notEmptyCollection = List.of();
 
-        testValidation(test, ValidationClassTest.class, 1);
+        TestUtils.testValidation(test, ValidationClassTest.class, 1);
     }
 
     @Test
@@ -54,7 +54,7 @@ class ValidatorTest {
         test.notEmptyString = null;
         test.notEmptyCollection = null;
 
-        testValidation(test, ValidationClassTest.class, 2);
+        TestUtils.testValidation(test, ValidationClassTest.class, 2);
     }
 
     @Test
@@ -63,7 +63,7 @@ class ValidatorTest {
         test.init();
         test.minValue = 0;
 
-        testValidation(test, ValidationClassTest.class, 1);
+        TestUtils.testValidation(test, ValidationClassTest.class, 1);
     }
 
     @Test
@@ -72,7 +72,7 @@ class ValidatorTest {
         test.init();
         test.maxValue = 101;
 
-        testValidation(test, ValidationClassTest.class, 1);
+        TestUtils.testValidation(test, ValidationClassTest.class, 1);
     }
 
     @Test
@@ -84,7 +84,7 @@ class ValidatorTest {
         test.init();
         test.cascadeValidation = testEnfant;
 
-        testValidation(test, ValidationClassTest.class, 1);
+        TestUtils.testValidation(test, ValidationClassTest.class, 1);
     }
 
     @Test
@@ -93,7 +93,7 @@ class ValidatorTest {
         ValidationClassTest test = new ValidationClassTest();
         test.cascadeValidation = testEnfant;
 
-        testValidation(test, ValidationClassTest.class, 10);
+        TestUtils.testValidation(test, ValidationClassTest.class, 10);
     }
 
     @Test
@@ -105,18 +105,7 @@ class ValidatorTest {
         assertDoesNotThrow(() -> Validator.validate(test, ValidationClassTest.class));
     }
 
-    private static <T> void testValidation(T object, Class<T> classe, int errors) {
-        assertThatThrownBy(() -> Validator.validate(object, classe))
-                .isInstanceOf(ValidationException.class)
-                .extracting("errors")
-                .isNotNull()
-                .matches(list -> {
-                    if (list instanceof Collection<?> collection) {
-                        return collection.size() == errors;
-                    }
-                    return false;
-                });
-    }
+
 
     static class ValidationClassTest {
 

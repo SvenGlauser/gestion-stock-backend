@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.categorie.model;
 
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.validation.NotEmpty;
+import ch.glauser.gestionstock.common.validation.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,4 +16,9 @@ public class Categorie extends Model {
     private String nom;
     private String description;
     private boolean actif;
+
+    @Override
+    public void validate() {
+        Validator.validate(this, Categorie.class);
+    }
 }
