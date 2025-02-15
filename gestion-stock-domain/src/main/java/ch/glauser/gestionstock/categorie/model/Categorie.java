@@ -18,7 +18,7 @@ public class Categorie extends Model {
     private boolean actif;
 
     @Override
-    public void validate() {
-        Validator.validate(this, Categorie.class);
+    public Validator validateChild() {
+        return Validator.validate(this, Categorie.class);
     }
 }

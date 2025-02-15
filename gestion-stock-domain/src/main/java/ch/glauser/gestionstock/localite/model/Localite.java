@@ -22,7 +22,7 @@ public class Localite extends Model {
     private Pays pays;
 
     @Override
-    public void validate() {
-        Validator.validate(this, Localite.class);
+    public Validator validateChild() {
+        return Validator.validate(this, Localite.class);
     }
 }

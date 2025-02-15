@@ -21,7 +21,18 @@ public class TestUtils {
      * @param <T> Type de l'objet à valider
      */
     public static <T> void testValidation(T object, Class<T> classe, int errors) {
-        assertThatThrownBy(() -> Validator.validate(object, classe))
+        testValidation(errors, () -> Validator.validate(object, classe).execute());
+    }
+
+    /**
+     * Test une validation
+     *
+     * @param errors Nombre d'erreurs attendues
+     * @param runnable Fonction à tester
+     * @param <T> Type de l'objet à valider
+     */
+    public static <T> void testValidation(int errors, Runnable runnable) {
+        assertThatThrownBy(runnable::run)
                 .isInstanceOf(ValidationException.class)
                 .extracting("errors")
                 .isNotNull()

@@ -27,7 +27,7 @@ public class Machine extends Model {
     private List<Piece> pieces;
 
     @Override
-    public void validate() {
-        Validator.validate(this, Machine.class);
+    public Validator validateChild() {
+        return Validator.validate(this, Machine.class);
     }
 }

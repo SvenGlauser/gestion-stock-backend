@@ -35,7 +35,7 @@ public class Piece extends Model {
     private Double prix;
 
     @Override
-    public void validate() {
-        Validator.validate(this, Piece.class);
+    public Validator validateChild() {
+        return Validator.validate(this, Piece.class);
     }
 }

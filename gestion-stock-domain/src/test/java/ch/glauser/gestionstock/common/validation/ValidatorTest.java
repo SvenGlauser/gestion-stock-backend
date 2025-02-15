@@ -6,9 +6,31 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ValidatorTest {
+
+    @Test
+    void validateNotNullWithNullValues() {
+        Validator validator = Validator.of(Object.class)
+                 .validateNotNull(new Object(), "test1")
+                 .validateNotNull(null, "test2")
+                 .validateNotNull(null, "test3")
+                 .validateNotNull(new Object(), "test4")
+                 .validateNotNull(null, "test5");
+
+        TestUtils.testValidation(3, validator::execute);
+    }
+
+    @Test
+    void validateNotNullWithoutNullValues() {
+        Validator validator = Validator.of(Object.class)
+                .validateNotNull(new Object(), "test1")
+                .validateNotNull(new Object(), "test2");
+
+        assertDoesNotThrow(validator::execute);
+    }
 
     @Test
     void validateWithoutClass() {
@@ -105,7 +127,47 @@ class ValidatorTest {
         assertDoesNotThrow(() -> Validator.validate(test, ValidationClassTest.class));
     }
 
+    @Test
+    void validateMinValueAnnotationType() {
+        ValidationClassNotNumberMinValueTest test = new ValidationClassNotNumberMinValueTest();
+        test.minValue = new Object();
 
+        assertThatThrownBy(() -> Validator.validate(test, ValidationClassNotNumberMinValueTest.class))
+                .isInstanceOf(TechnicalException.class);
+    }
+
+    @Test
+    void validateMaxValueAnnotationType() {
+        ValidationClassNotNumberMaxValueTest test = new ValidationClassNotNumberMaxValueTest();
+        test.minValue = new Object();
+
+        assertThatThrownBy(() -> Validator.validate(test, ValidationClassNotNumberMaxValueTest.class))
+                .isInstanceOf(TechnicalException.class);
+    }
+
+    @Test
+    void validateNotEmptyValueAnnotationType() {
+        ValidationClassNotStringOrCollectionTest test = new ValidationClassNotStringOrCollectionTest();
+        test.minValue = new Object();
+
+        assertThatThrownBy(() -> Validator.validate(test, ValidationClassNotStringOrCollectionTest.class))
+                .isInstanceOf(TechnicalException.class);
+    }
+
+    static class ValidationClassNotNumberMinValueTest {
+        @MinValue(0)
+        Object minValue;
+    }
+
+    static class ValidationClassNotNumberMaxValueTest {
+        @MaxValue(0)
+        Object minValue;
+    }
+
+    static class ValidationClassNotStringOrCollectionTest {
+        @NotEmpty
+        Object minValue;
+    }
 
     static class ValidationClassTest {
 

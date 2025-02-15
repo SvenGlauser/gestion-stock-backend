@@ -31,7 +31,7 @@ public class Contact extends Model {
     private String remarques;
 
     @Override
-    public void validate() {
-        Validator.validate(this, Contact.class);
+    public Validator validateChild() {
+        return Validator.validate(this, Contact.class);
     }
 }

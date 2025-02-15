@@ -18,7 +18,7 @@ public class Pays extends Model {
     private String abbreviation;
 
     @Override
-    public void validate() {
-        Validator.validate(this, Pays.class);
+    public Validator validateChild() {
+        return Validator.validate(this, Pays.class);
     }
 }

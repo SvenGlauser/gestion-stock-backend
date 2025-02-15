@@ -24,7 +24,7 @@ public class Fournisseur extends Model {
     private Adresse adresse;
 
     @Override
-    public void validate() {
-        Validator.validate(this, Fournisseur.class);
+    public Validator validateChild() {
+        return Validator.validate(this, Fournisseur.class);
     }
 }
