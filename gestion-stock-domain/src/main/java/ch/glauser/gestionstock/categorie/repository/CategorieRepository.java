@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.categorie.repository;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
+import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 
 /**
@@ -13,13 +14,15 @@ public interface CategorieRepository {
      * @param id Id de la catégorie à récupérer
      * @return La catégorie ou null
      */
-    Categorie getCategorie(int id);
+    Categorie getCategorie(Long id);
 
     /**
      * Récupère les catégories
+     *
+     * @param searchRequest Paramètres de recherche
      * @return Une liste de catégorie paginée
      */
-    SearchResult<Categorie> searchCategorie();
+    SearchResult<Categorie> searchCategorie(SearchRequest searchRequest);
 
     /**
      * Crée une catégorie
@@ -42,5 +45,5 @@ public interface CategorieRepository {
      *
      * @param id Id de la catégorie à supprimer
      */
-    void deleteCategorie(int id);
+    void deleteCategorie(Long id);
 }

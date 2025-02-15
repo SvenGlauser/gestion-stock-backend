@@ -22,6 +22,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>ch.glauser</groupId>
+            <artifactId>gestion-stock-persistence</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.glauser</groupId>
+            <artifactId>gestion-stock-domain</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

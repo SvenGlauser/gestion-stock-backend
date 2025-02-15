@@ -33,6 +33,24 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>gestion-stock-domain</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>gestion-stock-persistence</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>gestion-stock-application</artifactId>
+                <version>${version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>

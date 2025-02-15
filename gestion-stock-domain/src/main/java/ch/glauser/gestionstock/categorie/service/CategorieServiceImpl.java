@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.categorie.service;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.categorie.repository.CategorieRepository;
+import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.Validator;
 
@@ -17,13 +18,13 @@ public class CategorieServiceImpl implements CategorieService {
     }
 
     @Override
-    public Categorie getCategorie(int id) {
+    public Categorie getCategorie(Long id) {
         return this.categorieRepository.getCategorie(id);
     }
 
     @Override
-    public SearchResult<Categorie> searchCategorie() {
-        return this.categorieRepository.searchCategorie();
+    public SearchResult<Categorie> searchCategorie(SearchRequest searchRequest) {
+        return this.categorieRepository.searchCategorie(searchRequest);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class CategorieServiceImpl implements CategorieService {
     }
 
     @Override
-    public void deleteCategorie(int id) {
+    public void deleteCategorie(Long id) {
         Validator.of(CategorieServiceImpl.class)
                 .validateNotNull(id, "id")
                 .execute();
