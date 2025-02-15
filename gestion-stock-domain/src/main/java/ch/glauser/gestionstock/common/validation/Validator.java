@@ -128,12 +128,15 @@ public final class Validator {
 
         Object value = getValue(object, notEmptyField);
 
-        if (value instanceof String string) {
-            this.validateNotEmpty(string, notEmptyField.getName());
-        } else if (value instanceof Collection<?> collection) {
-            this.validateNotEmpty(collection, notEmptyField.getName());
-        } else {
-            this.validateNotNull(value, notEmptyField.getName());
+        if (Objects.isNull(value)) {
+            this.validateNotNull(null, notEmptyField.getName());
+            return;
+        }
+
+        switch (value) {
+            case String string -> this.validateNotEmpty(string, notEmptyField.getName());
+            case Collection<?> collection -> this.validateNotEmpty(collection, notEmptyField.getName());
+            default -> this.validateNotNull(null, notEmptyField.getName());
         }
     }
 
