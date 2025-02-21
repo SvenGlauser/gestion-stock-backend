@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.categorie.model;
 
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.NotEmpty;
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

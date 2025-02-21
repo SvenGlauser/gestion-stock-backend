@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.categorie.controller;
+package ch.glauser.gestionstock.pays.controller;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.categorie.service.CategorieService;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "/categorie", produces="application/json")
 @RequiredArgsConstructor
-public class CategorieController {
+public class PaysController {
 
     private final CategorieService categorieService;
 

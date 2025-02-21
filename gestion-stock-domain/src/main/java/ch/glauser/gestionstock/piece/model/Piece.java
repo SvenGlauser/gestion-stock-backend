@@ -2,10 +2,10 @@ package ch.glauser.gestionstock.piece.model;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.MinValue;
-import ch.glauser.gestionstock.common.validation.NotEmpty;
-import ch.glauser.gestionstock.common.validation.NotNull;
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.minvalue.MinValue;
+import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
+import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

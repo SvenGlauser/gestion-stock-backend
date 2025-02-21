@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.contact.service;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.contact.model.Contact;
 import ch.glauser.gestionstock.contact.repository.ContactRepository;
 import lombok.RequiredArgsConstructor;

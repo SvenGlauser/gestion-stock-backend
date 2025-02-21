@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.common.model;
 
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
 import lombok.Data;
 
 /**

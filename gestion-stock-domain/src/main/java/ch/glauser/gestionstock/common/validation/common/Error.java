@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.common.validation;
+package ch.glauser.gestionstock.common.validation.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

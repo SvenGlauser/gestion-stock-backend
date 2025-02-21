@@ -1,5 +1,6 @@
-package ch.glauser.gestionstock.common.validation;
+package ch.glauser.gestionstock.common.validation.exception;
 
+import ch.glauser.gestionstock.common.validation.common.Error;
 import lombok.Getter;
 
 import java.util.List;

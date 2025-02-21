@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.machine.service;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import lombok.RequiredArgsConstructor;

@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.categorie.repository.CategorieRepository;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
 import lombok.RequiredArgsConstructor;
 
 /**

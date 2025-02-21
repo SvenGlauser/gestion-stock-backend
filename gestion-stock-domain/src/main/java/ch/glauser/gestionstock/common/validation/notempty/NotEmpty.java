@@ -1,4 +1,6 @@
-package ch.glauser.gestionstock.common.validation;
+package ch.glauser.gestionstock.common.validation.notempty;
+
+import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

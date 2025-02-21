@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.common.validation;
+package ch.glauser.gestionstock.common.validation.cascade;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

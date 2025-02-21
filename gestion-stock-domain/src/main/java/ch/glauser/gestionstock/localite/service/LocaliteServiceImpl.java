@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.localite.service;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import lombok.RequiredArgsConstructor;
