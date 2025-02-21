@@ -1,10 +1,11 @@
 package ch.glauser.gestionstock.categorie.controller;
 
-import ch.glauser.gestionstock.categorie.model.Categorie;
-import ch.glauser.gestionstock.categorie.service.CategorieService;
+import ch.glauser.gestionstock.categorie.dto.CategorieDto;
+import ch.glauser.gestionstock.categorie.service.CategorieApplicationService;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,30 +13,32 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CategorieController {
 
-    private final CategorieService categorieService;
+    private final CategorieApplicationService categorieApplicationService;
 
     @GetMapping(path = "/{id}")
-    public Categorie get(@PathVariable(name = "id") Long id) {
-        return this.categorieService.getCategorie(id);
+    public ResponseEntity<CategorieDto> get(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(this.categorieApplicationService.getCategorie(id));
     }
 
     @PostMapping
-    public Categorie create(@RequestBody Categorie categorie) {
-        return this.categorieService.createCategorie(categorie);
+    public ResponseEntity<CategorieDto> create(@RequestBody CategorieDto categorie) {
+        return ResponseEntity.ok(this.categorieApplicationService.createCategorie(categorie));
     }
 
     @PostMapping(path = "/search")
-    public SearchResult<Categorie> search(@RequestBody SearchRequest searchRequest) {
-        return this.categorieService.searchCategorie(searchRequest);
+    public ResponseEntity<SearchResult<CategorieDto>> search(@RequestBody SearchRequest searchRequest) {
+        return ResponseEntity.ok(this.categorieApplicationService.searchCategorie(searchRequest));
     }
 
     @PutMapping
-    public Categorie modify(@RequestBody Categorie categorie) {
-        return this.categorieService.modifyCategorie(categorie);
+    public ResponseEntity<CategorieDto> modify(@RequestBody CategorieDto categorie) {
+        return ResponseEntity.ok(this.categorieApplicationService.modifyCategorie(categorie));
     }
 
     @DeleteMapping(path = "/{id}")
-    public void delete(@PathVariable(name = "id") Long id) {
-        this.categorieService.deleteCategorie(id);
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
+        this.categorieApplicationService.deleteCategorie(id);
+
+        return ResponseEntity.ok().build();
     }
 }

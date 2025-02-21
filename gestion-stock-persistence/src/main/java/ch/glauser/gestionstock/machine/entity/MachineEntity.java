@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class MachineEntity extends ModelEntity<Machine> {
         this.nom = machine.getNom();
         this.description = machine.getDescription();
         this.contact = Optional.ofNullable(machine.getContact()).map(ContactEntity::new).orElse(null);
-        this.pieces = CollectionUtils.emptyIfNull(machine.getPieces()).stream().map(PieceEntity::new).collect(Collectors.toList());
+        this.pieces = CollectionUtils.emptyIfNull(machine.getPieces()).stream().map(PieceEntity::new).collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class MachineEntity extends ModelEntity<Machine> {
         machine.setNom(this.nom);
         machine.setDescription(this.description);
         machine.setContact(Optional.ofNullable(this.contact).map(ModelEntity::toDomain).orElse(null));
-        machine.setPieces(CollectionUtils.emptyIfNull(this.pieces).stream().map(ModelEntity::toDomain).collect(Collectors.toList()));
+        machine.setPieces(CollectionUtils.emptyIfNull(this.pieces).stream().map(ModelEntity::toDomain).collect(Collectors.toCollection(LinkedList::new)));
         return machine;
     }
 }

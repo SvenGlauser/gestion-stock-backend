@@ -66,6 +66,8 @@ public class ContactServiceImpl implements ContactService {
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
+        // FIXME Validate no machine
+
         this.contactRepository.deleteContact(id);
     }
 }

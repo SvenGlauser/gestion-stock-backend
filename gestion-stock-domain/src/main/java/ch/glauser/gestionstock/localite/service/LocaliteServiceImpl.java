@@ -66,6 +66,8 @@ public class LocaliteServiceImpl implements LocaliteService {
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
+        // FIXME impossible if adresse
+
         this.localiteRepository.deleteLocalite(id);
     }
 }

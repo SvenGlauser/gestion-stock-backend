@@ -2,9 +2,10 @@ package ch.glauser.gestionstock.piece.controller;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.piece.model.Piece;
-import ch.glauser.gestionstock.piece.service.PieceService;
+import ch.glauser.gestionstock.piece.dto.PieceDto;
+import ch.glauser.gestionstock.piece.service.PieceApplicationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,30 +13,32 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PieceController {
 
-    private final PieceService pieceService;
+    private final PieceApplicationService pieceApplicationService;
 
     @GetMapping(path = "/{id}")
-    public Piece get(@PathVariable(name = "id") Long id) {
-        return this.pieceService.getPiece(id);
+    public ResponseEntity<PieceDto> get(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(this.pieceApplicationService.getPiece(id));
     }
 
     @PostMapping
-    public Piece create(@RequestBody Piece piece) {
-        return this.pieceService.createPiece(piece);
+    public ResponseEntity<PieceDto> create(@RequestBody PieceDto piece) {
+        return ResponseEntity.ok(this.pieceApplicationService.createPiece(piece));
     }
 
     @PostMapping(path = "/search")
-    public SearchResult<Piece> search(@RequestBody SearchRequest searchRequest) {
-        return this.pieceService.searchPiece(searchRequest);
+    public ResponseEntity<SearchResult<PieceDto>> search(@RequestBody SearchRequest searchRequest) {
+        return ResponseEntity.ok(this.pieceApplicationService.searchPiece(searchRequest));
     }
 
     @PutMapping
-    public Piece modify(@RequestBody Piece piece) {
-        return this.pieceService.modifyPiece(piece);
+    public ResponseEntity<PieceDto> modify(@RequestBody PieceDto piece) {
+        return ResponseEntity.ok(this.pieceApplicationService.modifyPiece(piece));
     }
 
     @DeleteMapping(path = "/{id}")
-    public void delete(@PathVariable(name = "id") Long id) {
-        this.pieceService.deletePiece(id);
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
+        this.pieceApplicationService.deletePiece(id);
+
+        return ResponseEntity.ok().build();
     }
 }

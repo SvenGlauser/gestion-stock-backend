@@ -66,6 +66,8 @@ public class PaysServiceImpl implements PaysService {
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
+        // FIXME Vérifier aucune localité liée
+
         this.paysRepository.deletePays(id);
     }
 }

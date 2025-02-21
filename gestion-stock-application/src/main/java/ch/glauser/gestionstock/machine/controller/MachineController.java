@@ -2,9 +2,10 @@ package ch.glauser.gestionstock.machine.controller;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.machine.model.Machine;
-import ch.glauser.gestionstock.machine.service.MachineService;
+import ch.glauser.gestionstock.machine.dto.MachineDto;
+import ch.glauser.gestionstock.machine.service.MachineApplicatifService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,30 +13,32 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MachineController {
 
-    private final MachineService machineService;
+    private final MachineApplicatifService machineApplicatifService;
 
     @GetMapping(path = "/{id}")
-    public Machine get(@PathVariable(name = "id") Long id) {
-        return this.machineService.getMachine(id);
+    public ResponseEntity<MachineDto> get(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(this.machineApplicatifService.getMachine(id));
     }
 
     @PostMapping
-    public Machine create(@RequestBody Machine machine) {
-        return this.machineService.createMachine(machine);
+    public ResponseEntity<MachineDto> create(@RequestBody MachineDto machine) {
+        return ResponseEntity.ok(this.machineApplicatifService.createMachine(machine));
     }
 
     @PostMapping(path = "/search")
-    public SearchResult<Machine> search(@RequestBody SearchRequest searchRequest) {
-        return this.machineService.searchMachine(searchRequest);
+    public ResponseEntity<SearchResult<MachineDto>> search(@RequestBody SearchRequest searchRequest) {
+        return ResponseEntity.ok(this.machineApplicatifService.searchMachine(searchRequest));
     }
 
     @PutMapping
-    public Machine modify(@RequestBody Machine machine) {
-        return this.machineService.modifyMachine(machine);
+    public ResponseEntity<MachineDto> modify(@RequestBody MachineDto machine) {
+        return ResponseEntity.ok(this.machineApplicatifService.modifyMachine(machine));
     }
 
     @DeleteMapping(path = "/{id}")
-    public void delete(@PathVariable(name = "id") Long id) {
-        this.machineService.deleteMachine(id);
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
+        this.machineApplicatifService.deleteMachine(id);
+
+        return ResponseEntity.ok().build();
     }
 }

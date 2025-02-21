@@ -66,6 +66,8 @@ public class FournisseurServiceImpl implements FournisseurService {
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
+        // FIXME delete impossible if piece
+
         this.fournisseurRepository.deleteFournisseur(id);
     }
 }

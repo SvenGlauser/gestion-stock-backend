@@ -65,6 +65,8 @@ public class CategorieServiceImpl implements CategorieService {
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
+        // FIXME Test deletion when in piece
+
         this.categorieRepository.deleteCategorie(id);
     }
 }

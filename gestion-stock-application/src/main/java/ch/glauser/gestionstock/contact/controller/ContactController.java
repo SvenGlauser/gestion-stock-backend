@@ -2,9 +2,10 @@ package ch.glauser.gestionstock.contact.controller;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.contact.model.Contact;
-import ch.glauser.gestionstock.contact.service.ContactService;
+import ch.glauser.gestionstock.contact.dto.ContactDto;
+import ch.glauser.gestionstock.contact.service.ContactApplicationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,30 +13,32 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ContactController {
 
-    private final ContactService contactService;
+    private final ContactApplicationService contactApplicationService;
 
     @GetMapping(path = "/{id}")
-    public Contact get(@PathVariable(name = "id") Long id) {
-        return this.contactService.getContact(id);
+    public ResponseEntity<ContactDto> get(@PathVariable(name = "id") Long id) {
+        return ResponseEntity.ok(this.contactApplicationService.getContact(id));
     }
 
     @PostMapping
-    public Contact create(@RequestBody Contact contact) {
-        return this.contactService.createContact(contact);
+    public ResponseEntity<ContactDto> create(@RequestBody ContactDto contact) {
+        return ResponseEntity.ok(this.contactApplicationService.createContact(contact));
     }
 
     @PostMapping(path = "/search")
-    public SearchResult<Contact> search(@RequestBody SearchRequest searchRequest) {
-        return this.contactService.searchContact(searchRequest);
+    public ResponseEntity<SearchResult<ContactDto>> search(@RequestBody SearchRequest searchRequest) {
+        return ResponseEntity.ok(this.contactApplicationService.searchContact(searchRequest));
     }
 
     @PutMapping
-    public Contact modify(@RequestBody Contact contact) {
-        return this.contactService.modifyContact(contact);
+    public ResponseEntity<ContactDto> modify(@RequestBody ContactDto contact) {
+        return ResponseEntity.ok(this.contactApplicationService.modifyContact(contact));
     }
 
     @DeleteMapping(path = "/{id}")
-    public void delete(@PathVariable(name = "id") Long id) {
-        this.contactService.deleteContact(id);
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
+        this.contactApplicationService.deleteContact(id);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GestionStock {
+public class GestionStockApplication {
     public static void main(String... args) {
-        SpringApplication.run(GestionStock.class, args);
+        SpringApplication.run(GestionStockApplication.class, args);
     }
 }

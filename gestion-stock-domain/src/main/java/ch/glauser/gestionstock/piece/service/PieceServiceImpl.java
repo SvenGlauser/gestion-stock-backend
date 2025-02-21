@@ -66,6 +66,8 @@ public class PieceServiceImpl implements PieceService {
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
+        // FIXME vérifier liaison machines
+
         this.pieceRepository.deletePiece(id);
     }
 }

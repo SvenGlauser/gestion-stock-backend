@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DomainBeansGenerator {
+public class ServiceBeansGenerator {
 
     @Bean
     public CategorieService categorieService(CategorieRepository categorieRepository) {
