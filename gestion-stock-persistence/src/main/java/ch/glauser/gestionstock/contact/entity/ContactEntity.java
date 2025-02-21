@@ -14,7 +14,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Contact")
 @Table(name = "CONTACT")
 public class ContactEntity extends ModelEntity<Contact> {
     @Enumerated(EnumType.STRING)

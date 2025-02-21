@@ -46,4 +46,9 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
     public void deleteFournisseur(Long id) {
         this.fournisseurJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existFournisseurWithIdLocalite(Long id) {
+        return this.fournisseurJpaRepository.existsByIdLocalite(id);
+    }
 }

@@ -46,4 +46,12 @@ public interface FournisseurRepository {
      * @param id Id du fournisseur à supprimer
      */
     void deleteFournisseur(Long id);
+
+    /**
+     * Vérifie s'il existe un fournisseur avec cette localité
+     *
+     * @param id Id de la localité
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existFournisseurWithIdLocalite(Long id);
 }

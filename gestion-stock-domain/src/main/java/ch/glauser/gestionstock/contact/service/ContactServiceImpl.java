@@ -16,6 +16,7 @@ public class ContactServiceImpl implements ContactService {
 
     public static final String FIELD_CONTACT = "contact";
     public static final String FIELD_ID = "id";
+    public static final String FIELD_ID_LOCALITE = "id";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
 
     private final ContactRepository contactRepository;
@@ -69,5 +70,14 @@ public class ContactServiceImpl implements ContactService {
         // FIXME Validate no machine
 
         this.contactRepository.deleteContact(id);
+    }
+
+    @Override
+    public boolean existContactWithIdLocalite(Long id) {
+        Validator.of(ContactServiceImpl.class)
+                .validateNotNull(id, FIELD_ID_LOCALITE)
+                .execute();
+
+        return this.contactRepository.existContactWithIdLocalite(id);
     }
 }

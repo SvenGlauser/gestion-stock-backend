@@ -16,6 +16,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 
     public static final String FIELD_FOURNISSEUR = "fournisseur";
     public static final String FIELD_ID = "id";
+    public static final String FIELD_ID_LOCALITE = "id";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
 
     private final FournisseurRepository fournisseurRepository;
@@ -69,5 +70,14 @@ public class FournisseurServiceImpl implements FournisseurService {
         // FIXME delete impossible if piece
 
         this.fournisseurRepository.deleteFournisseur(id);
+    }
+
+    @Override
+    public boolean existFournisseurWithIdLocalite(Long id) {
+        Validator.of(Fournisseur.class)
+                .validateNotNull(id, FIELD_ID_LOCALITE)
+                .execute();
+
+        return this.fournisseurRepository.existFournisseurWithIdLocalite(id);
     }
 }

@@ -46,4 +46,9 @@ public class ContactRepositoryImpl implements ContactRepository {
     public void deleteContact(Long id) {
         this.contactJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existContactWithIdLocalite(Long id) {
+        return this.contactJpaRepository.existsByIdLocalite(id);
+    }
 }

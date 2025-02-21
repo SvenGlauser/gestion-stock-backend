@@ -16,7 +16,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Fournisseur")
 @Table(name = "FOURNISSEUR")
 public class FournisseurEntity extends ModelEntity<Fournisseur> {
     @Column(name = "NOM", nullable = false)
