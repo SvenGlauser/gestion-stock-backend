@@ -55,7 +55,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
         Fournisseur newFournisseur = fournisseur.toDomain();
 
-        newFournisseur.validate();
+        newFournisseur.validateCreate();
 
         Fournisseur savedFournisseur = this.fournisseurService.createFournisseur(newFournisseur);
 

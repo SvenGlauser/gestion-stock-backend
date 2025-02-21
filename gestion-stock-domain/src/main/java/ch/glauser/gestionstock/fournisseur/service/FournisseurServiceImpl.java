@@ -53,7 +53,7 @@ public class FournisseurServiceImpl implements FournisseurService {
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
                 .execute();
 
-        fournisseur.validate();
+        fournisseur.validateCreate();
 
         return this.fournisseurRepository.createFournisseur(fournisseur);
     }

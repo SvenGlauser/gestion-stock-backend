@@ -53,7 +53,7 @@ public class PaysServiceImpl implements PaysService {
                 .validateNotNull(pays, FIELD_PAYS)
                 .execute();
 
-        pays.validate();
+        pays.validateCreate();
 
         return this.paysRepository.createPays(pays);
     }

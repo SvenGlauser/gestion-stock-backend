@@ -55,7 +55,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
         Machine newMachine = machine.toDomain();
 
-        newMachine.validate();
+        newMachine.validateCreate();
 
         Machine savedMachine = this.machineService.createMachine(newMachine);
 

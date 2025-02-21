@@ -56,7 +56,7 @@ public class LocaliteServiceImpl implements LocaliteService {
                 .validateNotNull(localite, FIELD_LOCALITE)
                 .execute();
 
-        localite.validate();
+        localite.validateCreate();
 
         return this.localiteRepository.createLocalite(localite);
     }

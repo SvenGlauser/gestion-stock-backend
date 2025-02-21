@@ -17,7 +17,21 @@ import java.util.Optional;
  */
 @Repository
 public interface CategorieJpaRepository extends JpaRepository<CategorieEntity, Long>, JpaSpecificationExecutor<CategorieEntity> {
+    /**
+     * Récupère une catégorie par id
+     *
+     * @param id Id de la catégorie
+     * @return Un {@link Optional} de {@link CategorieEntity}
+     */
     Optional<CategorieEntity> findOptionalById(Long id);
+
+    /**
+     * Vérifie s'il existe une catégorie avec ce nom
+     *
+     * @param nom Nom de la catégorie
+     * @return {@code true} s'il en existe une, sinon {@code false}
+     */
+    boolean existsByNom(String nom);
 
     default Page<CategorieEntity> search(Collection<Filter> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);

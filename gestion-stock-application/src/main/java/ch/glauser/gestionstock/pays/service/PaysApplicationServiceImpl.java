@@ -55,7 +55,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
         Pays newPays = pays.toDomain();
 
-        newPays.validate();
+        newPays.validateCreate();
 
         Pays savedPays = this.paysService.createPays(newPays);
 

@@ -12,10 +12,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Categorie")
 @Table(name = "CATEGORIE")
 public class CategorieEntity extends ModelEntity<Categorie> {
-    @Column(name = "NOM", nullable = false)
+    @Column(name = "NOM",
+            nullable = false,
+            unique = true)
     private String nom;
     @Column(name = "DESCRIPTION")
     private String description;

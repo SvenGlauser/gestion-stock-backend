@@ -59,6 +59,15 @@ class ValidatorTest {
     }
 
     @Test
+    void validateIsNull() {
+        Validator validator = Validator.of(ValidatorTest.class);
+
+        validator.validateIsNull(new Object(), "test");
+
+        TestUtils.testValidation(1, validator::execute);
+    }
+
+    @Test
     void validateNotEmptyString() {
         ValidationClassTest test = new ValidationClassTest();
         test.init();

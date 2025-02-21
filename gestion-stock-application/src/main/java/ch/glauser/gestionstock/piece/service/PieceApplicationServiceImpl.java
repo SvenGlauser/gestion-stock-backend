@@ -55,7 +55,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
         Piece newPiece = piece.toDomain();
 
-        newPiece.validate();
+        newPiece.validateCreate();
 
         Piece savedPiece = this.pieceService.createPiece(newPiece);
 

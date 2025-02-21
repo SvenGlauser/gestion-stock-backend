@@ -19,6 +19,6 @@ class PaysTest {
         pays.setNom("Suisse");
         pays.setAbreviation("CH");
 
-        assertDoesNotThrow(pays::validate);
+        assertDoesNotThrow(pays::validateCreate);
     }
 }

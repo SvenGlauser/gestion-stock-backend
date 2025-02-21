@@ -46,4 +46,12 @@ public interface CategorieRepository {
      * @param id Id de la catégorie à supprimer
      */
     void deleteCategorie(Long id);
+
+    /**
+     * Vérifie s'il existe une catégorie avec ce nom
+     *
+     * @param nom Nom de la catégorie
+     * @return {@code true} s'il en existe une, sinon {@code false}
+     */
+    boolean existCategorieByNom(String nom);
 }

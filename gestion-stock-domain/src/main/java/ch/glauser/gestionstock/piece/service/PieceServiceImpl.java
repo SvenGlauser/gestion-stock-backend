@@ -53,7 +53,7 @@ public class PieceServiceImpl implements PieceService {
                 .validateNotNull(piece, FIELD_PIECE)
                 .execute();
 
-        piece.validate();
+        piece.validateCreate();
 
         return this.pieceRepository.createPiece(piece);
     }

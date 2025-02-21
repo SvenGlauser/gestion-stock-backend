@@ -18,11 +18,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CategorieServiceImpl implements CategorieService {
 
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_CATEGORIE = "categorie";
-    public static final String FIELD_SEARCH_REQUEST = "searchRequest";
-    public static final String ERROR_SUPPRESSION_CATEGORIE_INEXISTANTE = "Impossible de supprimer cette catégorie car elle n'existe pas";
-    public static final String ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE = "Impossible de supprimer cette catégorie car il existe une pièce liée";
+    private static final String FIELD_ID = "id";
+    private static final String FIELD_CATEGORIE = "categorie";
+    private static final String FIELD_NOM = "nom";
+    private static final String FIELD_SEARCH_REQUEST = "searchRequest";
+    private static final String ERROR_SUPPRESSION_CATEGORIE_INEXISTANTE = "Impossible de supprimer cette catégorie car elle n'existe pas";
+    private static final String ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE = "Impossible de supprimer cette catégorie car il existe une pièce liée";
+    private static final String ERROR_CATEGORIE_NOM_UNIQUE = "Le nom de la catégorie doit être unique";
 
     private final CategorieRepository categorieRepository;
 
@@ -52,7 +54,13 @@ public class CategorieServiceImpl implements CategorieService {
                 .validateNotNull(categorie, FIELD_CATEGORIE)
                 .execute();
 
-        categorie.validate();
+        Validator validator = categorie.validateCreate();
+
+        if (this.categorieRepository.existCategorieByNom(categorie.getNom())) {
+            validator.addError(ERROR_CATEGORIE_NOM_UNIQUE, FIELD_NOM);
+        }
+
+        validator.execute();
 
         return this.categorieRepository.createCategorie(categorie);
     }
@@ -63,7 +71,20 @@ public class CategorieServiceImpl implements CategorieService {
                 .validateNotNull(categorie, FIELD_CATEGORIE)
                 .execute();
 
-        categorie.validateModify();
+        Categorie oldCategorie = this.categorieRepository.getCategorie(categorie.getId());
+
+        Validator validator = categorie.validateModify();
+
+        if (Objects.nonNull(oldCategorie) &&
+            !Objects.equals(oldCategorie.getNom(), categorie.getNom()) &&
+            this.categorieRepository.existCategorieByNom(categorie.getNom())) {
+
+            // Valide le cas dans lequel la catégorie a changé de nom
+            validator.addError(ERROR_CATEGORIE_NOM_UNIQUE, FIELD_NOM);
+        }
+
+
+        validator.execute();
 
         return this.categorieRepository.modifyCategorie(categorie);
     }

@@ -55,7 +55,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
         Localite newLocalite = localite.toDomain();
 
-        newLocalite.validate();
+        newLocalite.validateCreate();
 
         Localite savedCategorie = this.localiteService.createLocalite(newLocalite);
 

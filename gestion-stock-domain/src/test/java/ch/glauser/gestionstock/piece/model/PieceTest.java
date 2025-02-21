@@ -23,6 +23,6 @@ class PieceTest {
         piece.setQuantite(123L);
         piece.setCategorie(new Categorie());
 
-        assertDoesNotThrow(piece::validate);
+        assertDoesNotThrow(piece::validateCreate);
     }
 }

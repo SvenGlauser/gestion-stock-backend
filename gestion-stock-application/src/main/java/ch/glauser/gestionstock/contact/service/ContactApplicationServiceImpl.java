@@ -55,7 +55,7 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
 
         Contact newContact = contact.toDomain();
 
-        newContact.validate();
+        newContact.validateCreate();
 
         Contact savedCategorie = this.contactService.createContact(newContact);
 

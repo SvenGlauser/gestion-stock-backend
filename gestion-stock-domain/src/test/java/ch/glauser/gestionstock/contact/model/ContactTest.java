@@ -21,6 +21,6 @@ class ContactTest {
         contact.setNom("Test");
         contact.setPrenom("Test");
 
-        assertDoesNotThrow(contact::validate);
+        assertDoesNotThrow(contact::validateCreate);
     }
 }

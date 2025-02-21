@@ -50,7 +50,7 @@ public class MachineServiceImpl implements MachineService {
                 .validateNotNull(machine, FIELD_MACHINE)
                 .execute();
 
-        machine.validate();
+        machine.validateCreate();
 
         return this.machineRepository.createMachine(machine);
     }

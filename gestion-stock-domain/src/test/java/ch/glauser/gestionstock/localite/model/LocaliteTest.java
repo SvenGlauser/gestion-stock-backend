@@ -21,6 +21,6 @@ class LocaliteTest {
         localite.setNpa("Test");
         localite.setPays(new Pays());
 
-        assertDoesNotThrow(localite::validate);
+        assertDoesNotThrow(localite::validateCreate);
     }
 }

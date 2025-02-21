@@ -53,7 +53,7 @@ public class ContactServiceImpl implements ContactService {
                 .validateNotNull(contact, FIELD_CONTACT)
                 .execute();
 
-        contact.validate();
+        contact.validateCreate();
 
         return this.contactRepository.createContact(contact);
     }

@@ -54,7 +54,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
         Categorie newCategorie = categorie.toDomain();
 
-        newCategorie.validate();
+        newCategorie.validateCreate();
 
         Categorie savedCategorie = this.categorieService.createCategorie(newCategorie);
 
