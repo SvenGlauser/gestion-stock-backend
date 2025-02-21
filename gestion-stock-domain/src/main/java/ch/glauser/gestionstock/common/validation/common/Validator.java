@@ -122,7 +122,7 @@ public final class Validator {
     }
 
     /**
-     * Valide que le champ n'est pas une chaîne de caractères vide ou avec uniquement des espaces (blank)
+     * Valide que le champ n'est pas une chaîne de caractères vide ou avec uniquement des espaces (blank) ou une liste vide
      *
      * @param object Objet à valider
      * @param notEmptyField Champ à valider
@@ -163,7 +163,7 @@ public final class Validator {
     }
 
     /**
-     * Valide que le champ n'est pas une chaîne de caractères vide ou avec uniquement des espaces (blank)
+     * Valide que le champ n'est pas une liste vide
      *
      * @param object Objet à valider
      * @param field Champ à valider

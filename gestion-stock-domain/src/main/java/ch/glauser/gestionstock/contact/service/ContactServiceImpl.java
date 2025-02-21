@@ -3,10 +3,16 @@ package ch.glauser.gestionstock.contact.service;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.contact.model.Contact;
 import ch.glauser.gestionstock.contact.repository.ContactRepository;
+import ch.glauser.gestionstock.localite.model.Localite;
+import ch.glauser.gestionstock.localite.service.LocaliteServiceImpl;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Objects;
 
 /**
  * Implémentation du service de gestion des contacts
@@ -70,5 +76,33 @@ public class ContactServiceImpl implements ContactService {
         // FIXME Validate no machine
 
         this.contactRepository.deleteContact(id);
+    }
+
+    /**
+     * Valide que la localité existe
+     * @param id Id de la localité à supprimer
+     */
+    private void validateLocaliteExist(Long id) {
+        Localite localiteToDelete = this.getLocalite(id);
+
+        if (Objects.isNull(localiteToDelete)) {
+            throw new ValidationException(new ch.glauser.gestionstock.common.validation.common.Error(
+                    ERROR_SUPPRESSION_LOCALITE_INEXISTANTE,
+                    FIELD_LOCALITE,
+                    LocaliteServiceImpl.class));
+        }
+    }
+
+    /**
+     * Valide que la localité n'est pas utilisé par un contact
+     * @param id Id de la localité à supprimer
+     */
+    private void validatePasUtiliseParContact(Long id) {
+        if (this.contactRepository.existContactWithIdLocalite(id)) {
+            throw new ValidationException(new Error(
+                    ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_CONTACT,
+                    FIELD_LOCALITE,
+                    LocaliteServiceImpl.class));
+        }
     }
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Piece")
 @Table(name = "PIECE")
 public class PieceEntity extends ModelEntity<Piece> {
     @Column(name = "NUMERO_INVENTAIRE", nullable = false)

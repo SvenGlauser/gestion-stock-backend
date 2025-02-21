@@ -46,4 +46,12 @@ public interface PieceRepository {
      * @param id Id de la pièce à supprimer
      */
     void deletePiece(Long id);
+
+    /**
+     * Vérifie s'il existe une pièce avec cette catégorie
+     *
+     * @param id Id de la catégorie
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existPieceWithIdCategorie(Long id);
 }

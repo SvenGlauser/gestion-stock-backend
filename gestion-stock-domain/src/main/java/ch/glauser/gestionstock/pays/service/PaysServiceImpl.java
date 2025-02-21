@@ -7,7 +7,6 @@ import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
-import ch.glauser.gestionstock.localite.service.LocaliteServiceImpl;
 import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.gestionstock.pays.repository.PaysRepository;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +105,7 @@ public class PaysServiceImpl implements PaysService {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_PAYS_IMPOSSIBLE_EXISTE_LOCALITE,
                     FIELD_PAYS,
-                    LocaliteServiceImpl.class));
+                    PaysServiceImpl.class));
         }
     }
 }

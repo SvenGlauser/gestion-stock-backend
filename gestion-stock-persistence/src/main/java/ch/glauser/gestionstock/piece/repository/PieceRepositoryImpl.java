@@ -46,4 +46,9 @@ public class PieceRepositoryImpl implements PieceRepository {
     public void deletePiece(Long id) {
         this.pieceJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existPieceWithIdCategorie(Long id) {
+        return this.pieceJpaRepository.existsByIdCategorie(id);
+    }
 }
