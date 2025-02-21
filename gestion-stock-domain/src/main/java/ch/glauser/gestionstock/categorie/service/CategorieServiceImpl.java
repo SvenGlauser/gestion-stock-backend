@@ -22,7 +22,7 @@ public class CategorieServiceImpl implements CategorieService {
     public static final String FIELD_CATEGORIE = "categorie";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
     public static final String ERROR_SUPPRESSION_CATEGORIE_INEXISTANTE = "Impossible de supprimer cette catégorie car elle n'existe pas";
-    public static final String ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE = "Impossible de supprimer cette catégorie car il existe une pièce l'utilisant";
+    public static final String ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE = "Impossible de supprimer cette catégorie car il existe une pièce liée";
 
     private final CategorieRepository categorieRepository;
 

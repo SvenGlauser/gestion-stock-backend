@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Machine")
 @Table(name = "MACHINE")
 public class MachineEntity extends ModelEntity<Machine> {
     @Column(name = "NOM", nullable = false)

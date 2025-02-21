@@ -28,13 +28,15 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceBeansGenerator {
 
     @Bean
-    public CategorieService categorieService(CategorieRepository categorieRepository) {
-        return new CategorieServiceImpl(categorieRepository);
+    public CategorieService categorieService(CategorieRepository categorieRepository,
+                                             PieceRepository pieceRepository) {
+        return new CategorieServiceImpl(categorieRepository, pieceRepository);
     }
 
     @Bean
-    public ContactService contactService(ContactRepository contactRepository) {
-        return new ContactServiceImpl(contactRepository);
+    public ContactService contactService(ContactRepository contactRepository,
+                                         MachineRepository machineRepository) {
+        return new ContactServiceImpl(contactRepository, machineRepository);
     }
 
     @Bean

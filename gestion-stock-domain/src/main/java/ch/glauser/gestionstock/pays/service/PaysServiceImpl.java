@@ -23,7 +23,7 @@ public class PaysServiceImpl implements PaysService {
     public static final String FIELD_ID = "id";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
     public static final String ERROR_SUPPRESSION_PAYS_INEXISTANTE = "Impossible de supprimer ce pays car il n'existe pas";
-    public static final String ERROR_SUPPRESSION_PAYS_IMPOSSIBLE_EXISTE_LOCALITE = "Impossible de supprimer ce pays car il existe une localité l'utilisant";
+    public static final String ERROR_SUPPRESSION_PAYS_IMPOSSIBLE_EXISTE_LOCALITE = "Impossible de supprimer ce pays car il existe une localité liée";
 
     private final PaysRepository paysRepository;
 

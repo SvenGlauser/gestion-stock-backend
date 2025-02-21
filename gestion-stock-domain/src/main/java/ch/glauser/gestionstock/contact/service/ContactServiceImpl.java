@@ -8,8 +8,7 @@ import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.contact.model.Contact;
 import ch.glauser.gestionstock.contact.repository.ContactRepository;
-import ch.glauser.gestionstock.localite.model.Localite;
-import ch.glauser.gestionstock.localite.service.LocaliteServiceImpl;
+import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
@@ -22,10 +21,13 @@ public class ContactServiceImpl implements ContactService {
 
     public static final String FIELD_CONTACT = "contact";
     public static final String FIELD_ID = "id";
-    public static final String FIELD_ID_LOCALITE = "id";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
+    public static final String ERROR_SUPPRESSION_CONTACT_INEXISTANTE = "Impossible de supprimer ce contact car il n'existe pas";
+    public static final String ERROR_SUPPRESSION_CONTACT_IMPOSSIBLE_EXISTE_MACHINE = "Impossible de supprimer ce contact car il existe une machine liée";
 
     private final ContactRepository contactRepository;
+
+    private final MachineRepository machineRepository;
 
     @Override
     public Contact getContact(Long id) {
@@ -73,36 +75,37 @@ public class ContactServiceImpl implements ContactService {
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        // FIXME Validate no machine
+        this.validateContactExist(id);
+        this.validatePasUtiliseParMachine(id);
 
         this.contactRepository.deleteContact(id);
     }
 
     /**
-     * Valide que la localité existe
-     * @param id Id de la localité à supprimer
+     * Valide que le contact existe
+     * @param id Id du contact à supprimer
      */
-    private void validateLocaliteExist(Long id) {
-        Localite localiteToDelete = this.getLocalite(id);
+    private void validateContactExist(Long id) {
+        Contact contactToDelete = this.getContact(id);
 
-        if (Objects.isNull(localiteToDelete)) {
-            throw new ValidationException(new ch.glauser.gestionstock.common.validation.common.Error(
-                    ERROR_SUPPRESSION_LOCALITE_INEXISTANTE,
-                    FIELD_LOCALITE,
-                    LocaliteServiceImpl.class));
+        if (Objects.isNull(contactToDelete)) {
+            throw new ValidationException(new Error(
+                    ERROR_SUPPRESSION_CONTACT_INEXISTANTE,
+                    FIELD_CONTACT,
+                    ContactServiceImpl.class));
         }
     }
 
     /**
-     * Valide que la localité n'est pas utilisé par un contact
-     * @param id Id de la localité à supprimer
+     * Valide que le contact n'est pas utilisé par une machine
+     * @param id Id du contact à supprimer
      */
-    private void validatePasUtiliseParContact(Long id) {
-        if (this.contactRepository.existContactWithIdLocalite(id)) {
+    private void validatePasUtiliseParMachine(Long id) {
+        if (this.machineRepository.existMachineWithIdContact(id)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_CONTACT,
-                    FIELD_LOCALITE,
-                    LocaliteServiceImpl.class));
+                    ERROR_SUPPRESSION_CONTACT_IMPOSSIBLE_EXISTE_MACHINE,
+                    FIELD_CONTACT,
+                    ContactServiceImpl.class));
         }
     }
 }

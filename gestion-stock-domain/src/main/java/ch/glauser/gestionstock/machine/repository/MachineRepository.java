@@ -46,4 +46,12 @@ public interface MachineRepository {
      * @param id Id de la machine à supprimer
      */
     void deleteMachine(Long id);
+
+    /**
+     * Vérifie s'il existe une machine avec ce contact
+     *
+     * @param id Id du contact
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existMachineWithIdContact(Long id);
 }

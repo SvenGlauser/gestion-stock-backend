@@ -46,4 +46,9 @@ public class MachineRepositoryImpl implements MachineRepository {
     public void deleteMachine(Long id) {
         this.machineJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existMachineWithIdContact(Long id) {
+        return this.machineJpaRepository.existsByIdContact(id);
+    }
 }
