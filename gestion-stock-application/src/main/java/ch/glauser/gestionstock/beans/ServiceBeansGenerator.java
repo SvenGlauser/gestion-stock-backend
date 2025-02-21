@@ -43,8 +43,10 @@ public class ServiceBeansGenerator {
     }
 
     @Bean
-    public LocaliteService localiteService(LocaliteRepository localiteRepository) {
-        return new LocaliteServiceImpl(localiteRepository);
+    public LocaliteService localiteService(LocaliteRepository localiteRepository,
+                                           ContactService contactService,
+                                           FournisseurService fournisseurService) {
+        return new LocaliteServiceImpl(localiteRepository, contactService, fournisseurService);
     }
 
     @Bean
