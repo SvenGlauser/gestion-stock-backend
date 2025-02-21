@@ -54,4 +54,12 @@ public interface MachineRepository {
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
     boolean existMachineWithIdContact(Long id);
+
+    /**
+     * Vérifie s'il existe une machine avec cette pièce
+     *
+     * @param id Id de la pièce
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existMachineWithIdPiece(Long id);
 }

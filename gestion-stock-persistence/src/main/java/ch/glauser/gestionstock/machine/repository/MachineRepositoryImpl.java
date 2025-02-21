@@ -51,4 +51,9 @@ public class MachineRepositoryImpl implements MachineRepository {
     public boolean existMachineWithIdContact(Long id) {
         return this.machineJpaRepository.existsByIdContact(id);
     }
+
+    @Override
+    public boolean existMachineWithIdPiece(Long id) {
+        return this.machineJpaRepository.existsByIdPiece(id);
+    }
 }

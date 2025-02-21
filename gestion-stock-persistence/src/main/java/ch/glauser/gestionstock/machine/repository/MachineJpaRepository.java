@@ -36,6 +36,15 @@ public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>
     @Query("SELECT COUNT(machine) > 0 FROM Machine machine WHERE machine.contact.id = :id")
     boolean existsByIdContact(@Param("id") Long id);
 
+    /**
+     * Vérifie s'il existe une machine avec cette pièce
+     *
+     * @param id Id de la pièce
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    @Query("SELECT COUNT(machine) > 0 FROM Machine machine JOIN machine.pieces piece WHERE piece.id = :id")
+    boolean existsByIdPiece(@Param("id") Long id);
+
     default Page<MachineEntity> search(Collection<Filter> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }

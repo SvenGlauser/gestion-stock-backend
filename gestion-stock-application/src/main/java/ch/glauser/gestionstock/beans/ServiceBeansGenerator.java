@@ -63,7 +63,8 @@ public class ServiceBeansGenerator {
     }
 
     @Bean
-    public PieceService pieceService(PieceRepository pieceRepository) {
-        return new PieceServiceImpl(pieceRepository);
+    public PieceService pieceService(PieceRepository pieceRepository,
+                                     MachineRepository machineRepository) {
+        return new PieceServiceImpl(pieceRepository, machineRepository);
     }
 }
