@@ -89,7 +89,7 @@ public class PieceServiceImpl implements PieceService {
         Piece pieceToDelete = this.getPiece(id);
 
         if (Objects.isNull(pieceToDelete)) {
-            throw new ValidationException(new ch.glauser.gestionstock.common.validation.common.Error(
+            throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_PIECE_INEXISTANTE,
                     FIELD_PIECE,
                     PieceServiceImpl.class));

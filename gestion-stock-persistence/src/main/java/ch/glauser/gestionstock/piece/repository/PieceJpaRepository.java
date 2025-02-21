@@ -36,6 +36,15 @@ public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, Jp
     @Query("SELECT COUNT(piece) > 0 FROM Piece piece WHERE piece.categorie.id = :id")
     boolean existsByIdCategorie(@Param("id") Long id);
 
+    /**
+     * Vérifie s'il existe une pièce avec ce fournisseur
+     *
+     * @param id Id du fournisseur
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    @Query("SELECT COUNT(piece) > 0 FROM Piece piece WHERE piece.fournisseur.id = :id")
+    boolean existsByIdFournisseur(@Param("id") Long id);
+
     default Page<PieceEntity> search(Collection<Filter> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }

@@ -54,4 +54,12 @@ public interface PieceRepository {
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
     boolean existPieceWithIdCategorie(Long id);
+
+    /**
+     * Vérifie s'il existe une pièce avec ce fournisseur
+     *
+     * @param id Id du fournisseur
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existPieceWithIdFournisseur(Long id);
 }

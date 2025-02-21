@@ -40,8 +40,9 @@ public class ServiceBeansGenerator {
     }
 
     @Bean
-    public FournisseurService fournisseurService(FournisseurRepository fournisseurRepository) {
-        return new FournisseurServiceImpl(fournisseurRepository);
+    public FournisseurService fournisseurService(FournisseurRepository fournisseurRepository,
+                                                 PieceRepository pieceRepository) {
+        return new FournisseurServiceImpl(fournisseurRepository, pieceRepository);
     }
 
     @Bean
