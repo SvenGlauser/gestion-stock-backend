@@ -71,13 +71,4 @@ public class FournisseurServiceImpl implements FournisseurService {
 
         this.fournisseurRepository.deleteFournisseur(id);
     }
-
-    @Override
-    public boolean existFournisseurWithIdLocalite(Long id) {
-        Validator.of(Fournisseur.class)
-                .validateNotNull(id, FIELD_ID_LOCALITE)
-                .execute();
-
-        return this.fournisseurRepository.existFournisseurWithIdLocalite(id);
-    }
 }

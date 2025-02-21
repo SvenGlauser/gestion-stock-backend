@@ -13,7 +13,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Entity(name = "Localite")
 @Table(name = "LOCALITE")
 public class LocaliteEntity extends ModelEntity<Localite> {
     @Column(name = "NOM", nullable = false)

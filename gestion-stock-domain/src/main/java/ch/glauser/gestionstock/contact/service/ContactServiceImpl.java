@@ -71,13 +71,4 @@ public class ContactServiceImpl implements ContactService {
 
         this.contactRepository.deleteContact(id);
     }
-
-    @Override
-    public boolean existContactWithIdLocalite(Long id) {
-        Validator.of(ContactServiceImpl.class)
-                .validateNotNull(id, FIELD_ID_LOCALITE)
-                .execute();
-
-        return this.contactRepository.existContactWithIdLocalite(id);
-    }
 }

@@ -46,4 +46,9 @@ public class LocaliteRepositoryImpl implements LocaliteRepository {
     public void deleteLocalite(Long id) {
         this.localiteJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existLocaliteWithIdPays(Long id) {
+        return this.localiteJpaRepository.existsByIdPays(id);
+    }
 }

@@ -44,9 +44,9 @@ public class ServiceBeansGenerator {
 
     @Bean
     public LocaliteService localiteService(LocaliteRepository localiteRepository,
-                                           ContactService contactService,
-                                           FournisseurService fournisseurService) {
-        return new LocaliteServiceImpl(localiteRepository, contactService, fournisseurService);
+                                           ContactRepository contactRepository,
+                                           FournisseurRepository fournisseurRepository) {
+        return new LocaliteServiceImpl(localiteRepository, contactRepository, fournisseurRepository);
     }
 
     @Bean
@@ -55,8 +55,9 @@ public class ServiceBeansGenerator {
     }
 
     @Bean
-    public PaysService paysService(PaysRepository paysRepository) {
-        return new PaysServiceImpl(paysRepository);
+    public PaysService paysService(PaysRepository paysRepository,
+                                   LocaliteRepository localiteRepository) {
+        return new PaysServiceImpl(paysRepository, localiteRepository);
     }
 
     @Bean

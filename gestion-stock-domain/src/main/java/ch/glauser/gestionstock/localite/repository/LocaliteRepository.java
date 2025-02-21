@@ -46,4 +46,12 @@ public interface LocaliteRepository {
      * @param id Id de la localité à supprimer
      */
     void deleteLocalite(Long id);
+
+    /**
+     * Vérifie s'il existe une localité avec ce pays
+     *
+     * @param id Id du pays
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existLocaliteWithIdPays(Long id);
 }

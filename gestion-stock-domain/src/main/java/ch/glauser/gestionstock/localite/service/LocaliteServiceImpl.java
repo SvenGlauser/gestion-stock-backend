@@ -6,8 +6,8 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
-import ch.glauser.gestionstock.contact.service.ContactService;
-import ch.glauser.gestionstock.fournisseur.service.FournisseurService;
+import ch.glauser.gestionstock.contact.repository.ContactRepository;
+import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class LocaliteServiceImpl implements LocaliteService {
 
     public static final String FIELD_LOCALITE = "localite";
     public static final String FIELD_ID = "id";
+    public static final String FIELD_ID_PAYS = "id";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
     public static final String ERROR_SUPPRESSION_LOCALITE_INEXISTANTE = "Impossible de supprimer cette localité car elle n'existe pas";
     public static final String ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_CONTACT = "Impossible de supprimer cette localité car il existe un contact l'utilisant";
@@ -29,8 +30,8 @@ public class LocaliteServiceImpl implements LocaliteService {
 
     private final LocaliteRepository localiteRepository;
 
-    private final ContactService contactService;
-    private final FournisseurService fournisseurService;
+    private final ContactRepository contactRepository;
+    private final FournisseurRepository fournisseurRepository;
 
     @Override
     public Localite getLocalite(Long id) {
@@ -105,7 +106,7 @@ public class LocaliteServiceImpl implements LocaliteService {
      * @param id Id de la localité à supprimer
      */
     private void validatePasUtiliseParContact(Long id) {
-        if (this.contactService.existContactWithIdLocalite(id)) {
+        if (this.contactRepository.existContactWithIdLocalite(id)) {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_CONTACT,
                     FIELD_LOCALITE,
@@ -118,7 +119,7 @@ public class LocaliteServiceImpl implements LocaliteService {
      * @param id Id de la localité à supprimer
      */
     private void validatePasUtiliseParFournisseur(Long id) {
-        if (this.fournisseurService.existFournisseurWithIdLocalite(id)) {
+        if (this.fournisseurRepository.existFournisseurWithIdLocalite(id)) {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_FOURNISSEUR,
                     FIELD_LOCALITE,

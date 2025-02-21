@@ -46,12 +46,4 @@ public interface ContactService {
      * @param id Id du contact à supprimer
      */
     void deleteContact(Long id);
-
-    /**
-     * Vérifie s'il existe un contact avec cette localité
-     *
-     * @param id Id de la localité
-     * @return {@code true} s'il en existe un, sinon {@code false}
-     */
-    boolean existContactWithIdLocalite(Long id);
 }
