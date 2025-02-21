@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.utils;
 
-import ch.glauser.gestionstock.common.validation.ValidationException;
-import ch.glauser.gestionstock.common.validation.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 
 import java.util.Collection;
 

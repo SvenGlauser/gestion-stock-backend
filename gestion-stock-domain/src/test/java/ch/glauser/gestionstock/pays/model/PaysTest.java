@@ -17,7 +17,7 @@ class PaysTest {
     void validateWithValue() {
         Pays pays = new Pays();
         pays.setNom("Suisse");
-        pays.setAbbreviation("CH");
+        pays.setAbreviation("CH");
 
         assertDoesNotThrow(pays::validate);
     }
