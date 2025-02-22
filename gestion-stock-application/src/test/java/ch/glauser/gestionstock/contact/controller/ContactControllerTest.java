@@ -6,7 +6,6 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.contact.dto.ContactDto;
 import ch.glauser.gestionstock.contact.model.Titre;
-import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,6 @@ class ContactControllerTest {
 
     @Autowired
     ContactController contactController;
-
-    @Autowired
-    PieceController pieceController;
 
     @Test
     void get() {
