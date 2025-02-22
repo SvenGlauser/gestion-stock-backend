@@ -5,10 +5,14 @@ import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.piece.controller.PieceController;
+import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.utils.TestUtils;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
@@ -16,10 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = GestionStockApplication.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CategorieControllerTest {
 
     @Autowired
     CategorieController categorieController;
+
+    @Autowired
+    PieceController pieceController;
 
     @Test
     void get() {
@@ -191,5 +199,30 @@ class CategorieControllerTest {
         categorie = categorieController.get(categorie.getId()).getBody();
 
         assertThat(categorie).isNull();
+
+        // Suppression inexistant
+        TestUtils.testValidation(1, () -> categorieController.delete(1000L));
+
+        CategorieDto categorie2 = new CategorieDto();
+        categorie2.setNom("Categorie - Test Delete - 2");
+        categorie2 = categorieController.create(categorie2).getBody();
+
+        PieceDto piece = new PieceDto();
+        piece.setNom("Piece - Test Delete - 2");
+        piece.setNumeroInventaire("12345678");
+        piece.setCategorie(categorie2);
+        piece.setQuantite(0L);
+        piece.setPrix(0D);
+        piece = pieceController.create(piece).getBody();
+
+        // Suppression piece
+        CategorieDto finalCategorie = categorie2;
+        PieceDto finalPiece = piece;
+        Assertions.assertThat(finalCategorie).isNotNull();
+        Assertions.assertThat(finalPiece).isNotNull();
+        TestUtils.testValidation(1, () -> categorieController.delete(finalCategorie.getId()));
+
+        assertDoesNotThrow(() -> pieceController.delete(finalPiece.getId()));
+        assertDoesNotThrow(() -> categorieController.delete(finalCategorie.getId()));
     }
 }
