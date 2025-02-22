@@ -1,0 +1,195 @@
+package ch.glauser.gestionstock.categorie.controller;
+
+import ch.glauser.gestionstock.GestionStockApplication;
+import ch.glauser.gestionstock.categorie.dto.CategorieDto;
+import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.utils.TestUtils;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+@SpringBootTest(classes = GestionStockApplication.class)
+class CategorieControllerTest {
+
+    @Autowired
+    CategorieController categorieController;
+
+    @Test
+    void get() {
+        CategorieDto categorie = new CategorieDto();
+        categorie.setNom("Categorie - Test Get");
+        categorie.setDescription("Categorie - Test Get - Description");
+        categorie.setActif(false);
+
+        categorie = categorieController.create(categorie).getBody();
+
+        assertThat(categorie).isNotNull();
+
+        CategorieDto categorieDto = categorieController.get(categorie.getId()).getBody();
+        assertThat(categorieDto).isNotNull();
+        assertThat(categorieDto.getNom())
+                .isNotNull()
+                .isEqualTo("Categorie - Test Get");
+        assertThat(categorieDto.getDescription())
+                .isNotNull()
+                .isEqualTo("Categorie - Test Get - Description");
+        assertThat(categorieDto.isActif()).isFalse();
+    }
+
+    @Test
+    void create() {
+        // Test validation bien mise en place
+        CategorieDto categorie = new CategorieDto();
+        TestUtils.testValidation(1, () -> categorieController.create(categorie));
+
+        // Test cas OK
+        categorie.setNom("Categorie - Test Set");
+        assertDoesNotThrow(() -> categorieController.create(categorie));
+
+        CategorieDto categorie2 = new CategorieDto();
+        categorie2.setNom("Categorie - Test Set");
+
+        // Test unicité du nom
+        TestUtils.testValidation(1, () -> categorieController.create(categorie2));
+
+        CategorieDto categorie3 = new CategorieDto();
+        categorie3.setNom("Categorie - Test Set - 2");
+
+        // Test unicité du nom
+        assertDoesNotThrow(() -> categorieController.create(categorie3));
+    }
+
+    @Test
+    void search() {
+        CategorieDto categorie = new CategorieDto();
+        categorie.setNom("Categorie - Test Search");
+        categorie.setActif(false);
+        assertDoesNotThrow(() -> categorieController.create(categorie));
+
+        CategorieDto categorie2 = new CategorieDto();
+        categorie2.setNom("Categorie - Test Search - 2");
+        categorie2.setActif(false);
+        assertDoesNotThrow(() -> categorieController.create(categorie2));
+
+        CategorieDto categorie3 = new CategorieDto();
+        categorie3.setNom("Categorie - Test Search - 3");
+        categorie3.setActif(true);
+        assertDoesNotThrow(() -> categorieController.create(categorie3));
+
+        SearchRequest searchRequest = new SearchRequest();
+        
+        SearchResult<CategorieDto> result = categorieController.search(searchRequest).getBody();
+        assertThat(result).isNotNull();
+        assertThat(result.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(3);
+
+        Filter actif = new Filter();
+        actif.setValue(false);
+        actif.setField("actif");
+        SearchRequest searchRequest1 = new SearchRequest();
+        searchRequest1.setFilter(List.of(actif));
+        SearchResult<CategorieDto> result1 = categorieController.search(searchRequest1).getBody();
+        assertThat(result1).isNotNull();
+        assertThat(result1.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(2);
+
+        Filter nom = new Filter();
+        nom.setValue("Categorie - Test Search - 3");
+        nom.setField("nom");
+        SearchRequest searchRequest2 = new SearchRequest();
+        searchRequest2.setFilter(List.of(nom));
+        SearchResult<CategorieDto> result2 = categorieController.search(searchRequest2).getBody();
+        assertThat(result2).isNotNull();
+        assertThat(result2.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(1);
+    }
+
+    @Test
+    void modify() {
+        CategorieDto categorie = new CategorieDto();
+        categorie.setNom("Categorie - Test Modify");
+        categorie.setDescription("Categorie - Test Modify - Description");
+        categorie.setActif(false);
+
+        categorie = categorieController.create(categorie).getBody();
+
+        assertThat(categorie).isNotNull();
+
+        CategorieDto categorieDto = categorieController.get(categorie.getId()).getBody();
+        assertThat(categorieDto).isNotNull();
+        assertThat(categorieDto.getNom())
+                .isNotNull()
+                .isEqualTo("Categorie - Test Modify");
+        assertThat(categorieDto.getDescription())
+                .isNotNull()
+                .isEqualTo("Categorie - Test Modify - Description");
+        assertThat(categorieDto.isActif()).isFalse();
+
+        categorie.setNom("Categorie - Test Modify - 2");
+        categorie.setDescription("Categorie - Test Modify - Description - 2");
+        categorie.setActif(true);
+
+        categorieController.modify(categorie).getBody();
+
+        CategorieDto categorieDto2 = categorieController.get(categorie.getId()).getBody();
+        assertThat(categorieDto2).isNotNull();
+        assertThat(categorieDto2.getNom())
+                .isNotNull()
+                .isEqualTo("Categorie - Test Modify - 2");
+        assertThat(categorieDto2.getDescription())
+                .isNotNull()
+                .isEqualTo("Categorie - Test Modify - Description - 2");
+        assertThat(categorieDto2.isActif()).isTrue();
+        assertThat(categorieDto2.getId()).isEqualTo(categorieDto.getId());
+    }
+
+    @Test
+    void modifyAvecNomUnique() {
+        CategorieDto categorie = new CategorieDto();
+        categorie.setNom("Categorie - Test ModifyAvecNomUnique");
+
+        categorie = categorieController.create(categorie).getBody();
+
+        assertThat(categorie).isNotNull();
+
+        CategorieDto categorie2 = new CategorieDto();
+        categorie2.setNom("Categorie - Test ModifyAvecNomUnique - 2");
+
+        categorie2 = categorieController.create(categorie2).getBody();
+
+        assertThat(categorie2).isNotNull();
+
+        CategorieDto categorie2SameName = categorie2;
+        categorie2SameName.setNom("Categorie - Test ModifyAvecNomUnique");
+        TestUtils.testValidation(1, () -> categorieController.modify(categorie2SameName));
+    }
+
+    @Test
+    void delete() {
+        CategorieDto categorie = new CategorieDto();
+        categorie.setNom("Categorie - Test Delete");
+
+        categorie = categorieController.create(categorie).getBody();
+
+        assertThat(categorie).isNotNull();
+
+        categorieController.delete(categorie.getId());
+
+        categorie = categorieController.get(categorie.getId()).getBody();
+
+        assertThat(categorie).isNull();
+    }
+}
