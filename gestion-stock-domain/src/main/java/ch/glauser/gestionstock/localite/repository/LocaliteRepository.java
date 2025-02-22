@@ -53,5 +53,15 @@ public interface LocaliteRepository {
      * @param id Id du pays
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existLocaliteWithIdPays(Long id);
+    boolean existLocaliteByIdPays(Long id);
+
+    /**
+     * Vérifie s'il existe une localité avec ce pays, nom, npa
+     *
+     * @param npa NPA de la localité
+     * @param nom Nom de la localité
+     * @param id Id du pays
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existLocaliteByNpaAndNomAndIdPays(String npa, String nom, Long id);
 }

@@ -36,6 +36,14 @@ public interface FournisseurJpaRepository extends JpaRepository<FournisseurEntit
     @Query("SELECT COUNT(fournisseur) > 0 FROM Fournisseur fournisseur WHERE fournisseur.adresse.localite.id = :id")
     boolean existsByIdLocalite(@Param("id") Long id);
 
+    /**
+     * Vérifie s'il existe un fournisseur avec ce nom
+     *
+     * @param nom Nom du fournisseur
+     * @return {@code true} s'il en existe une, sinon {@code false}
+     */
+    boolean existsByNom(String nom);
+
     default Page<FournisseurEntity> search(Collection<Filter> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }

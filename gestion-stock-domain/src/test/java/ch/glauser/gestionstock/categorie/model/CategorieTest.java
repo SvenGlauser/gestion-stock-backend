@@ -19,6 +19,6 @@ class CategorieTest {
         Categorie categorie = new Categorie();
         categorie.setNom("Test");
 
-        assertDoesNotThrow(categorie::validate);
+        assertDoesNotThrow(categorie::validateCreate);
     }
 }

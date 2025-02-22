@@ -122,6 +122,21 @@ public final class Validator {
     }
 
     /**
+     * Valide que le champ est null
+     *
+     * @param object Objet à valider
+     * @param field Champ à valider
+     * @return L'instance de validation
+     */
+    public Validator validateIsNull(Object object, String field) {
+        if (Objects.nonNull(object)) {
+            this.errors.add(new Error("Le champ doit pas être vide", field, this.classe));
+        }
+
+        return this;
+    }
+
+    /**
      * Valide que le champ n'est pas une chaîne de caractères vide ou avec uniquement des espaces (blank) ou une liste vide
      *
      * @param object Objet à valider
@@ -266,6 +281,18 @@ public final class Validator {
         }
 
         this.validateWithoutNullCheck(value, cascadeValidationField.getType());
+    }
+
+    /**
+     * Ajoute un message d'erreur
+     *
+     * @param message Message
+     * @param field Champ en erreur
+     * @return L'instance de validation
+     */
+    public Validator addError(String message, String field) {
+        this.errors.add(new Error(message, field, this.classe));
+        return this;
     }
 
     /**

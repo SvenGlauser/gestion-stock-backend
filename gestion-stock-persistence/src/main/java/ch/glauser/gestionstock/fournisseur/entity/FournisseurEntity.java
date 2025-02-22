@@ -22,7 +22,7 @@ public class FournisseurEntity extends ModelEntity<Fournisseur> {
     @Column(name = "NOM", nullable = false)
     private String nom;
     @Column(name = "DESCRIPTION")
-    private String descripton;
+    private String description;
 
     @Column(name = "URL")
     private String url;
@@ -33,7 +33,7 @@ public class FournisseurEntity extends ModelEntity<Fournisseur> {
     public FournisseurEntity(Fournisseur fournisseur) {
         super(fournisseur);
         this.nom = fournisseur.getNom();
-        this.descripton = fournisseur.getDescription();
+        this.description = fournisseur.getDescription();
         this.url = fournisseur.getUrl();
         this.adresse = Optional.ofNullable(fournisseur.getAdresse()).map(AdresseEntity::new).orElse(null);
     }
@@ -42,7 +42,7 @@ public class FournisseurEntity extends ModelEntity<Fournisseur> {
     protected Fournisseur toDomainChild() {
         Fournisseur fournisseur = new Fournisseur();
         fournisseur.setNom(this.nom);
-        fournisseur.setDescription(this.descripton);
+        fournisseur.setDescription(this.description);
         fournisseur.setUrl(this.url);
         fournisseur.setAdresse(Optional.ofNullable(this.adresse).map(AdresseEntity::toDomain).orElse(null));
         return fournisseur;

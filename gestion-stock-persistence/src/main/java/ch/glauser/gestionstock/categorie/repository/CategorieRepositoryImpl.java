@@ -46,4 +46,9 @@ public class CategorieRepositoryImpl implements CategorieRepository {
     public void deleteCategorie(Long id) {
         this.categorieJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existCategorieByNom(String nom) {
+        return this.categorieJpaRepository.existsByNom(nom);
+    }
 }

@@ -17,10 +17,10 @@ import java.util.Optional;
 @Entity(name = "Piece")
 @Table(name = "PIECE")
 public class PieceEntity extends ModelEntity<Piece> {
-    @Column(name = "NUMERO_INVENTAIRE", nullable = false)
+    @Column(name = "NUMERO_INVENTAIRE", nullable = false, unique = true)
     private String numeroInventaire;
 
-    @Column(name = "NOM", nullable = false)
+    @Column(name = "NOM", nullable = false, unique = true)
     private String nom;
     @Column(name = "DESCRIPTION")
     private String description;

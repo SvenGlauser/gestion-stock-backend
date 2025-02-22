@@ -11,19 +11,26 @@ public abstract class Model {
     private Long id;
 
     /**
-     * Appelle une méthode de validation
+     * Valide un model
      */
     public void validate() {
         this.validateChild().execute();
     }
 
     /**
-     * Appelle une méthode de validation
+     * Appelle une méthode de validation pour la création
      */
-    public void validateModify() {
-        this.validateChild()
-            .validateNotNull(this.id, "id")
-            .execute();
+    public Validator validateCreate() {
+        return this.validateChild()
+            .validateIsNull(this.id, "id");
+    }
+
+    /**
+     * Appelle une méthode de validation pour la modification
+     */
+    public Validator validateModify() {
+        return this.validateChild()
+            .validateNotNull(this.id, "id");
     }
 
     /**

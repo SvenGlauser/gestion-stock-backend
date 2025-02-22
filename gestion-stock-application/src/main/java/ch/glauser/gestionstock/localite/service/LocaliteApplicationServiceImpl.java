@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import ch.glauser.gestionstock.localite.model.Localite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
  * Implémentation du service applicatif de gestion des localités
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LocaliteApplicationServiceImpl implements LocaliteApplicationService {
 
@@ -48,6 +50,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
     }
 
     @Override
+    @Transactional
     public LocaliteDto createLocalite(LocaliteDto localite) {
         Validator.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
@@ -55,14 +58,13 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
         Localite newLocalite = localite.toDomain();
 
-        newLocalite.validate();
-
         Localite savedCategorie = this.localiteService.createLocalite(newLocalite);
 
         return Optional.ofNullable(savedCategorie).map(LocaliteDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public LocaliteDto modifyLocalite(LocaliteDto localite) {
         Validator.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
@@ -70,14 +72,13 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
         Localite localiteToUpdate = localite.toDomain();
 
-        localiteToUpdate.validateModify();
-
         Localite savedCategorie = this.localiteService.modifyLocalite(localiteToUpdate);
 
         return Optional.ofNullable(savedCategorie).map(LocaliteDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public void deleteLocalite(Long id) {
         Validator.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

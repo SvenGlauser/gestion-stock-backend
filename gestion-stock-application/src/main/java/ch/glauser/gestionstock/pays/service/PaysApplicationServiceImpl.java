@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.pays.dto.PaysDto;
 import ch.glauser.gestionstock.pays.model.Pays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
  * Implémentation du service applicatif de gestion des pays
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PaysApplicationServiceImpl implements PaysApplicationService {
 
@@ -48,6 +50,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
     }
 
     @Override
+    @Transactional
     public PaysDto createPays(PaysDto pays) {
         Validator.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
@@ -55,14 +58,13 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
         Pays newPays = pays.toDomain();
 
-        newPays.validate();
-
         Pays savedPays = this.paysService.createPays(newPays);
 
         return Optional.ofNullable(savedPays).map(PaysDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public PaysDto modifyPays(PaysDto pays) {
         Validator.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
@@ -70,14 +72,13 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
         Pays paysToUpdate = pays.toDomain();
 
-        paysToUpdate.validateModify();
-
         Pays savedPays = this.paysService.modifyPays(paysToUpdate);
 
         return Optional.ofNullable(savedPays).map(PaysDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public void deletePays(Long id) {
         Validator.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

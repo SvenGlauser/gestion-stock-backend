@@ -48,7 +48,12 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
     }
 
     @Override
-    public boolean existFournisseurWithIdLocalite(Long id) {
+    public boolean existFournisseurByIdLocalite(Long id) {
         return this.fournisseurJpaRepository.existsByIdLocalite(id);
+    }
+
+    @Override
+    public boolean existFournisseurByNom(String nom) {
+        return this.fournisseurJpaRepository.existsByNom(nom);
     }
 }

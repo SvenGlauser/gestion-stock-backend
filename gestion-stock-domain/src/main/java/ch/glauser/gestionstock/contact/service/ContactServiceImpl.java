@@ -7,6 +7,7 @@ import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.contact.model.Contact;
+import ch.glauser.gestionstock.contact.model.ContactConstantes;
 import ch.glauser.gestionstock.contact.repository.ContactRepository;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService {
 
-    public static final String FIELD_CONTACT = "contact";
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_SEARCH_REQUEST = "searchRequest";
-    public static final String ERROR_SUPPRESSION_CONTACT_INEXISTANTE = "Impossible de supprimer ce contact car il n'existe pas";
-    public static final String ERROR_SUPPRESSION_CONTACT_IMPOSSIBLE_EXISTE_MACHINE = "Impossible de supprimer ce contact car il existe une machine liée";
-
     private final ContactRepository contactRepository;
 
     private final MachineRepository machineRepository;
@@ -32,7 +27,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact getContact(Long id) {
         Validator.of(ContactServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, ContactConstantes.FIELD_ID)
                 .execute();
 
         return this.contactRepository.getContact(id);
@@ -41,7 +36,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public SearchResult<Contact> searchContact(SearchRequest searchRequest) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchRequest, ContactConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
         return this.contactRepository.searchContact(searchRequest);
@@ -50,10 +45,10 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact createContact(Contact contact) {
         Validator.of(ContactServiceImpl.class)
-                .validateNotNull(contact, FIELD_CONTACT)
+                .validateNotNull(contact, ContactConstantes.FIELD_CONTACT)
                 .execute();
 
-        contact.validate();
+        contact.validateCreate().execute();
 
         return this.contactRepository.createContact(contact);
     }
@@ -61,10 +56,10 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact modifyContact(Contact contact) {
         Validator.of(ContactServiceImpl.class)
-                .validateNotNull(contact, FIELD_CONTACT)
+                .validateNotNull(contact, ContactConstantes.FIELD_CONTACT)
                 .execute();
 
-        contact.validateModify();
+        contact.validateModify().execute();
 
         return this.contactRepository.modifyContact(contact);
     }
@@ -72,7 +67,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void deleteContact(Long id) {
         Validator.of(ContactServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, ContactConstantes.FIELD_ID)
                 .execute();
 
         this.validateContactExist(id);
@@ -90,8 +85,8 @@ public class ContactServiceImpl implements ContactService {
 
         if (Objects.isNull(contactToDelete)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_CONTACT_INEXISTANTE,
-                    FIELD_CONTACT,
+                    ContactConstantes.ERROR_SUPPRESSION_CONTACT_INEXISTANTE,
+                    ContactConstantes.FIELD_CONTACT,
                     ContactServiceImpl.class));
         }
     }
@@ -101,10 +96,10 @@ public class ContactServiceImpl implements ContactService {
      * @param id Id du contact à supprimer
      */
     private void validatePasUtiliseParMachine(Long id) {
-        if (this.machineRepository.existMachineWithIdContact(id)) {
+        if (this.machineRepository.existMachineByIdContact(id)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_CONTACT_IMPOSSIBLE_EXISTE_MACHINE,
-                    FIELD_CONTACT,
+                    ContactConstantes.ERROR_SUPPRESSION_CONTACT_IMPOSSIBLE_EXISTE_MACHINE,
+                    ContactConstantes.FIELD_CONTACT,
                     ContactServiceImpl.class));
         }
     }

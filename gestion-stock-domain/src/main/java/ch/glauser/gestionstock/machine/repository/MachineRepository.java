@@ -53,7 +53,7 @@ public interface MachineRepository {
      * @param id Id du contact
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existMachineWithIdContact(Long id);
+    boolean existMachineByIdContact(Long id);
 
     /**
      * Vérifie s'il existe une machine avec cette pièce
@@ -61,5 +61,14 @@ public interface MachineRepository {
      * @param id Id de la pièce
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existMachineWithIdPiece(Long id);
+    boolean existMachineByIdPiece(Long id);
+
+    /**
+     * Vérifie s'il existe une machine avec ce contact et nom
+     *
+     * @param nom Nom de la pièce
+     * @param idContact Id du contact
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existMachineByNomAndIdContact(String nom, Long idContact);
 }

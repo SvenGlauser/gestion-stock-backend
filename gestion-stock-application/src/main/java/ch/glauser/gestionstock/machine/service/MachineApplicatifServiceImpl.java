@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.machine.model.Machine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
  * Implémentation du service applicatif de gestion des machines
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
@@ -48,6 +50,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     }
 
     @Override
+    @Transactional
     public MachineDto createMachine(MachineDto machine) {
         Validator.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
@@ -55,14 +58,13 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
         Machine newMachine = machine.toDomain();
 
-        newMachine.validate();
-
         Machine savedMachine = this.machineService.createMachine(newMachine);
 
         return Optional.ofNullable(savedMachine).map(MachineDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public MachineDto modifyMachine(MachineDto machine) {
         Validator.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
@@ -70,14 +72,13 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
         Machine machineToUpdate = machine.toDomain();
 
-        machineToUpdate.validateModify();
-
         Machine savedMachine = this.machineService.modifyMachine(machineToUpdate);
 
         return Optional.ofNullable(savedMachine).map(MachineDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public void deleteMachine(Long id) {
         Validator.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

@@ -18,6 +18,6 @@ class FournisseurTest {
         Fournisseur fournisseur = new Fournisseur();
         fournisseur.setNom("Test");
 
-        assertDoesNotThrow(fournisseur::validate);
+        assertDoesNotThrow(fournisseur::validateCreate);
     }
 }

@@ -20,6 +20,6 @@ class MachineTest {
         machine.setNom("Test");
         machine.setContact(new Contact());
 
-        assertDoesNotThrow(machine::validate);
+        assertDoesNotThrow(machine::validateCreate);
     }
 }

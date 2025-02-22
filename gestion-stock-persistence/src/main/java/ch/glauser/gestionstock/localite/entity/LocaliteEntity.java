@@ -14,7 +14,10 @@ import java.util.Optional;
 @Setter
 @NoArgsConstructor
 @Entity(name = "Localite")
-@Table(name = "LOCALITE")
+@Table(
+        name = "LOCALITE",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"NPA", "NOM", "PAYS_ID"})})
 public class LocaliteEntity extends ModelEntity<Localite> {
     @Column(name = "NOM", nullable = false)
     private String nom;

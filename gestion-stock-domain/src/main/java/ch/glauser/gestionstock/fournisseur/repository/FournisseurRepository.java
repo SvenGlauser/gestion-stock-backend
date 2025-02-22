@@ -53,5 +53,13 @@ public interface FournisseurRepository {
      * @param id Id de la localité
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existFournisseurWithIdLocalite(Long id);
+    boolean existFournisseurByIdLocalite(Long id);
+
+    /**
+     * Vérifie s'il existe un fournisseur avec ce nom
+     *
+     * @param nom Nom du fournisseur
+     * @return {@code true} s'il en existe une, sinon {@code false}
+     */
+    boolean existFournisseurByNom(String nom);
 }

@@ -46,4 +46,14 @@ public class PaysRepositoryImpl implements PaysRepository {
     public void deletePays(Long id) {
         this.paysJpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existPaysByNom(String nom) {
+        return this.paysJpaRepository.existsByNom(nom);
+    }
+
+    @Override
+    public boolean existPaysByAbreviation(String abreviation) {
+        return this.paysJpaRepository.existsByAbreviation(abreviation);
+    }
 }

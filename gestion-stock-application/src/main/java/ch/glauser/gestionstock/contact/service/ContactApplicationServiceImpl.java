@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.contact.dto.ContactDto;
 import ch.glauser.gestionstock.contact.model.Contact;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
  * Implémentation du service applicatif de gestion des contacts
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ContactApplicationServiceImpl implements ContactApplicationService {
 
@@ -48,6 +50,7 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
     }
 
     @Override
+    @Transactional
     public ContactDto createContact(ContactDto contact) {
         Validator.of(ContactApplicationServiceImpl.class)
                 .validateNotNull(contact, FIELD_CONTACT)
@@ -55,14 +58,13 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
 
         Contact newContact = contact.toDomain();
 
-        newContact.validate();
-
         Contact savedCategorie = this.contactService.createContact(newContact);
 
         return Optional.ofNullable(savedCategorie).map(ContactDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public ContactDto modifyContact(ContactDto contact) {
         Validator.of(ContactApplicationServiceImpl.class)
                 .validateNotNull(contact, FIELD_CONTACT)
@@ -70,14 +72,13 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
 
         Contact contactToUpdate = contact.toDomain();
 
-        contactToUpdate.validateModify();
-
         Contact savedCategorie = this.contactService.modifyContact(contactToUpdate);
 
         return Optional.ofNullable(savedCategorie).map(ContactDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public void deleteContact(Long id) {
         Validator.of(ContactApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

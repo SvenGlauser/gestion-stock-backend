@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.common.repository;
 
 import ch.glauser.gestionstock.common.pagination.Filter;
+import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,25 @@ public final class RepositoryUtils {
 
             for (Filter filter : filters) {
                 if (Objects.nonNull(filter.getValue())) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get(filter.getField()), filter.getValue())));
+                    List<String> fields = List.of(filter.getField().split("\\."));
+                    Path<?> jpaPath = null;
+
+                    for (String field : fields) {
+                        if (Objects.nonNull(jpaPath)) {
+                            jpaPath = jpaPath.get(field);
+                        } else {
+                            jpaPath = root.get(field);
+                        }
+                    }
+
+                    if (Objects.isNull(filter.getType())) {
+                        filter.setType(Filter.Type.EQUAL);
+                    }
+
+                    switch (filter.getType()) {
+                        case EQUAL -> predicates.add(criteriaBuilder.and(criteriaBuilder.equal(jpaPath, filter.getValue())));
+                        case STRING_LIKE -> predicates.add(criteriaBuilder.and(criteriaBuilder.like((Path<String>) jpaPath, "%" + filter.getValue() + "%")));
+                    }
                 }
             }
 

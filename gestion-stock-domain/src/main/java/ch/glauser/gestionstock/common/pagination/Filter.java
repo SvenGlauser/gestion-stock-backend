@@ -10,10 +10,16 @@ import lombok.Setter;
 public class Filter {
     private String field;
     private Object value;
+    private Type type;
     private Order order;
 
     public enum Order {
         ASC,
         DESC
+    }
+
+    public enum Type {
+        EQUAL,
+        STRING_LIKE
     }
 }

@@ -1,17 +1,20 @@
 package ch.glauser.gestionstock.machine.service;
 
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
+import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.machine.model.Machine;
+import ch.glauser.gestionstock.machine.model.MachineConstantes;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import ch.glauser.gestionstock.pays.service.PaysServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Implémentation du service de gestion des machines
@@ -19,17 +22,12 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MachineServiceImpl implements MachineService {
 
-    public static final String FIELD_MACHINE = "machine";
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_SEARCH_REQUEST = "searchRequest";
-    public static final String ERROR_SUPPRESSION_MACHINE_INEXISTANTE = "Impossible de supprimer cette machine car il n'existe pas";
-
     private final MachineRepository machineRepository;
 
     @Override
     public Machine getMachine(Long id) {
         Validator.of(MachineServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, MachineConstantes.FIELD_ID)
                 .execute();
 
         return this.machineRepository.getMachine(id);
@@ -38,7 +36,7 @@ public class MachineServiceImpl implements MachineService {
     @Override
     public SearchResult<Machine> searchMachine(SearchRequest searchRequest) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchRequest, MachineConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
         return this.machineRepository.searchMachine(searchRequest);
@@ -47,10 +45,18 @@ public class MachineServiceImpl implements MachineService {
     @Override
     public Machine createMachine(Machine machine) {
         Validator.of(MachineServiceImpl.class)
-                .validateNotNull(machine, FIELD_MACHINE)
+                .validateNotNull(machine, MachineConstantes.FIELD_MACHINE)
                 .execute();
 
-        machine.validate();
+        Validator validator = machine.validateCreate();
+
+        Long idContact = Optional.ofNullable(machine.getContact()).map(Model::getId).orElse(null);
+
+        if (this.machineRepository.existMachineByNomAndIdContact(machine.getNom(), idContact)) {
+            validator.addError(MachineConstantes.ERROR_MACHINE_NOM_UNIQUE, MachineConstantes.FIELD_NOM);
+        }
+
+        validator.execute();
 
         return this.machineRepository.createMachine(machine);
     }
@@ -58,10 +64,25 @@ public class MachineServiceImpl implements MachineService {
     @Override
     public Machine modifyMachine(Machine machine) {
         Validator.of(MachineServiceImpl.class)
-                .validateNotNull(machine, FIELD_MACHINE)
+                .validateNotNull(machine, MachineConstantes.FIELD_MACHINE)
                 .execute();
 
-        machine.validateModify();
+        Machine oldMachine = this.machineRepository.getMachine(machine.getId());
+
+        Validator validator = machine.validateModify();
+
+        if (Objects.nonNull(oldMachine)) {
+            Long idContact = Optional.ofNullable(machine.getContact()).map(Model::getId).orElse(null);
+
+            if ((
+                    !Objects.equals(oldMachine.getNom(), machine.getNom()) ||
+                    !Objects.equals(oldMachine.getContact().getId(), idContact)
+                ) && this.machineRepository.existMachineByNomAndIdContact(machine.getNom(), idContact)) {
+                validator.addError(MachineConstantes.ERROR_MACHINE_NOM_UNIQUE, MachineConstantes.FIELD_NOM);
+            }
+        }
+
+        validator.execute();
 
         return this.machineRepository.modifyMachine(machine);
     }
@@ -69,7 +90,7 @@ public class MachineServiceImpl implements MachineService {
     @Override
     public void deleteMachine(Long id) {
         Validator.of(MachineServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, MachineConstantes.FIELD_ID)
                 .execute();
 
         this.validateMachineExist(id);
@@ -86,8 +107,8 @@ public class MachineServiceImpl implements MachineService {
 
         if (Objects.isNull(machineToDelete)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_MACHINE_INEXISTANTE,
-                    FIELD_MACHINE,
+                    MachineConstantes.ERROR_SUPPRESSION_MACHINE_INEXISTANTE,
+                    MachineConstantes.FIELD_MACHINE,
                     PaysServiceImpl.class));
         }
     }

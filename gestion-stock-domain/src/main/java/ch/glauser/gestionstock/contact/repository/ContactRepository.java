@@ -53,5 +53,5 @@ public interface ContactRepository {
      * @param id Id de la localité
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existContactWithIdLocalite(Long id);
+    boolean existContactByIdLocalite(Long id);
 }

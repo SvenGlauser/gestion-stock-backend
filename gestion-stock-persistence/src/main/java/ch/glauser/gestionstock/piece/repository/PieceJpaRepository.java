@@ -45,6 +45,22 @@ public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, Jp
     @Query("SELECT COUNT(piece) > 0 FROM Piece piece WHERE piece.fournisseur.id = :id")
     boolean existsByIdFournisseur(@Param("id") Long id);
 
+    /**
+     * Vérifie s'il existe une pièce avec ce nom
+     *
+     * @param nom Nom de la catégorie
+     * @return {@code true} s'il en existe une, sinon {@code false}
+     */
+    boolean existsByNom(String nom);
+
+    /**
+     * Vérifie s'il existe une pièce avec ce numéro d'inventaire
+     *
+     * @param numeroInventaire Numéro d'inventaire de la catégorie
+     * @return {@code true} s'il en existe une, sinon {@code false}
+     */
+    boolean existsByNumeroInventaire(String numeroInventaire);
+
     default Page<PieceEntity> search(Collection<Filter> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }

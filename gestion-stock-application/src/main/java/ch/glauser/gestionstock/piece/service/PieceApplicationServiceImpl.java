@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.piece.model.Piece;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
  * Implémentation du service applicatif de gestion des pièces
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PieceApplicationServiceImpl implements PieceApplicationService {
 
@@ -48,6 +50,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     }
 
     @Override
+    @Transactional
     public PieceDto createPiece(PieceDto piece) {
         Validator.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, FIELD_PIECE)
@@ -55,14 +58,13 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
         Piece newPiece = piece.toDomain();
 
-        newPiece.validate();
-
         Piece savedPiece = this.pieceService.createPiece(newPiece);
 
         return Optional.ofNullable(savedPiece).map(PieceDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public PieceDto modifyPiece(PieceDto piece) {
         Validator.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, FIELD_PIECE)
@@ -70,14 +72,13 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
         Piece pieceToUpdate = piece.toDomain();
 
-        pieceToUpdate.validateModify();
-
         Piece savedPiece = this.pieceService.modifyPiece(pieceToUpdate);
 
         return Optional.ofNullable(savedPiece).map(PieceDto::new).orElse(null);
     }
 
     @Override
+    @Transactional
     public void deletePiece(Long id) {
         Validator.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

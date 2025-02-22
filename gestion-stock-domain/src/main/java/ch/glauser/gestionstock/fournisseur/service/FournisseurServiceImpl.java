@@ -7,6 +7,7 @@ import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
+import ch.glauser.gestionstock.fournisseur.model.FournisseurConstantes;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class FournisseurServiceImpl implements FournisseurService {
 
-    public static final String FIELD_FOURNISSEUR = "fournisseur";
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_SEARCH_REQUEST = "searchRequest";
-    public static final String ERROR_SUPPRESSION_FOURNISSEUR_INEXISTANTE = "Impossible de supprimer ce fournisseur car il n'existe pas";
-    public static final String ERROR_SUPPRESSION_FOURNISSEUR_IMPOSSIBLE_EXISTE_CONTACT = "Impossible de supprimer ce fournisseur car il existe une pièce liée";
-
     private final FournisseurRepository fournisseurRepository;
 
     private final PieceRepository pieceRepository;
@@ -32,7 +27,7 @@ public class FournisseurServiceImpl implements FournisseurService {
     @Override
     public Fournisseur getFournisseur(Long id) {
         Validator.of(FournisseurServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, FournisseurConstantes.FIELD_ID)
                 .execute();
 
         return this.fournisseurRepository.getFournisseur(id);
@@ -41,7 +36,7 @@ public class FournisseurServiceImpl implements FournisseurService {
     @Override
     public SearchResult<Fournisseur> searchFournisseur(SearchRequest searchRequest) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchRequest, FournisseurConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
         return this.fournisseurRepository.searchFournisseur(searchRequest);
@@ -50,10 +45,16 @@ public class FournisseurServiceImpl implements FournisseurService {
     @Override
     public Fournisseur createFournisseur(Fournisseur fournisseur) {
         Validator.of(FournisseurServiceImpl.class)
-                .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
+                .validateNotNull(fournisseur, FournisseurConstantes.FIELD_FOURNISSEUR)
                 .execute();
 
-        fournisseur.validate();
+        Validator validator = fournisseur.validateCreate();
+
+        if (this.fournisseurRepository.existFournisseurByNom(fournisseur.getNom())) {
+            validator.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
+        }
+
+        validator.execute();
 
         return this.fournisseurRepository.createFournisseur(fournisseur);
     }
@@ -61,10 +62,22 @@ public class FournisseurServiceImpl implements FournisseurService {
     @Override
     public Fournisseur modifyFournisseur(Fournisseur fournisseur) {
         Validator.of(FournisseurServiceImpl.class)
-                .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
+                .validateNotNull(fournisseur, FournisseurConstantes.FIELD_FOURNISSEUR)
                 .execute();
 
-        fournisseur.validateModify();
+        Fournisseur oldFournisseur = this.fournisseurRepository.getFournisseur(fournisseur.getId());
+
+        Validator validator = fournisseur.validateModify();
+
+        if (Objects.nonNull(oldFournisseur) &&
+            !Objects.equals(oldFournisseur.getNom(), fournisseur.getNom()) &&
+            this.fournisseurRepository.existFournisseurByNom(fournisseur.getNom())) {
+
+            // Valide le cas dans lequel la catégorie a changé de nom
+            validator.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
+        }
+
+        validator.execute();
 
         return this.fournisseurRepository.modifyFournisseur(fournisseur);
     }
@@ -72,7 +85,7 @@ public class FournisseurServiceImpl implements FournisseurService {
     @Override
     public void deleteFournisseur(Long id) {
         Validator.of(FournisseurServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, FournisseurConstantes.FIELD_ID)
                 .execute();
 
         this.validateFournisseurExist(id);
@@ -90,8 +103,8 @@ public class FournisseurServiceImpl implements FournisseurService {
 
         if (Objects.isNull(fournisseurToDelete)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_FOURNISSEUR_INEXISTANTE,
-                    FIELD_FOURNISSEUR,
+                    FournisseurConstantes.ERROR_SUPPRESSION_FOURNISSEUR_INEXISTANTE,
+                    FournisseurConstantes.FIELD_FOURNISSEUR,
                     FournisseurServiceImpl.class));
         }
     }
@@ -101,10 +114,10 @@ public class FournisseurServiceImpl implements FournisseurService {
      * @param id Id du fournisseur à supprimer
      */
     private void validatePasUtiliseParContact(Long id) {
-        if (this.pieceRepository.existPieceWithIdFournisseur(id)) {
+        if (this.pieceRepository.existPieceByIdFournisseur(id)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_FOURNISSEUR_IMPOSSIBLE_EXISTE_CONTACT,
-                    FIELD_FOURNISSEUR,
+                    FournisseurConstantes.ERROR_SUPPRESSION_FOURNISSEUR_IMPOSSIBLE_EXISTE_CONTACT,
+                    FournisseurConstantes.FIELD_FOURNISSEUR,
                     FournisseurServiceImpl.class));
         }
     }
