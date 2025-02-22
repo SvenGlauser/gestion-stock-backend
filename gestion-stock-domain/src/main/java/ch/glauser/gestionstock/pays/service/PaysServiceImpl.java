@@ -122,7 +122,7 @@ public class PaysServiceImpl implements PaysService {
      * @param id Id de la localité à supprimer
      */
     private void validatePasUtiliseParLocalite(Long id) {
-        if (this.localiteRepository.existLocaliteWithIdPays(id)) {
+        if (this.localiteRepository.existLocaliteByIdPays(id)) {
             throw new ValidationException(new Error(
                     PaysConstantes.ERROR_SUPPRESSION_PAYS_IMPOSSIBLE_EXISTE_LOCALITE,
                     PaysConstantes.FIELD_PAYS,

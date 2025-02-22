@@ -19,7 +19,11 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @Entity(name = "Machine")
-@Table(name = "MACHINE")
+@Table(
+        name = "MACHINE",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"NOM", "CONTACT_ID"})
+        })
 public class MachineEntity extends ModelEntity<Machine> {
     @Column(name = "NOM", nullable = false)
     private String nom;

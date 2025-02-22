@@ -105,7 +105,7 @@ public class LocaliteServiceImpl implements LocaliteService {
      * @param id Id de la localité à supprimer
      */
     private void validatePasUtiliseParContact(Long id) {
-        if (this.contactRepository.existContactWithIdLocalite(id)) {
+        if (this.contactRepository.existContactByIdLocalite(id)) {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_CONTACT,
                     FIELD_LOCALITE,
@@ -118,7 +118,7 @@ public class LocaliteServiceImpl implements LocaliteService {
      * @param id Id de la localité à supprimer
      */
     private void validatePasUtiliseParFournisseur(Long id) {
-        if (this.fournisseurRepository.existFournisseurWithIdLocalite(id)) {
+        if (this.fournisseurRepository.existFournisseurByIdLocalite(id)) {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_FOURNISSEUR,
                     FIELD_LOCALITE,

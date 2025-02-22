@@ -48,7 +48,7 @@ public class ContactRepositoryImpl implements ContactRepository {
     }
 
     @Override
-    public boolean existContactWithIdLocalite(Long id) {
+    public boolean existContactByIdLocalite(Long id) {
         return this.contactJpaRepository.existsByIdLocalite(id);
     }
 }

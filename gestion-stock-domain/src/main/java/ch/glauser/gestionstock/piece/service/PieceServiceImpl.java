@@ -101,7 +101,7 @@ public class PieceServiceImpl implements PieceService {
      * @param id Id de la pièce à supprimer
      */
     private void validatePasUtiliseParMachine(Long id) {
-        if (this.machineRepository.existMachineWithIdPiece(id)) {
+        if (this.machineRepository.existMachineByIdPiece(id)) {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE,
                     FIELD_PIECE,

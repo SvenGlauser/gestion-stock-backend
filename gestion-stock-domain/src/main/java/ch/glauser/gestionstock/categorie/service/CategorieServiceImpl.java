@@ -113,7 +113,7 @@ public class CategorieServiceImpl implements CategorieService {
      * @param id Id de la catégorie à valider
      */
     private void validatePasUtiliseParPiece(Long id) {
-        if (this.pieceRepository.existPieceWithIdCategorie(id)) {
+        if (this.pieceRepository.existPieceByIdCategorie(id)) {
             throw new ValidationException(new Error(
                     CategorieConstantes.ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE,
                     CategorieConstantes.FIELD_CATEGORIE,

@@ -8,6 +8,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
  * Implémentation du service applicatif de gestion des catégories
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CategorieApplicationServiceImpl implements CategorieApplicationService {
 
@@ -47,6 +49,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     }
 
     @Override
+    @Transactional
     public CategorieDto createCategorie(CategorieDto categorie) {
         Validator.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
@@ -62,6 +65,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     }
 
     @Override
+    @Transactional
     public CategorieDto modifyCategorie(CategorieDto categorie) {
         Validator.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
@@ -77,6 +81,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     }
 
     @Override
+    @Transactional
     public void deleteCategorie(Long id) {
         Validator.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
  * Implémentation du service applicatif de gestion des fournisseurs
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FournisseurApplicationServiceImpl implements FournisseurApplicationService {
 
@@ -48,6 +50,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     }
 
     @Override
+    @Transactional
     public FournisseurDto createFournisseur(FournisseurDto fournisseur) {
         Validator.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
@@ -63,6 +66,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     }
 
     @Override
+    @Transactional
     public FournisseurDto modifyFournisseur(FournisseurDto fournisseur) {
         Validator.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
@@ -78,6 +82,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     }
 
     @Override
+    @Transactional
     public void deleteFournisseur(Long id) {
         Validator.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

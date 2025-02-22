@@ -101,7 +101,7 @@ public class ContactServiceImpl implements ContactService {
      * @param id Id du contact à supprimer
      */
     private void validatePasUtiliseParMachine(Long id) {
-        if (this.machineRepository.existMachineWithIdContact(id)) {
+        if (this.machineRepository.existMachineByIdContact(id)) {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_CONTACT_IMPOSSIBLE_EXISTE_MACHINE,
                     FIELD_CONTACT,

@@ -101,7 +101,7 @@ public class FournisseurServiceImpl implements FournisseurService {
      * @param id Id du fournisseur à supprimer
      */
     private void validatePasUtiliseParContact(Long id) {
-        if (this.pieceRepository.existPieceWithIdFournisseur(id)) {
+        if (this.pieceRepository.existPieceByIdFournisseur(id)) {
             throw new ValidationException(new Error(
                     ERROR_SUPPRESSION_FOURNISSEUR_IMPOSSIBLE_EXISTE_CONTACT,
                     FIELD_FOURNISSEUR,

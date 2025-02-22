@@ -22,8 +22,8 @@ public class AdresseEntity {
     private String rue;
     @Column(name = "NUMERO")
     private String numero;
-    @ManyToOne(optional = false)
-    @JoinColumn(name="LOCALITE_ID", nullable=false)
+    @ManyToOne
+    @JoinColumn(name="LOCALITE_ID")
     private LocaliteEntity localite;
 
     /**

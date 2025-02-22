@@ -53,5 +53,5 @@ public interface LocaliteRepository {
      * @param id Id du pays
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existLocaliteWithIdPays(Long id);
+    boolean existLocaliteByIdPays(Long id);
 }
