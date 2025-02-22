@@ -34,7 +34,6 @@ class MachineControllerTest {
         MachineDto machine = new MachineDto();
         machine.setNom("Machine");
         machine.setDescription("Machine - Description");
-        machine.setNom("Machine");
         machine.setContact(this.getContact());
 
         machine = machineController.create(machine).getBody();

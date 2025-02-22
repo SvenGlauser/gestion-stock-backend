@@ -1,5 +1,12 @@
 package ch.glauser.gestionstock.machine.model;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+/**
+ * Classe contenant les constantes de texte pour les machines
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MachineConstantes {
     public static final String FIELD_MACHINE = "machine";
 

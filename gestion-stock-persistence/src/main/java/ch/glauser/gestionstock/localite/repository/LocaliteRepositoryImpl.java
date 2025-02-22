@@ -51,4 +51,9 @@ public class LocaliteRepositoryImpl implements LocaliteRepository {
     public boolean existLocaliteByIdPays(Long id) {
         return this.localiteJpaRepository.existsByIdPays(id);
     }
+
+    @Override
+    public boolean existLocaliteByNpaAndNomAndIdPays(String npa, String nom, Long id) {
+        return this.localiteJpaRepository.existsByNpaAndNomAndIdPays(npa, nom, id);
+    }
 }

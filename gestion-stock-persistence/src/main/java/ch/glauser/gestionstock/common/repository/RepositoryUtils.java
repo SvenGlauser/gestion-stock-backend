@@ -30,7 +30,7 @@ public final class RepositoryUtils {
             for (Filter filter : filters) {
                 if (Objects.nonNull(filter.getValue())) {
                     List<String> fields = List.of(filter.getField().split("\\."));
-                    Path<Object> jpaPath = null;
+                    Path<?> jpaPath = null;
 
                     for (String field : fields) {
                         if (Objects.nonNull(jpaPath)) {
@@ -40,7 +40,14 @@ public final class RepositoryUtils {
                         }
                     }
 
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(jpaPath, filter.getValue())));
+                    if (Objects.isNull(filter.getType())) {
+                        filter.setType(Filter.Type.EQUAL);
+                    }
+
+                    switch (filter.getType()) {
+                        case EQUAL -> predicates.add(criteriaBuilder.and(criteriaBuilder.equal(jpaPath, filter.getValue())));
+                        case STRING_LIKE -> predicates.add(criteriaBuilder.and(criteriaBuilder.like((Path<String>) jpaPath, "%" + filter.getValue() + "%")));
+                    }
                 }
             }
 
