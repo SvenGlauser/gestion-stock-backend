@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.categorie.service;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
+import ch.glauser.gestionstock.categorie.model.CategorieConstantes;
 import ch.glauser.gestionstock.categorie.repository.CategorieRepository;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
@@ -18,14 +19,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CategorieServiceImpl implements CategorieService {
 
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_CATEGORIE = "categorie";
-    private static final String FIELD_NOM = "nom";
-    private static final String FIELD_SEARCH_REQUEST = "searchRequest";
-    private static final String ERROR_SUPPRESSION_CATEGORIE_INEXISTANTE = "Impossible de supprimer cette catégorie car elle n'existe pas";
-    private static final String ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE = "Impossible de supprimer cette catégorie car il existe une pièce liée";
-    private static final String ERROR_CATEGORIE_NOM_UNIQUE = "Le nom de la catégorie doit être unique";
-
     private final CategorieRepository categorieRepository;
 
     private final PieceRepository pieceRepository;
@@ -33,7 +26,7 @@ public class CategorieServiceImpl implements CategorieService {
     @Override
     public Categorie getCategorie(Long id) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, CategorieConstantes.FIELD_ID)
                 .execute();
 
         return this.categorieRepository.getCategorie(id);
@@ -42,7 +35,7 @@ public class CategorieServiceImpl implements CategorieService {
     @Override
     public SearchResult<Categorie> searchCategorie(SearchRequest searchRequest) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchRequest, CategorieConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
         return this.categorieRepository.searchCategorie(searchRequest);
@@ -51,13 +44,13 @@ public class CategorieServiceImpl implements CategorieService {
     @Override
     public Categorie createCategorie(Categorie categorie) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(categorie, FIELD_CATEGORIE)
+                .validateNotNull(categorie, CategorieConstantes.FIELD_CATEGORIE)
                 .execute();
 
         Validator validator = categorie.validateCreate();
 
         if (this.categorieRepository.existCategorieByNom(categorie.getNom())) {
-            validator.addError(ERROR_CATEGORIE_NOM_UNIQUE, FIELD_NOM);
+            validator.addError(CategorieConstantes.ERROR_CATEGORIE_NOM_UNIQUE, CategorieConstantes.FIELD_NOM);
         }
 
         validator.execute();
@@ -68,7 +61,7 @@ public class CategorieServiceImpl implements CategorieService {
     @Override
     public Categorie modifyCategorie(Categorie categorie) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(categorie, FIELD_CATEGORIE)
+                .validateNotNull(categorie, CategorieConstantes.FIELD_CATEGORIE)
                 .execute();
 
         Categorie oldCategorie = this.categorieRepository.getCategorie(categorie.getId());
@@ -80,9 +73,8 @@ public class CategorieServiceImpl implements CategorieService {
             this.categorieRepository.existCategorieByNom(categorie.getNom())) {
 
             // Valide le cas dans lequel la catégorie a changé de nom
-            validator.addError(ERROR_CATEGORIE_NOM_UNIQUE, FIELD_NOM);
+            validator.addError(CategorieConstantes.ERROR_CATEGORIE_NOM_UNIQUE, CategorieConstantes.FIELD_NOM);
         }
-
 
         validator.execute();
 
@@ -92,7 +84,7 @@ public class CategorieServiceImpl implements CategorieService {
     @Override
     public void deleteCategorie(Long id) {
         Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, CategorieConstantes.FIELD_ID)
                 .execute();
 
         this.validateCategorieExist(id);
@@ -110,8 +102,8 @@ public class CategorieServiceImpl implements CategorieService {
 
         if (Objects.isNull(categorieToDelete)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_CATEGORIE_INEXISTANTE,
-                    FIELD_CATEGORIE,
+                    CategorieConstantes.ERROR_SUPPRESSION_CATEGORIE_INEXISTANTE,
+                    CategorieConstantes.FIELD_CATEGORIE,
                     CategorieServiceImpl.class));
         }
     }
@@ -123,8 +115,8 @@ public class CategorieServiceImpl implements CategorieService {
     private void validatePasUtiliseParPiece(Long id) {
         if (this.pieceRepository.existPieceWithIdCategorie(id)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE,
-                    FIELD_CATEGORIE,
+                    CategorieConstantes.ERROR_SUPPRESSION_CATEGORIE_IMPOSSIBLE_EXISTE_PIECE,
+                    CategorieConstantes.FIELD_CATEGORIE,
                     CategorieServiceImpl.class));
         }
     }

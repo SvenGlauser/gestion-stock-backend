@@ -46,4 +46,20 @@ public interface PaysRepository {
      * @param id Id du pays à supprimer
      */
     void deletePays(Long id);
+
+    /**
+     * Vérifie s'il existe un pays avec ce nom
+     *
+     * @param nom Nom du pays
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existPaysByNom(String nom);
+
+    /**
+     * Vérifie s'il existe un pays avec cette abréviation
+     *
+     * @param abreviation Abréviation du pays
+     * @return {@code true} s'il en existe un, sinon {@code false}
+     */
+    boolean existPaysByAbreviation(String abreviation);
 }
