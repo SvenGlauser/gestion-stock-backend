@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
  * Classe contenant les constantes de texte pour les contacts
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ContactConstantes {
+public final class ContactConstantes {
     public static final String FIELD_CONTACT = "contact";
 
     public static final String FIELD_ID = "id";

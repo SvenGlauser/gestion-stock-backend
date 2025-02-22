@@ -56,4 +56,9 @@ public class PieceRepositoryImpl implements PieceRepository {
     public boolean existPieceByIdFournisseur(Long id) {
         return this.pieceJpaRepository.existsByIdFournisseur(id);
     }
+
+    @Override
+    public boolean existPieceByNom(String nom) {
+        return this.pieceJpaRepository.existsByNom(nom);
+    }
 }

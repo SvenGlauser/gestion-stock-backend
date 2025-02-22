@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
  * Classe contenant les constantes de texte pour les fournisseurs
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class FournisseurConstantes {
+public final class FournisseurConstantes {
     public static final String FIELD_FOURNISSEUR = "fournisseur";
 
     public static final String FIELD_ID = "id";

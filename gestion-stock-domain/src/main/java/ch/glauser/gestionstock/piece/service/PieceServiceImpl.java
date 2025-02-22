@@ -1,6 +1,5 @@
 package ch.glauser.gestionstock.piece.service;
 
-import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
@@ -8,6 +7,7 @@ import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import ch.glauser.gestionstock.piece.model.Piece;
+import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -19,12 +19,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PieceServiceImpl implements PieceService {
 
-    public static final String FIELD_PIECE = "piece";
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_SEARCH_REQUEST = "searchRequest";
-    public static final String ERROR_SUPPRESSION_PIECE_INEXISTANTE = "Impossible de supprimer cette pièce car elle n'existe pas";
-    public static final String ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE = "Impossible de supprimer cette pièce car il existe une machine liée";
-
     private final PieceRepository pieceRepository;
 
     private final MachineRepository machineRepository;
@@ -32,7 +26,7 @@ public class PieceServiceImpl implements PieceService {
     @Override
     public Piece getPiece(Long id) {
         Validator.of(PieceServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
         return this.pieceRepository.getPiece(id);
@@ -40,8 +34,8 @@ public class PieceServiceImpl implements PieceService {
 
     @Override
     public SearchResult<Piece> searchPiece(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+        Validator.of(PieceServiceImpl.class)
+                .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
         return this.pieceRepository.searchPiece(searchRequest);
@@ -50,10 +44,16 @@ public class PieceServiceImpl implements PieceService {
     @Override
     public Piece createPiece(Piece piece) {
         Validator.of(PieceServiceImpl.class)
-                .validateNotNull(piece, FIELD_PIECE)
+                .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
-        piece.validateCreate();
+        Validator validator = piece.validateCreate();
+
+        if (this.pieceRepository.existPieceByNom(piece.getNom())) {
+            validator.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
+        }
+
+        validator.execute();
 
         return this.pieceRepository.createPiece(piece);
     }
@@ -61,10 +61,22 @@ public class PieceServiceImpl implements PieceService {
     @Override
     public Piece modifyPiece(Piece piece) {
         Validator.of(PieceServiceImpl.class)
-                .validateNotNull(piece, FIELD_PIECE)
+                .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
-        piece.validateModify();
+        Piece oldPiece = this.pieceRepository.getPiece(piece.getId());
+
+        Validator validator = piece.validateModify();
+
+        if (Objects.nonNull(oldPiece) &&
+            !Objects.equals(oldPiece.getNom(), piece.getNom()) &&
+            this.pieceRepository.existPieceByNom(piece.getNom())) {
+
+            // Valide le cas dans lequel la pièce a changé de nom
+            validator.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
+        }
+
+        validator.execute();
 
         return this.pieceRepository.modifyPiece(piece);
     }
@@ -72,7 +84,7 @@ public class PieceServiceImpl implements PieceService {
     @Override
     public void deletePiece(Long id) {
         Validator.of(PieceServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
         this.validatePieceExist(id);
@@ -90,8 +102,8 @@ public class PieceServiceImpl implements PieceService {
 
         if (Objects.isNull(pieceToDelete)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_PIECE_INEXISTANTE,
-                    FIELD_PIECE,
+                    PieceConstantes.ERROR_SUPPRESSION_PIECE_INEXISTANTE,
+                    PieceConstantes.FIELD_PIECE,
                     PieceServiceImpl.class));
         }
     }
@@ -103,8 +115,8 @@ public class PieceServiceImpl implements PieceService {
     private void validatePasUtiliseParMachine(Long id) {
         if (this.machineRepository.existMachineByIdPiece(id)) {
             throw new ValidationException(new Error(
-                    ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE,
-                    FIELD_PIECE,
+                    PieceConstantes.ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE,
+                    PieceConstantes.FIELD_PIECE,
                     PieceServiceImpl.class));
         }
     }

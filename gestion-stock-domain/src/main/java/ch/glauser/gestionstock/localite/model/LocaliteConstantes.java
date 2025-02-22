@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
  * Classe contenant les constantes de texte pour les localités
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class LocaliteConstantes {
+public final class LocaliteConstantes {
     public static final String FIELD_LOCALITE = "localite";
 
     public static final String FIELD_ID = "id";
