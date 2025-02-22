@@ -74,15 +74,15 @@ class ContactControllerTest {
         assertDoesNotThrow(() -> contactController.create(contact));
 
         ContactDto contact2 = new ContactDto();
-        contact.setTitre(Titre.MONSIEUR.name());
-        contact.setNom("Nom");
-        contact.setPrenom("Prénom 2");
+        contact2.setTitre(Titre.MONSIEUR.name());
+        contact2.setNom("Nom");
+        contact2.setPrenom("Prénom 2");
         assertDoesNotThrow(() -> contactController.create(contact2));
 
         ContactDto contact3 = new ContactDto();
-        contact.setTitre(Titre.MONSIEUR.name());
-        contact.setNom("Nom 2");
-        contact.setPrenom("Prénom 2");
+        contact3.setTitre(Titre.MONSIEUR.name());
+        contact3.setNom("Nom 2");
+        contact3.setPrenom("Prénom 2");
         assertDoesNotThrow(() -> contactController.create(contact3));
 
         SearchRequest searchRequest = new SearchRequest();
