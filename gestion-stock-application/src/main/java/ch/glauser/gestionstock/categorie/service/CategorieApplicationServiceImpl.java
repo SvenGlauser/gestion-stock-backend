@@ -57,8 +57,6 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
         Categorie newCategorie = categorie.toDomain();
 
-        newCategorie.validateCreate();
-
         Categorie savedCategorie = this.categorieService.createCategorie(newCategorie);
 
         return Optional.ofNullable(savedCategorie).map(CategorieDto::new).orElse(null);
@@ -72,8 +70,6 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
                 .execute();
 
         Categorie categorieToUpdate = categorie.toDomain();
-
-        categorieToUpdate.validateModify();
 
         Categorie savedCategorie = this.categorieService.modifyCategorie(categorieToUpdate);
 

@@ -58,8 +58,6 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
         Localite newLocalite = localite.toDomain();
 
-        newLocalite.validateCreate();
-
         Localite savedCategorie = this.localiteService.createLocalite(newLocalite);
 
         return Optional.ofNullable(savedCategorie).map(LocaliteDto::new).orElse(null);
@@ -73,8 +71,6 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
                 .execute();
 
         Localite localiteToUpdate = localite.toDomain();
-
-        localiteToUpdate.validateModify();
 
         Localite savedCategorie = this.localiteService.modifyLocalite(localiteToUpdate);
 

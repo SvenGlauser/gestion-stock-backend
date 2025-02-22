@@ -58,8 +58,6 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
         Fournisseur newFournisseur = fournisseur.toDomain();
 
-        newFournisseur.validateCreate();
-
         Fournisseur savedFournisseur = this.fournisseurService.createFournisseur(newFournisseur);
 
         return Optional.ofNullable(savedFournisseur).map(FournisseurDto::new).orElse(null);
@@ -73,8 +71,6 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
                 .execute();
 
         Fournisseur fournisseurToUpdate = fournisseur.toDomain();
-
-        fournisseurToUpdate.validateModify();
 
         Fournisseur savedFournisseur = this.fournisseurService.modifyFournisseur(fournisseurToUpdate);
 

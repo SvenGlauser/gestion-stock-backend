@@ -58,8 +58,6 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
 
         Contact newContact = contact.toDomain();
 
-        newContact.validateCreate();
-
         Contact savedCategorie = this.contactService.createContact(newContact);
 
         return Optional.ofNullable(savedCategorie).map(ContactDto::new).orElse(null);
@@ -73,8 +71,6 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
                 .execute();
 
         Contact contactToUpdate = contact.toDomain();
-
-        contactToUpdate.validateModify();
 
         Contact savedCategorie = this.contactService.modifyContact(contactToUpdate);
 

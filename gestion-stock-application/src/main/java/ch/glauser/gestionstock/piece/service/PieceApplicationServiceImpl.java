@@ -58,8 +58,6 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
         Piece newPiece = piece.toDomain();
 
-        newPiece.validateCreate();
-
         Piece savedPiece = this.pieceService.createPiece(newPiece);
 
         return Optional.ofNullable(savedPiece).map(PieceDto::new).orElse(null);
@@ -73,8 +71,6 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
                 .execute();
 
         Piece pieceToUpdate = piece.toDomain();
-
-        pieceToUpdate.validateModify();
 
         Piece savedPiece = this.pieceService.modifyPiece(pieceToUpdate);
 
