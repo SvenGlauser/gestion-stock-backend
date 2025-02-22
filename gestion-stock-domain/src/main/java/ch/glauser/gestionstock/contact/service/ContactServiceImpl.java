@@ -48,7 +48,7 @@ public class ContactServiceImpl implements ContactService {
                 .validateNotNull(contact, ContactConstantes.FIELD_CONTACT)
                 .execute();
 
-        contact.validateCreate();
+        contact.validateCreate().execute();
 
         return this.contactRepository.createContact(contact);
     }
@@ -59,7 +59,7 @@ public class ContactServiceImpl implements ContactService {
                 .validateNotNull(contact, ContactConstantes.FIELD_CONTACT)
                 .execute();
 
-        contact.validateModify();
+        contact.validateModify().execute();
 
         return this.contactRepository.modifyContact(contact);
     }
