@@ -70,4 +70,12 @@ public interface PieceRepository {
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
     boolean existPieceByNom(String nom);
+
+    /**
+     * Vérifie s'il existe une pièce avec ce numéro d'inventaire
+     *
+     * @param numeroInventaire Numéro d'inventaire de la catégorie
+     * @return {@code true} s'il en existe une, sinon {@code false}
+     */
+    boolean existPieceByNumeroInventaire(String numeroInventaire);
 }

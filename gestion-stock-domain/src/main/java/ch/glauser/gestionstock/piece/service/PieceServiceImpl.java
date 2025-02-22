@@ -53,6 +53,10 @@ public class PieceServiceImpl implements PieceService {
             validator.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
         }
 
+        if (this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
+            validator.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
+        }
+
         validator.execute();
 
         return this.pieceRepository.createPiece(piece);
@@ -68,12 +72,20 @@ public class PieceServiceImpl implements PieceService {
 
         Validator validator = piece.validateModify();
 
-        if (Objects.nonNull(oldPiece) &&
-            !Objects.equals(oldPiece.getNom(), piece.getNom()) &&
-            this.pieceRepository.existPieceByNom(piece.getNom())) {
+        if (Objects.nonNull(oldPiece)) {
+            if (!Objects.equals(oldPiece.getNom(), piece.getNom()) &&
+                this.pieceRepository.existPieceByNom(piece.getNom())) {
 
-            // Valide le cas dans lequel la pièce a changé de nom
-            validator.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
+                // Valide le cas dans lequel la pièce a changé de nom
+                validator.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
+            }
+
+            if (!Objects.equals(oldPiece.getNumeroInventaire(), piece.getNumeroInventaire()) &&
+                this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
+
+                // Valide le cas dans lequel la pièce a changé de numéro d'inventaire
+                validator.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
+            }
         }
 
         validator.execute();

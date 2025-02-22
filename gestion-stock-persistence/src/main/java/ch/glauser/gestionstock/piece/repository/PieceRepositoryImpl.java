@@ -61,4 +61,9 @@ public class PieceRepositoryImpl implements PieceRepository {
     public boolean existPieceByNom(String nom) {
         return this.pieceJpaRepository.existsByNom(nom);
     }
+
+    @Override
+    public boolean existPieceByNumeroInventaire(String numeroInventaire) {
+        return this.pieceJpaRepository.existsByNumeroInventaire(numeroInventaire);
+    }
 }
