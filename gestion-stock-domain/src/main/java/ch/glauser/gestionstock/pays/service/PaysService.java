@@ -17,6 +17,14 @@ public interface PaysService {
     Pays getPays(Long id);
 
     /**
+     * Récupère un pays
+     *
+     * @param abreviation Abréviation du pays à récupérer
+     * @return Le pays ou null
+     */
+    Pays getPaysByAbreviation(String abreviation);
+
+    /**
      * Récupère les pays
      *
      * @param searchRequest Paramètres de recherche

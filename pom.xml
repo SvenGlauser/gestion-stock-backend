@@ -13,6 +13,7 @@
         <module>gestion-stock-persistence</module>
         <module>gestion-stock-domain</module>
         <module>gestion-stock-application</module>
+        <module>gestion-stock-batch</module>
     </modules>
 
     <properties>
@@ -48,6 +49,12 @@
             <dependency>
                 <groupId>ch.glauser</groupId>
                 <artifactId>gestion-stock-application</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>gestion-stock-batch</artifactId>
                 <version>${version}</version>
             </dependency>
 

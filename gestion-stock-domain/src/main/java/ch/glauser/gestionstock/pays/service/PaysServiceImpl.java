@@ -34,6 +34,15 @@ public class PaysServiceImpl implements PaysService {
     }
 
     @Override
+    public Pays getPaysByAbreviation(String abreviation) {
+        Validator.of(PaysServiceImpl.class)
+                .validateNotNull(abreviation, PaysConstantes.FIELD_ABREVIATION)
+                .execute();
+
+        return this.paysRepository.getPaysByAbreviation(abreviation);
+    }
+
+    @Override
     public SearchResult<Pays> searchPays(SearchRequest searchRequest) {
         Validator.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, PaysConstantes.FIELD_SEARCH_REQUEST)
