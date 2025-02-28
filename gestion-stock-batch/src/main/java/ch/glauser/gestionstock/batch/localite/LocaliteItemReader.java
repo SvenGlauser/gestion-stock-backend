@@ -5,12 +5,16 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Component("localiteItemReader")
 public class LocaliteItemReader implements ItemReader<Object> {
+    public static final String MAP_CANTON_KEY = "key";
     private List<Integer> cantonsIds;
-    private List<?> localites;
+    private List<Object> localites;
 
     @Override
     public Object read() {
@@ -31,7 +35,7 @@ public class LocaliteItemReader implements ItemReader<Object> {
         this.cantonsIds = new ArrayList<>();
         for (Object canton : CollectionUtils.emptyIfNull(cantons)) {
             if (canton instanceof Map<?, ?> cantonMap) {
-                cantonsIds.add(Integer.parseInt(cantonMap.get("key").toString()));
+                cantonsIds.add(Integer.parseInt(cantonMap.get(MAP_CANTON_KEY).toString()));
             }
         }
     }
@@ -41,9 +45,9 @@ public class LocaliteItemReader implements ItemReader<Object> {
             int page = 1;
             boolean continu = true;
             do {
-                List<?> localites = restTemplate.getForObject("https://openplzapi.org/ch/Cantons/" + id + "/Localities?page=" + page + "&pageSize=50", List.class);
-                if (CollectionUtils.isNotEmpty(localites)) {
-                    this.localites.addAll((Collection) localites);
+                List<?> importedLocalites = restTemplate.getForObject("https://openplzapi.org/ch/Cantons/" + id + "/Localities?page=" + page + "&pageSize=50", List.class);
+                if (CollectionUtils.isNotEmpty(importedLocalites)) {
+                    this.localites.addAll(importedLocalites);
                     page++;
                 } else {
                     continu = false;

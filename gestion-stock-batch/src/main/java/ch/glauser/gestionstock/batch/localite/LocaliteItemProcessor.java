@@ -16,23 +16,29 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class LocaliteItemProcessor implements ItemProcessor<Object, Localite> {
 
+    private static final String ABREVIATION_SUISSE = "CH";
+    private static final String ERROR_IMPORT_LOCALITE_PAYS_SUISSE_INTROUVABLE = "Impossible de récupérer le pays : Suisse";
+    private static final String MAP_LOCALITE_NAME = "name";
+    private static final String MAP_LOCALITE_POSTAL_CODE = "postalCode";
+
     private final PaysService paysService;
+
     private Pays suisse;
 
     @Override
     public Localite process(@NonNull Object item) {
         if (Objects.isNull(this.suisse)) {
-            this.suisse = this.paysService.getPaysByAbreviation("CH");
+            this.suisse = this.paysService.getPaysByAbreviation(ABREVIATION_SUISSE);
 
             if (Objects.isNull(this.suisse)) {
-                throw new TechnicalException("Impossible de récupérer le pays : Suisse");
+                throw new TechnicalException(ERROR_IMPORT_LOCALITE_PAYS_SUISSE_INTROUVABLE);
             }
         }
 
         if (item instanceof Map<?,?> mapItem) {
             Localite localite = new Localite();
-            localite.setNom(mapItem.get("name").toString());
-            localite.setNpa(mapItem.get("postalCode").toString());
+            localite.setNom(mapItem.get(MAP_LOCALITE_NAME).toString());
+            localite.setNpa(mapItem.get(MAP_LOCALITE_POSTAL_CODE).toString());
             localite.setPays(this.suisse);
 
             return localite;
