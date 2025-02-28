@@ -26,6 +26,14 @@ public interface PaysJpaRepository extends JpaRepository<PaysEntity, Long>, JpaS
     Optional<PaysEntity> findOptionalById(Long id);
 
     /**
+     * Récupère un pays par abréviation
+     *
+     * @param abreviation Abréviation du pays
+     * @return Un {@link Optional} de {@link PaysEntity}
+     */
+    Optional<PaysEntity> findOptionalByAbreviation(String abreviation);
+
+    /**
      * Vérifie s'il existe un pays avec ce nom
      *
      * @param nom Nom du pays

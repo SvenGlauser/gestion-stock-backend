@@ -20,12 +20,17 @@
     <dependencies>
         <dependency>
             <groupId>ch.glauser</groupId>
+            <artifactId>gestion-stock-domain</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.glauser</groupId>
             <artifactId>gestion-stock-persistence</artifactId>
         </dependency>
 
         <dependency>
             <groupId>ch.glauser</groupId>
-            <artifactId>gestion-stock-domain</artifactId>
+            <artifactId>gestion-stock-batch</artifactId>
         </dependency>
 
         <dependency>

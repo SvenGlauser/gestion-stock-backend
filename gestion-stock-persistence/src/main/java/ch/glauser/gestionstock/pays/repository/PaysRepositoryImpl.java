@@ -27,6 +27,11 @@ public class PaysRepositoryImpl implements PaysRepository {
     }
 
     @Override
+    public Pays getPaysByAbreviation(String abreviation) {
+        return this.paysJpaRepository.findOptionalByAbreviation(abreviation).map(ModelEntity::toDomain).orElse(null);
+    }
+
+    @Override
     public SearchResult<Pays> searchPays(SearchRequest searchRequest) {
         Page<PaysEntity> page = this.paysJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
