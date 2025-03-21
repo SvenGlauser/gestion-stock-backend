@@ -143,7 +143,7 @@ class PaysControllerTest {
         pays.setNom("Pays - Test Modify - 2");
         pays.setAbreviation("Pays - Test Modify - Abreviation - 2");
 
-        paysController.modify(pays).getBody();
+        paysController.modify(pays);
 
         PaysDto paysDto2 = paysController.get(pays.getId()).getBody();
         assertThat(paysDto2).isNotNull();

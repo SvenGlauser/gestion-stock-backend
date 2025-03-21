@@ -161,7 +161,7 @@ class FournisseurControllerTest {
         fournisseur.setDescription("Description 2");
         fournisseur.setUrl("https://google.ch");
 
-        fournisseurController.modify(fournisseur).getBody();
+        fournisseurController.modify(fournisseur);
 
         FournisseurDto fournisseurDto2 = fournisseurController.get(fournisseur.getId()).getBody();
         assertThat(fournisseurDto2).isNotNull();

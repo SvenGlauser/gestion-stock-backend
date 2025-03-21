@@ -185,7 +185,7 @@ class LocaliteControllerTest {
         localite.setNom("Localite 2");
         localite.setNpa("12345");
 
-        localiteController.modify(localite).getBody();
+        localiteController.modify(localite);
 
         LocaliteDto localiteDto2 = localiteController.get(localite.getId()).getBody();
         assertThat(localiteDto2).isNotNull();

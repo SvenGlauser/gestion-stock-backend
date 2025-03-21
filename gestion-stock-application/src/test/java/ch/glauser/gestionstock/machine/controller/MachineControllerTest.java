@@ -165,7 +165,7 @@ class MachineControllerTest {
         machine.setNom("Machine 2");
         machine.setDescription("Machine - Description 2");
 
-        machineController.modify(machine).getBody();
+        machineController.modify(machine);
 
         MachineDto machineDto2 = machineController.get(machine.getId()).getBody();
         assertThat(machineDto2).isNotNull();

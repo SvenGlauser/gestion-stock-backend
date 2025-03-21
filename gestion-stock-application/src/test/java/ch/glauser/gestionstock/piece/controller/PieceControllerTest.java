@@ -211,7 +211,7 @@ class PieceControllerTest {
         piece.setNom("Piece 2");
         piece.setDescription("Description 2");
 
-        pieceController.modify(piece).getBody();
+        pieceController.modify(piece);
 
         PieceDto pieceDto2 = pieceController.get(piece.getId()).getBody();
         assertThat(pieceDto2).isNotNull();

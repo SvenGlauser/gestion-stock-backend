@@ -130,7 +130,7 @@ class ContactControllerTest {
         contact.setNom("Nom 2");
         contact.setPrenom("Prénom 2");
 
-        contactController.modify(contact).getBody();
+        contactController.modify(contact);
 
         ContactDto contactDto2 = contactController.get(contact.getId()).getBody();
         assertThat(contactDto2).isNotNull();
