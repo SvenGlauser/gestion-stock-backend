@@ -59,6 +59,7 @@ class CategorieControllerTest {
 
         // Test cas OK
         categorie.setNom("Categorie - Test Set");
+        categorie.setActif(true);
         assertDoesNotThrow(() -> categorieController.create(categorie));
 
         CategorieDto categorie2 = new CategorieDto();
