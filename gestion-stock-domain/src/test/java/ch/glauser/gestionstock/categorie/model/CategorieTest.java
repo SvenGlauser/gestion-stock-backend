@@ -11,13 +11,14 @@ class CategorieTest {
     void validateWithoutValue() {
         Categorie categorie = new Categorie();
 
-        TestUtils.testValidation(categorie, Categorie.class, 1);
+        TestUtils.testValidation(categorie, Categorie.class, 2);
     }
 
     @Test
     void validateWithValue() {
         Categorie categorie = new Categorie();
         categorie.setNom("Test");
+        categorie.setActif(true);
 
         assertDoesNotThrow(categorie::validateCreate);
     }
