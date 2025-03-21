@@ -4,6 +4,7 @@ import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.common.validation.notnull.NotNull;
+import ch.glauser.gestionstock.common.validation.unique.notnull.Unique;
 import ch.glauser.gestionstock.contact.model.Contact;
 import ch.glauser.gestionstock.piece.model.Piece;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Machine extends Model {
     @NotNull
     private Contact contact;
 
+    @Unique
     private List<Piece> pieces;
 
     @Override

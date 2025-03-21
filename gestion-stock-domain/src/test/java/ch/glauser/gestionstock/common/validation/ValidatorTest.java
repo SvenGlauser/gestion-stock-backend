@@ -40,6 +40,25 @@ class ValidatorTest {
     }
 
     @Test
+    void validateUniqueWithNonUniqueValues() {
+        Validator validator = Validator.of(List.class)
+                .validateUnique(List.of(1, 1, 2, 3, 4, 5, 6), "test1")
+                .validateUnique(List.of(1, 2, 3, 4, 5, 6), "test2")
+                .validateUnique(null, "test3");
+
+        TestUtils.testValidation(1, validator::execute);
+    }
+
+    @Test
+    void validateUniqueWithoutUniqueValues() {
+        Validator validator = Validator.of(List.class)
+                .validateUnique(List.of(1, 2, 3, 4, 5, 6), "test2")
+                .validateUnique(null, "test3");
+
+        assertDoesNotThrow(validator::execute);
+    }
+
+    @Test
     void validateWithoutClass() {
         TestUtils.testValidation(new Object(), null, 1);
     }

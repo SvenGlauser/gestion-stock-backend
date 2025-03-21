@@ -135,7 +135,7 @@ class LocaliteControllerTest {
         paysFilter.setValue(pays.getId());
         paysFilter.setField("pays.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilter(List.of(paysFilter));
+        searchRequest1.setFilters(List.of(paysFilter));
         SearchResult<LocaliteDto> result1 = localiteController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -151,7 +151,7 @@ class LocaliteControllerTest {
         npa.setField("npa");
         npa.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(npa, nom));
+        searchRequest2.setFilters(List.of(npa, nom));
         SearchResult<LocaliteDto> result2 = localiteController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

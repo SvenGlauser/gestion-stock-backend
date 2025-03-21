@@ -112,7 +112,7 @@ class FournisseurControllerTest {
         description.setField("description");
         description.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilter(List.of(description));
+        searchRequest1.setFilters(List.of(description));
         SearchResult<FournisseurDto> result1 = fournisseurController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -125,7 +125,7 @@ class FournisseurControllerTest {
         nom.setField("nom");
         nom.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(nom));
+        searchRequest2.setFilters(List.of(nom));
         SearchResult<FournisseurDto> result2 = fournisseurController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

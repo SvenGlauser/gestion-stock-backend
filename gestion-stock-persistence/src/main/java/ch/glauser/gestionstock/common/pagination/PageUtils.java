@@ -50,6 +50,6 @@ public final class PageUtils {
     }
 
     public static Collection<Filter> getFilters(SearchRequest searchRequest) {
-        return CollectionUtils.emptyIfNull(searchRequest.getFilter());
+        return CollectionUtils.emptyIfNull(searchRequest.getFilters());
     }
 }

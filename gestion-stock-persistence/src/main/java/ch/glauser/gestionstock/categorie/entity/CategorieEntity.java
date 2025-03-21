@@ -28,7 +28,7 @@ public class CategorieEntity extends ModelEntity<Categorie> {
         super(categorie);
         this.nom = categorie.getNom();
         this.description = categorie.getDescription();
-        this.actif = categorie.isActif();
+        this.actif = categorie.getActif();
     }
 
     @Override

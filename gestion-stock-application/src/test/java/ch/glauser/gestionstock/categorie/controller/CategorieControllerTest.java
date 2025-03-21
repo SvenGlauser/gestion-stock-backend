@@ -104,7 +104,7 @@ class CategorieControllerTest {
         actif.setValue(false);
         actif.setField("actif");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilter(List.of(actif));
+        searchRequest1.setFilters(List.of(actif));
         SearchResult<CategorieDto> result1 = categorieController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -116,7 +116,7 @@ class CategorieControllerTest {
         nom.setValue("Categorie - Test Search - 3");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(nom));
+        searchRequest2.setFilters(List.of(nom));
         SearchResult<CategorieDto> result2 = categorieController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

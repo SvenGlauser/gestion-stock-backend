@@ -12,8 +12,8 @@ import java.lang.reflect.Field;
 @AllArgsConstructor
 public final class Error {
     private String message;
-    private String champs;
-    private Class<?> classe;
+    private String field;
+    private Class<?> clazz;
 
     /**
      * Construit une erreur
@@ -23,7 +23,7 @@ public final class Error {
      */
     public Error(String message, Field field) {
         this.message = message;
-        this.champs = field.getName();
-        this.classe = field.getDeclaringClass();
+        this.field = field.getName();
+        this.clazz = field.getDeclaringClass();
     }
 }

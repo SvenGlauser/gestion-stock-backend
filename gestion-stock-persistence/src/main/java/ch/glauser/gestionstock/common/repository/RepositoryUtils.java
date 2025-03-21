@@ -45,8 +45,14 @@ public final class RepositoryUtils {
                     }
 
                     switch (filter.getType()) {
-                        case EQUAL -> predicates.add(criteriaBuilder.and(criteriaBuilder.equal(jpaPath, filter.getValue())));
-                        case STRING_LIKE -> predicates.add(criteriaBuilder.and(criteriaBuilder.like((Path<String>) jpaPath, "%" + filter.getValue() + "%")));
+                        case EQUAL -> predicates.add(
+                                criteriaBuilder.and(
+                                        criteriaBuilder.equal(jpaPath, filter.getValue())));
+                        case STRING_LIKE -> predicates.add(
+                                criteriaBuilder.and(
+                                        criteriaBuilder.like(
+                                                criteriaBuilder.lower((Path<String>) jpaPath),
+                                                "%" + filter.getValue().toString().toLowerCase() + "%")));
                     }
                 }
             }
