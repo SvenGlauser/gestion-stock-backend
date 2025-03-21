@@ -6,6 +6,9 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.contact.repository.ContactRepository;
 import ch.glauser.gestionstock.contact.service.ContactService;
 import ch.glauser.gestionstock.contact.service.ContactServiceImpl;
+import ch.glauser.gestionstock.exception.repository.ThrownExceptionRepository;
+import ch.glauser.gestionstock.exception.service.ThrownExceptionService;
+import ch.glauser.gestionstock.exception.service.ThrownExceptionServiceImpl;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.fournisseur.service.FournisseurService;
 import ch.glauser.gestionstock.fournisseur.service.FournisseurServiceImpl;
@@ -67,5 +70,10 @@ public class ServiceBeansGenerator {
     public PieceService pieceService(PieceRepository pieceRepository,
                                      MachineRepository machineRepository) {
         return new PieceServiceImpl(pieceRepository, machineRepository);
+    }
+
+    @Bean
+    public ThrownExceptionService thrownExceptionService(ThrownExceptionRepository thrownExceptionRepository) {
+        return new ThrownExceptionServiceImpl(thrownExceptionRepository);
     }
 }
