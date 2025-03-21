@@ -48,7 +48,7 @@ class CategorieControllerTest {
         assertThat(categorieDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Categorie - Test Get - Description");
-        assertThat(categorieDto.isActif()).isFalse();
+        assertThat(categorieDto.getActif()).isFalse();
     }
 
     @Test
@@ -144,13 +144,13 @@ class CategorieControllerTest {
         assertThat(categorieDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Categorie - Test Modify - Description");
-        assertThat(categorieDto.isActif()).isFalse();
+        assertThat(categorieDto.getActif()).isFalse();
 
         categorie.setNom("Categorie - Test Modify - 2");
         categorie.setDescription("Categorie - Test Modify - Description - 2");
         categorie.setActif(true);
 
-        categorieController.modify(categorie).getBody();
+        categorieController.modify(categorie);
 
         CategorieDto categorieDto2 = categorieController.get(categorie.getId()).getBody();
         assertThat(categorieDto2).isNotNull();
@@ -160,7 +160,7 @@ class CategorieControllerTest {
         assertThat(categorieDto2.getDescription())
                 .isNotNull()
                 .isEqualTo("Categorie - Test Modify - Description - 2");
-        assertThat(categorieDto2.isActif()).isTrue();
+        assertThat(categorieDto2.getActif()).isTrue();
         assertThat(categorieDto2.getId()).isEqualTo(categorieDto.getId());
     }
 
