@@ -321,12 +321,14 @@ class PieceControllerTest {
     private CategorieDto getCategorie() {
         CategorieDto categorie = new CategorieDto();
         categorie.setNom("Categorie");
+        categorie.setActif(true);
         return categorieController.create(categorie).getBody();
     }
 
     private CategorieDto getCategorie1() {
         CategorieDto categorie = new CategorieDto();
         categorie.setNom("Categorie 1");
+        categorie.setActif(true);
         return categorieController.create(categorie).getBody();
     }
 }

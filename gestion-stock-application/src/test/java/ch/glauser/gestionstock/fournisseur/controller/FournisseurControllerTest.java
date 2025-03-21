@@ -221,6 +221,7 @@ class FournisseurControllerTest {
 
         CategorieDto categorieDto = new CategorieDto();
         categorieDto.setNom("Categorie");
+        categorieDto.setActif(true);
         categorieDto = categorieController.create(categorieDto).getBody();
         PieceDto piece = new PieceDto();
         piece.setNom("Piece");
