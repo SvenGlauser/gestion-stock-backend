@@ -94,7 +94,7 @@ class ContactControllerTest {
         nom.setValue("Nom");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(nom));
+        searchRequest2.setFilters(List.of(nom));
         SearchResult<ContactDto> result2 = contactController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
@@ -130,7 +130,7 @@ class ContactControllerTest {
         contact.setNom("Nom 2");
         contact.setPrenom("Prénom 2");
 
-        contactController.modify(contact).getBody();
+        contactController.modify(contact);
 
         ContactDto contactDto2 = contactController.get(contact.getId()).getBody();
         assertThat(contactDto2).isNotNull();

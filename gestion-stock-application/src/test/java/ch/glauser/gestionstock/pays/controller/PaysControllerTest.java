@@ -112,7 +112,7 @@ class PaysControllerTest {
         nom.setValue("Pays - Test Search - 3");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(nom));
+        searchRequest2.setFilters(List.of(nom));
         SearchResult<PaysDto> result2 = paysController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
@@ -143,7 +143,7 @@ class PaysControllerTest {
         pays.setNom("Pays - Test Modify - 2");
         pays.setAbreviation("Pays - Test Modify - Abreviation - 2");
 
-        paysController.modify(pays).getBody();
+        paysController.modify(pays);
 
         PaysDto paysDto2 = paysController.get(pays.getId()).getBody();
         assertThat(paysDto2).isNotNull();

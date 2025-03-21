@@ -3,6 +3,7 @@ package ch.glauser.gestionstock.categorie.model;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.validation.common.Validator;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
+import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +16,9 @@ public class Categorie extends Model {
     @NotEmpty
     private String nom;
     private String description;
-    private boolean actif;
+
+    @NotNull
+    private Boolean actif;
 
     @Override
     public Validator validateChild() {

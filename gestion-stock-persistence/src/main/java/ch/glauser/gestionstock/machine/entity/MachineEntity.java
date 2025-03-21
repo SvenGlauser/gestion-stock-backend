@@ -33,7 +33,7 @@ public class MachineEntity extends ModelEntity<Machine> {
     @JoinColumn(name = "CONTACT_ID", nullable = false)
     private ContactEntity contact;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(
             name = "MACHINE_PIECE",
             joinColumns = @JoinColumn(name = "MACHINE_ID"),

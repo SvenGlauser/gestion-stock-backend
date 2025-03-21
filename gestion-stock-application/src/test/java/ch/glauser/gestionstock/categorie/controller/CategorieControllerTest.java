@@ -48,27 +48,30 @@ class CategorieControllerTest {
         assertThat(categorieDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Categorie - Test Get - Description");
-        assertThat(categorieDto.isActif()).isFalse();
+        assertThat(categorieDto.getActif()).isFalse();
     }
 
     @Test
     void create() {
         // Test validation bien mise en place
         CategorieDto categorie = new CategorieDto();
-        TestUtils.testValidation(1, () -> categorieController.create(categorie));
+        TestUtils.testValidation(2, () -> categorieController.create(categorie));
 
         // Test cas OK
         categorie.setNom("Categorie - Test Set");
+        categorie.setActif(true);
         assertDoesNotThrow(() -> categorieController.create(categorie));
 
         CategorieDto categorie2 = new CategorieDto();
         categorie2.setNom("Categorie - Test Set");
+        categorie2.setActif(true);
 
         // Test unicité du nom
         TestUtils.testValidation(1, () -> categorieController.create(categorie2));
 
         CategorieDto categorie3 = new CategorieDto();
         categorie3.setNom("Categorie - Test Set - 2");
+        categorie3.setActif(true);
 
         // Test unicité du nom
         assertDoesNotThrow(() -> categorieController.create(categorie3));
@@ -104,7 +107,7 @@ class CategorieControllerTest {
         actif.setValue(false);
         actif.setField("actif");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilter(List.of(actif));
+        searchRequest1.setFilters(List.of(actif));
         SearchResult<CategorieDto> result1 = categorieController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -116,7 +119,7 @@ class CategorieControllerTest {
         nom.setValue("Categorie - Test Search - 3");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(nom));
+        searchRequest2.setFilters(List.of(nom));
         SearchResult<CategorieDto> result2 = categorieController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
@@ -144,13 +147,13 @@ class CategorieControllerTest {
         assertThat(categorieDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Categorie - Test Modify - Description");
-        assertThat(categorieDto.isActif()).isFalse();
+        assertThat(categorieDto.getActif()).isFalse();
 
         categorie.setNom("Categorie - Test Modify - 2");
         categorie.setDescription("Categorie - Test Modify - Description - 2");
         categorie.setActif(true);
 
-        categorieController.modify(categorie).getBody();
+        categorieController.modify(categorie);
 
         CategorieDto categorieDto2 = categorieController.get(categorie.getId()).getBody();
         assertThat(categorieDto2).isNotNull();
@@ -160,7 +163,7 @@ class CategorieControllerTest {
         assertThat(categorieDto2.getDescription())
                 .isNotNull()
                 .isEqualTo("Categorie - Test Modify - Description - 2");
-        assertThat(categorieDto2.isActif()).isTrue();
+        assertThat(categorieDto2.getActif()).isTrue();
         assertThat(categorieDto2.getId()).isEqualTo(categorieDto.getId());
     }
 
@@ -168,6 +171,7 @@ class CategorieControllerTest {
     void modifyAvecNomUnique() {
         CategorieDto categorie = new CategorieDto();
         categorie.setNom("Categorie - Test ModifyAvecNomUnique");
+        categorie.setActif(true);
 
         categorie = categorieController.create(categorie).getBody();
 
@@ -175,6 +179,7 @@ class CategorieControllerTest {
 
         CategorieDto categorie2 = new CategorieDto();
         categorie2.setNom("Categorie - Test ModifyAvecNomUnique - 2");
+        categorie2.setActif(true);
 
         categorie2 = categorieController.create(categorie2).getBody();
 
@@ -189,6 +194,7 @@ class CategorieControllerTest {
     void delete() {
         CategorieDto categorie = new CategorieDto();
         categorie.setNom("Categorie - Test Delete");
+        categorie.setActif(true);
 
         categorie = categorieController.create(categorie).getBody();
 
@@ -205,6 +211,7 @@ class CategorieControllerTest {
 
         CategorieDto categorie2 = new CategorieDto();
         categorie2.setNom("Categorie - Test Delete - 2");
+        categorie2.setActif(true);
         categorie2 = categorieController.create(categorie2).getBody();
 
         PieceDto piece = new PieceDto();

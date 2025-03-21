@@ -7,6 +7,7 @@ import ch.glauser.gestionstock.common.validation.maxvalue.MaxValue;
 import ch.glauser.gestionstock.common.validation.minvalue.MinValue;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.common.validation.notnull.NotNull;
+import ch.glauser.gestionstock.common.validation.unique.notnull.Unique;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -80,12 +81,14 @@ public final class Validator {
 
         List<Field> notNull = getAllFieldsWithSpecificAnnotation(annotatedFields, NotNull.class);
         List<Field> notEmpty = getAllFieldsWithSpecificAnnotation(annotatedFields, NotEmpty.class);
+        List<Field> unique = getAllFieldsWithSpecificAnnotation(annotatedFields, Unique.class);
         List<Field> minValue = getAllFieldsWithSpecificAnnotation(annotatedFields, MinValue.class);
         List<Field> maxValue = getAllFieldsWithSpecificAnnotation(annotatedFields, MaxValue.class);
         List<Field> cascadeValidation = getAllFieldsWithSpecificAnnotation(annotatedFields, CascadeValidation.class);
 
         notNull.forEach(field -> validator.validateNotNull(object, field));
         notEmpty.forEach(field -> validator.validateNotEmpty(object, field));
+        unique.forEach(field -> validator.validateUnique(object, field));
         minValue.forEach(field -> validator.validateMinValue(object, field));
         maxValue.forEach(field -> validator.validateMaxValue(object, field));
         cascadeValidation.forEach(field -> validator.validateCascade(object, field));
@@ -187,6 +190,39 @@ public final class Validator {
     public Validator validateNotEmpty(Collection<?> object, String field) {
         if (CollectionUtils.isEmpty(object)) {
             this.errors.add(new Error("La liste ne doit pas être vide", field, this.classe));
+        }
+
+        return this;
+    }
+    /**
+     * Valide que la liste ne contient pas la même valeur 2 fois
+     *
+     * @param object Liste à valider
+     * @param uniqueField Champ à valider
+     */
+    public void validateUnique(Object object, Field uniqueField) {
+        if (isNotType(uniqueField, Collection.class)) {
+            throw new TechnicalException("L'annotation @Unique ne peut pas être utilisé sur un champ de type : " + uniqueField.getType() + ", " + uniqueField);
+        }
+
+        Object value = getValue(object, uniqueField);
+
+        // N'empêche pas les valeurs null
+        if (value instanceof Collection<?> collection) {
+            this.validateUnique(collection, uniqueField.getName());
+        }
+    }
+
+    /**
+     * Valide que la liste ne contient pas la même valeur 2 fois
+     *
+     * @param object Liste à valider
+     * @param field Champ à valider
+     * @return L'instance de validation
+     */
+    public Validator validateUnique(Collection<?> object, String field) {
+        if (CollectionUtils.size(object) != CollectionUtils.size(Set.copyOf(CollectionUtils.emptyIfNull(object)))) {
+            this.errors.add(new Error("La liste doit contenir des valeurs uniques", field, this.classe));
         }
 
         return this;

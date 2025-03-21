@@ -13,13 +13,13 @@ public class CategorieDto extends ModelDto<Categorie> {
 
     private String nom;
     private String description;
-    private boolean actif;
+    private Boolean actif;
 
     public CategorieDto(Categorie categorie) {
         super(categorie);
         this.nom = categorie.getNom();
         this.description = categorie.getDescription();
-        this.actif = categorie.isActif();
+        this.actif = categorie.getActif();
     }
 
     @Override

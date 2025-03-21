@@ -163,7 +163,7 @@ class PieceControllerTest {
         categorieFilter.setValue(categorie.getId());
         categorieFilter.setField("categorie.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilter(List.of(categorieFilter));
+        searchRequest1.setFilters(List.of(categorieFilter));
         SearchResult<PieceDto> result1 = pieceController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -176,7 +176,7 @@ class PieceControllerTest {
         nom.setField("nom");
         nom.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(nom));
+        searchRequest2.setFilters(List.of(nom));
         SearchResult<PieceDto> result2 = pieceController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
@@ -211,7 +211,7 @@ class PieceControllerTest {
         piece.setNom("Piece 2");
         piece.setDescription("Description 2");
 
-        pieceController.modify(piece).getBody();
+        pieceController.modify(piece);
 
         PieceDto pieceDto2 = pieceController.get(piece.getId()).getBody();
         assertThat(pieceDto2).isNotNull();
@@ -321,12 +321,14 @@ class PieceControllerTest {
     private CategorieDto getCategorie() {
         CategorieDto categorie = new CategorieDto();
         categorie.setNom("Categorie");
+        categorie.setActif(true);
         return categorieController.create(categorie).getBody();
     }
 
     private CategorieDto getCategorie1() {
         CategorieDto categorie = new CategorieDto();
         categorie.setNom("Categorie 1");
+        categorie.setActif(true);
         return categorieController.create(categorie).getBody();
     }
 }

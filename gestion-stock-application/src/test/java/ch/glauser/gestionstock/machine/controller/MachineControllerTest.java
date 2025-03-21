@@ -119,7 +119,7 @@ class MachineControllerTest {
         contactFilter.setValue(contact.getId());
         contactFilter.setField("contact.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilter(List.of(contactFilter));
+        searchRequest1.setFilters(List.of(contactFilter));
         SearchResult<MachineDto> result1 = machineController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -131,7 +131,7 @@ class MachineControllerTest {
         nom.setValue("Machine");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilter(List.of(nom));
+        searchRequest2.setFilters(List.of(nom));
         SearchResult<MachineDto> result2 = machineController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
@@ -165,7 +165,7 @@ class MachineControllerTest {
         machine.setNom("Machine 2");
         machine.setDescription("Machine - Description 2");
 
-        machineController.modify(machine).getBody();
+        machineController.modify(machine);
 
         MachineDto machineDto2 = machineController.get(machine.getId()).getBody();
         assertThat(machineDto2).isNotNull();
