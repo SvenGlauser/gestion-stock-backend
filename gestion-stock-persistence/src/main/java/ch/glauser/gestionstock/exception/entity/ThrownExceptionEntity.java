@@ -9,19 +9,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity(name = "Exception")
 @Table(name = "EXCEPTION")
 public class ThrownExceptionEntity extends ModelEntity<ThrownException> {
-    @Column(name = "STACKTRACE")
+    @Column(name = "STACKTRACE", columnDefinition = "TEXT", nullable = false)
     private String stacktrace;
-    @Column(name = "CLASS_NAME")
+    @Column(name = "CLASS_NAME", nullable = false)
     private String className;
     @Column(name = "MESSAGE")
     private String message;
-    @Column(name = "ACTIF")
+    @Column(name = "TIMESTAMP", nullable = false)
+    private LocalDateTime timestamp;
+    @Column(name = "ACTIF", nullable = false)
     private boolean actif;
 
     public ThrownExceptionEntity(ThrownException exception) {
@@ -29,6 +33,7 @@ public class ThrownExceptionEntity extends ModelEntity<ThrownException> {
         this.stacktrace = exception.getStacktrace();
         this.className = exception.getClassName();
         this.message = exception.getMessage();
+        this.timestamp = exception.getTimestamp();
         this.actif = exception.isActif();
     }
 
@@ -38,6 +43,7 @@ public class ThrownExceptionEntity extends ModelEntity<ThrownException> {
         thrownException.setStacktrace(this.stacktrace);
         thrownException.setClassName(this.className);
         thrownException.setMessage(this.message);
+        thrownException.setTimestamp(this.timestamp);
         thrownException.setActif(this.actif);
         return thrownException;
     }

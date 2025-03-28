@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/exceptions", produces="application/json")
+@RequestMapping(path = "/exception", produces="application/json")
 @RequiredArgsConstructor
 public class ThrownExceptionController {
 
     private final ThrownExceptionApplicationService thrownExceptionApplicationService;
 
-    @GetMapping(path = "/{id}/{status}")
+    @PutMapping(path = "/{id}/{status}")
     public ResponseEntity<Void> changeStatus(@PathVariable(name = "id") Long id,
                                           @PathVariable(name = "status") Boolean status) {
 

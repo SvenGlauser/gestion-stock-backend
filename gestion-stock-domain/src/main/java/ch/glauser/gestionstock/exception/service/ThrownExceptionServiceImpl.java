@@ -8,7 +8,9 @@ import ch.glauser.gestionstock.exception.model.ThrownExceptionConstantes;
 import ch.glauser.gestionstock.exception.repository.ThrownExceptionRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -35,9 +37,17 @@ public class ThrownExceptionServiceImpl implements ThrownExceptionService {
                 .execute();
 
         ThrownException thrownException = new ThrownException();
+
+        // Récupère une jolie stacktrace
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        exception.printStackTrace(pw);
+
+        thrownException.setStacktrace(sw.toString());
+
         thrownException.setClassName(exception.getClass().getName());
         thrownException.setMessage(exception.getMessage());
-        thrownException.setStacktrace(Arrays.toString(exception.getStackTrace()));
+        thrownException.setTimestamp(LocalDateTime.now());
         thrownException.setActif(true);
 
         return this.thrownExceptionRepository.createException(thrownException);
