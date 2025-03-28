@@ -19,7 +19,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public PieceHistorique getPieceHistorique(Long id) {
-        Validator.of(PieceServiceImpl.class)
+        Validator.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(id, PieceHistoriqueConstantes.FIELD_ID)
                 .execute();
 
@@ -28,7 +28,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public SearchResult<PieceHistorique> searchPieceHistorique(SearchRequest searchRequest) {
-        Validator.of(PieceServiceImpl.class)
+        Validator.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -37,7 +37,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public void createPieceHistoriqueFromPiece(Piece newPiece) {
-        Validator.of(PieceServiceImpl.class)
+        Validator.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(newPiece, PieceHistoriqueConstantes.FIELD_NEW_PIECE)
                 .execute();
 
@@ -57,7 +57,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece) {
-        Validator.of(PieceServiceImpl.class)
+        Validator.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(newPiece, PieceHistoriqueConstantes.FIELD_NEW_PIECE)
                 .validateNotNull(oldPiece, PieceHistoriqueConstantes.FIELD_OLD_PIECE)
                 .execute();
@@ -88,7 +88,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public void deleteAllByIdPiece(Long idPiece) {
-        Validator.of(PieceServiceImpl.class)
+        Validator.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(idPiece, PieceHistoriqueConstantes.FIELD_PIECE_ID)
                 .execute();
 
