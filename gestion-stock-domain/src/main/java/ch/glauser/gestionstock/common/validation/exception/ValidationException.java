@@ -18,7 +18,7 @@ public final class ValidationException extends RuntimeException {
      * @param error Erreur d'utilisation de l'API
      */
     public ValidationException(Error error) {
-        this.errors = List.of(error);
+        this(List.of(error));
     }
 
     /**
@@ -27,6 +27,7 @@ public final class ValidationException extends RuntimeException {
      * @param errors Erreurs d'utilisation de l'API
      */
     public ValidationException(List<Error> errors) {
+        super(errors.toString());
         this.errors = errors;
     }
 }

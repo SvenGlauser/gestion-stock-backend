@@ -1,0 +1,35 @@
+package ch.glauser.gestionstock.exception.model;
+
+import ch.glauser.gestionstock.common.model.Model;
+import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
+import ch.glauser.gestionstock.common.validation.notnull.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+/**
+ * Classe représentant une erreur précédemment lancée
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@SuppressWarnings("java:S2166")
+public class ThrownException extends Model {
+    @NotEmpty
+    private String stacktrace;
+    @NotEmpty
+    private String className;
+    private String message;
+    @NotNull
+    private LocalDateTime timestamp;
+    @NotEmpty
+    private boolean actif;
+
+    @Override
+    protected Validator validateChild() {
+        return Validator.of(ThrownException.class);
+    }
+}
