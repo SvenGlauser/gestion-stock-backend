@@ -21,6 +21,7 @@ public class PieceServiceImpl implements PieceService {
 
     private final PieceRepository pieceRepository;
 
+    private final PieceHistoriqueService pieceHistoriqueService;
     private final MachineRepository machineRepository;
 
     @Override
@@ -47,6 +48,7 @@ public class PieceServiceImpl implements PieceService {
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
+        // Validation
         Validator validator = piece.validateCreate();
 
         if (this.pieceRepository.existPieceByNom(piece.getNom())) {
@@ -59,7 +61,13 @@ public class PieceServiceImpl implements PieceService {
 
         validator.execute();
 
-        return this.pieceRepository.createPiece(piece);
+        // Création de la pièce
+        Piece newPiece = this.pieceRepository.createPiece(piece);
+
+        // Mise à jour de l'historique
+        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece);
+
+        return newPiece;
     }
 
     @Override
@@ -68,8 +76,10 @@ public class PieceServiceImpl implements PieceService {
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
+        // Récupération de l'ancienne pièce
         Piece oldPiece = this.pieceRepository.getPiece(piece.getId());
 
+        // Validation
         Validator validator = piece.validateModify();
 
         if (Objects.nonNull(oldPiece)) {
@@ -90,7 +100,13 @@ public class PieceServiceImpl implements PieceService {
 
         validator.execute();
 
-        return this.pieceRepository.modifyPiece(piece);
+        // Création de la pièce
+        Piece newPiece = this.pieceRepository.modifyPiece(piece);
+
+        // Mise à jour de l'historique
+        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece, oldPiece);
+
+        return newPiece;
     }
 
     @Override
@@ -102,6 +118,7 @@ public class PieceServiceImpl implements PieceService {
         this.validatePieceExist(id);
         this.validatePasUtiliseParMachine(id);
 
+        this.pieceHistoriqueService.deleteAllByIdPiece(id);
         this.pieceRepository.deletePiece(id);
     }
 
