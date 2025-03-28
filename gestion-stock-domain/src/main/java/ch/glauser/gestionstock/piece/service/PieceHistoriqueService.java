@@ -29,7 +29,6 @@ public interface PieceHistoriqueService {
      * Créer un mouvement de pièce suite à la création d'une pièce
      *
      * @param newPiece Nouvelle pièce
-     * @return L'historique du mouvement
      */
     void createPieceHistoriqueFromPiece(Piece newPiece);
 
@@ -38,7 +37,6 @@ public interface PieceHistoriqueService {
      *
      * @param newPiece Nouvelle pièce
      * @param oldPiece Ancienne pièce
-     * @return L'historique du mouvement
      */
     void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece);
 
