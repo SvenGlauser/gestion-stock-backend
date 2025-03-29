@@ -12,6 +12,7 @@ public final class PieceConstantes {
 
     public static final String FIELD_ID = "id";
     public static final String FIELD_NOM = "nom";
+    public static final String FIELD_CATEGORIE = "categorie";
     public static final String FIELD_NUMERO_INVENTAIRE = "numeroInventaire";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
 
@@ -20,4 +21,5 @@ public final class PieceConstantes {
 
     public static final String ERROR_PIECE_NOM_UNIQUE = "Le nom de la pièce doit être unique";
     public static final String ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE = "Le numéro d'inventaire de la pièce doit être unique";
+    public static final String ERROR_CATEGORIE_DOIT_ETRE_ACTIVE = "La catégorie doit être active";
 }

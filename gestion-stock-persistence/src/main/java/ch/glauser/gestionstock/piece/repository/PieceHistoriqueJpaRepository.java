@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -33,6 +34,7 @@ public interface PieceHistoriqueJpaRepository extends JpaRepository<PieceHistori
      * Supprime tout l'historique d'une pièce
      * @param idPiece Id de la pièce
      */
+    @Modifying
     @Query("DELETE FROM PieceHistorique pieceHistorique WHERE pieceHistorique.piece.id = :idPiece")
     void deleteAllByPieceId(@Param("idPiece") Long idPiece);
 

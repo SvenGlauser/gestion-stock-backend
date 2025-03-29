@@ -1,5 +1,7 @@
 package ch.glauser.gestionstock.piece.service;
 
+import ch.glauser.gestionstock.categorie.model.Categorie;
+import ch.glauser.gestionstock.categorie.service.CategorieService;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
@@ -22,6 +24,7 @@ public class PieceServiceImpl implements PieceService {
     private final PieceRepository pieceRepository;
 
     private final PieceHistoriqueService pieceHistoriqueService;
+    private final CategorieService categorieService;
     private final MachineRepository machineRepository;
 
     @Override
@@ -58,6 +61,8 @@ public class PieceServiceImpl implements PieceService {
         if (this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
             validator.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
         }
+
+        this.validateCategorieActive(piece, validator);
 
         validator.execute();
 
@@ -97,6 +102,8 @@ public class PieceServiceImpl implements PieceService {
                 validator.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
             }
         }
+
+        this.validateCategorieActive(piece, validator);
 
         validator.execute();
 
@@ -147,6 +154,22 @@ public class PieceServiceImpl implements PieceService {
                     PieceConstantes.ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE,
                     PieceConstantes.FIELD_PIECE,
                     PieceServiceImpl.class));
+        }
+    }
+
+    /**
+     * Valide que la catégorie assignée est bien active
+     * @param piece Pièce
+     * @param validator Validateur
+     */
+    private void validateCategorieActive(Piece piece, Validator validator) {
+        if (Objects.isNull(piece.getCategorie())) {
+            return;
+        }
+
+        Categorie categorie = this.categorieService.getCategorie(piece.getCategorie().getId());
+        if (Objects.nonNull(categorie) && Boolean.FALSE == categorie.getActif()) {
+            validator.addError(PieceConstantes.ERROR_CATEGORIE_DOIT_ETRE_ACTIVE, PieceConstantes.FIELD_CATEGORIE);
         }
     }
 }
