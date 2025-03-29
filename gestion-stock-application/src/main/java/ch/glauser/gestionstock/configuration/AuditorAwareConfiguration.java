@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -24,6 +25,10 @@ public class AuditorAwareConfiguration implements AuditorAware<String> {
 
         if (principal instanceof AnonymousAuthenticationToken anonymousAuthenticationToken) {
             return Optional.of(anonymousAuthenticationToken.getPrincipal().toString());
+        }
+
+        if (Objects.isNull(principal)) {
+            return Optional.empty();
         }
 
         return Optional.of(principal.toString());
