@@ -1,5 +1,7 @@
 package ch.glauser.gestionstock.piece.service;
 
+import ch.glauser.gestionstock.categorie.model.Categorie;
+import ch.glauser.gestionstock.categorie.service.CategorieService;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
@@ -21,6 +23,8 @@ public class PieceServiceImpl implements PieceService {
 
     private final PieceRepository pieceRepository;
 
+    private final PieceHistoriqueService pieceHistoriqueService;
+    private final CategorieService categorieService;
     private final MachineRepository machineRepository;
 
     @Override
@@ -47,6 +51,7 @@ public class PieceServiceImpl implements PieceService {
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
+        // Validation
         Validator validator = piece.validateCreate();
 
         if (this.pieceRepository.existPieceByNom(piece.getNom())) {
@@ -57,9 +62,17 @@ public class PieceServiceImpl implements PieceService {
             validator.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
         }
 
+        this.validateCategorieActive(piece, validator);
+
         validator.execute();
 
-        return this.pieceRepository.createPiece(piece);
+        // Création de la pièce
+        Piece newPiece = this.pieceRepository.createPiece(piece);
+
+        // Mise à jour de l'historique
+        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece);
+
+        return newPiece;
     }
 
     @Override
@@ -68,8 +81,10 @@ public class PieceServiceImpl implements PieceService {
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
+        // Récupération de l'ancienne pièce
         Piece oldPiece = this.pieceRepository.getPiece(piece.getId());
 
+        // Validation
         Validator validator = piece.validateModify();
 
         if (Objects.nonNull(oldPiece)) {
@@ -88,9 +103,17 @@ public class PieceServiceImpl implements PieceService {
             }
         }
 
+        this.validateCategorieActive(piece, validator);
+
         validator.execute();
 
-        return this.pieceRepository.modifyPiece(piece);
+        // Création de la pièce
+        Piece newPiece = this.pieceRepository.modifyPiece(piece);
+
+        // Mise à jour de l'historique
+        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece, oldPiece);
+
+        return newPiece;
     }
 
     @Override
@@ -102,6 +125,7 @@ public class PieceServiceImpl implements PieceService {
         this.validatePieceExist(id);
         this.validatePasUtiliseParMachine(id);
 
+        this.pieceHistoriqueService.deleteAllByIdPiece(id);
         this.pieceRepository.deletePiece(id);
     }
 
@@ -130,6 +154,22 @@ public class PieceServiceImpl implements PieceService {
                     PieceConstantes.ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE,
                     PieceConstantes.FIELD_PIECE,
                     PieceServiceImpl.class));
+        }
+    }
+
+    /**
+     * Valide que la catégorie assignée est bien active
+     * @param piece Pièce
+     * @param validator Validateur
+     */
+    private void validateCategorieActive(Piece piece, Validator validator) {
+        if (Objects.isNull(piece.getCategorie())) {
+            return;
+        }
+
+        Categorie categorie = this.categorieService.getCategorie(piece.getCategorie().getId());
+        if (Objects.nonNull(categorie) && Boolean.FALSE == categorie.getActif()) {
+            validator.addError(PieceConstantes.ERROR_CATEGORIE_DOIT_ETRE_ACTIVE, PieceConstantes.FIELD_CATEGORIE);
         }
     }
 }

@@ -21,7 +21,10 @@ import ch.glauser.gestionstock.machine.service.MachineServiceImpl;
 import ch.glauser.gestionstock.pays.repository.PaysRepository;
 import ch.glauser.gestionstock.pays.service.PaysService;
 import ch.glauser.gestionstock.pays.service.PaysServiceImpl;
+import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
+import ch.glauser.gestionstock.piece.service.PieceHistoriqueService;
+import ch.glauser.gestionstock.piece.service.PieceHistoriqueServiceImpl;
 import ch.glauser.gestionstock.piece.service.PieceService;
 import ch.glauser.gestionstock.piece.service.PieceServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -68,8 +71,15 @@ public class ServiceBeansGenerator {
 
     @Bean
     public PieceService pieceService(PieceRepository pieceRepository,
+                                     PieceHistoriqueService pieceHistoriqueService,
+                                     CategorieService categorieService,
                                      MachineRepository machineRepository) {
-        return new PieceServiceImpl(pieceRepository, machineRepository);
+        return new PieceServiceImpl(pieceRepository, pieceHistoriqueService, categorieService, machineRepository);
+    }
+
+    @Bean
+    public PieceHistoriqueService pieceHistoriqueService(PieceHistoriqueRepository pieceHistoriqueRepository) {
+        return new PieceHistoriqueServiceImpl(pieceHistoriqueRepository);
     }
 
     @Bean
