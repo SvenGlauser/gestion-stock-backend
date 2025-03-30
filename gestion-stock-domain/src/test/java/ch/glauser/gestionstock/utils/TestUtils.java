@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.utils;
 
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 
 import java.util.Collection;
@@ -21,7 +21,7 @@ public class TestUtils {
      * @param <T> Type de l'objet à valider
      */
     public static <T> void testValidation(T object, Class<T> classe, int errors) {
-        testValidation(errors, () -> Validator.validate(object, classe).execute());
+        testValidation(errors, () -> Validation.validate(object, classe).execute());
     }
 
     /**

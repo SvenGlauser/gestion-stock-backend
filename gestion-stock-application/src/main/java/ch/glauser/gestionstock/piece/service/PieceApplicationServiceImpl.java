@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.piece.model.Piece;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
     @Override
     public PieceDto getPiece(Long id) {
-        Validator.of(PieceApplicationServiceImpl.class)
+        Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
@@ -40,7 +40,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
     @Override
     public SearchResult<PieceDto> searchPiece(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -52,7 +52,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     @Override
     @Transactional
     public PieceDto createPiece(PieceDto piece) {
-        Validator.of(PieceApplicationServiceImpl.class)
+        Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, FIELD_PIECE)
                 .execute();
 
@@ -66,7 +66,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     @Override
     @Transactional
     public PieceDto modifyPiece(PieceDto piece) {
-        Validator.of(PieceApplicationServiceImpl.class)
+        Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, FIELD_PIECE)
                 .execute();
 
@@ -80,7 +80,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     @Override
     @Transactional
     public void deletePiece(Long id) {
-        Validator.of(PieceApplicationServiceImpl.class)
+        Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 

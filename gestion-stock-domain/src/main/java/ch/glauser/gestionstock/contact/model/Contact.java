@@ -3,9 +3,11 @@ package ch.glauser.gestionstock.contact.model;
 import ch.glauser.gestionstock.adresse.model.Adresse;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.validation.cascade.CascadeValidation;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.common.validation.notnull.NotNull;
+import ch.glauser.gestionstock.common.validation.regex.Regex;
+import ch.glauser.gestionstock.common.validation.regex.RegexValidationType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,7 +24,9 @@ public class Contact extends Model {
     @NotEmpty
     private String prenom;
 
+    @Regex(RegexValidationType.EMAIL)
     private String email;
+    @Regex(RegexValidationType.PHONE_NUMBER)
     private String telephone;
 
     @CascadeValidation
@@ -31,7 +35,7 @@ public class Contact extends Model {
     private String remarques;
 
     @Override
-    public Validator validateChild() {
-        return Validator.validate(this, Contact.class);
+    public Validation validateChild() {
+        return Validation.validate(this, Contact.class);
     }
 }

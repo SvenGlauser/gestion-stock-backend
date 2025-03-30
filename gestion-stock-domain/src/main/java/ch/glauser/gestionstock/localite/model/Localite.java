@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.localite.model;
 
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 import ch.glauser.gestionstock.pays.model.Pays;
@@ -22,7 +22,7 @@ public class Localite extends Model {
     private Pays pays;
 
     @Override
-    public Validator validateChild() {
-        return Validator.validate(this, Localite.class);
+    public Validation validateChild() {
+        return Validation.validate(this, Localite.class);
     }
 }

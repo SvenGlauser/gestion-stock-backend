@@ -5,7 +5,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieService;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import ch.glauser.gestionstock.piece.model.Piece;
@@ -29,7 +29,7 @@ public class PieceServiceImpl implements PieceService {
 
     @Override
     public Piece getPiece(Long id) {
-        Validator.of(PieceServiceImpl.class)
+        Validation.of(PieceServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
@@ -38,7 +38,7 @@ public class PieceServiceImpl implements PieceService {
 
     @Override
     public SearchResult<Piece> searchPiece(SearchRequest searchRequest) {
-        Validator.of(PieceServiceImpl.class)
+        Validation.of(PieceServiceImpl.class)
                 .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -47,24 +47,24 @@ public class PieceServiceImpl implements PieceService {
 
     @Override
     public Piece createPiece(Piece piece) {
-        Validator.of(PieceServiceImpl.class)
+        Validation.of(PieceServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
         // Validation
-        Validator validator = piece.validateCreate();
+        Validation validation = piece.validateCreate();
 
         if (this.pieceRepository.existPieceByNom(piece.getNom())) {
-            validator.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
+            validation.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
         }
 
         if (this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
-            validator.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
+            validation.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
         }
 
-        this.validateCategorieActive(piece, validator);
+        this.validateCategorieActive(piece, validation);
 
-        validator.execute();
+        validation.execute();
 
         // Création de la pièce
         Piece newPiece = this.pieceRepository.createPiece(piece);
@@ -77,7 +77,7 @@ public class PieceServiceImpl implements PieceService {
 
     @Override
     public Piece modifyPiece(Piece piece) {
-        Validator.of(PieceServiceImpl.class)
+        Validation.of(PieceServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
@@ -85,27 +85,27 @@ public class PieceServiceImpl implements PieceService {
         Piece oldPiece = this.pieceRepository.getPiece(piece.getId());
 
         // Validation
-        Validator validator = piece.validateModify();
+        Validation validation = piece.validateModify();
 
         if (Objects.nonNull(oldPiece)) {
             if (!Objects.equals(oldPiece.getNom(), piece.getNom()) &&
                 this.pieceRepository.existPieceByNom(piece.getNom())) {
 
                 // Valide le cas dans lequel la pièce a changé de nom
-                validator.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
+                validation.addError(PieceConstantes.ERROR_PIECE_NOM_UNIQUE, PieceConstantes.FIELD_NOM);
             }
 
             if (!Objects.equals(oldPiece.getNumeroInventaire(), piece.getNumeroInventaire()) &&
                 this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
 
                 // Valide le cas dans lequel la pièce a changé de numéro d'inventaire
-                validator.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
+                validation.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
             }
         }
 
-        this.validateCategorieActive(piece, validator);
+        this.validateCategorieActive(piece, validation);
 
-        validator.execute();
+        validation.execute();
 
         // Création de la pièce
         Piece newPiece = this.pieceRepository.modifyPiece(piece);
@@ -118,7 +118,7 @@ public class PieceServiceImpl implements PieceService {
 
     @Override
     public void deletePiece(Long id) {
-        Validator.of(PieceServiceImpl.class)
+        Validation.of(PieceServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
@@ -160,16 +160,16 @@ public class PieceServiceImpl implements PieceService {
     /**
      * Valide que la catégorie assignée est bien active
      * @param piece Pièce
-     * @param validator Validateur
+     * @param validation Validateur
      */
-    private void validateCategorieActive(Piece piece, Validator validator) {
+    private void validateCategorieActive(Piece piece, Validation validation) {
         if (Objects.isNull(piece.getCategorie())) {
             return;
         }
 
         Categorie categorie = this.categorieService.getCategorie(piece.getCategorie().getId());
         if (Objects.nonNull(categorie) && Boolean.FALSE == categorie.getActif()) {
-            validator.addError(PieceConstantes.ERROR_CATEGORIE_DOIT_ETRE_ACTIVE, PieceConstantes.FIELD_CATEGORIE);
+            validation.addError(PieceConstantes.ERROR_CATEGORIE_DOIT_ETRE_ACTIVE, PieceConstantes.FIELD_CATEGORIE);
         }
     }
 }

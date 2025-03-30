@@ -5,7 +5,7 @@ import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.contact.repository.ContactRepository;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
@@ -30,7 +30,7 @@ public class LocaliteServiceImpl implements LocaliteService {
 
     @Override
     public Localite getLocalite(Long id) {
-        Validator.of(LocaliteServiceImpl.class)
+        Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(id, LocaliteConstantes.FIELD_ID)
                 .execute();
 
@@ -39,7 +39,7 @@ public class LocaliteServiceImpl implements LocaliteService {
 
     @Override
     public SearchResult<Localite> searchLocalite(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, LocaliteConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -48,32 +48,32 @@ public class LocaliteServiceImpl implements LocaliteService {
 
     @Override
     public Localite createLocalite(Localite localite) {
-        Validator.of(LocaliteServiceImpl.class)
+        Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(localite, LocaliteConstantes.FIELD_LOCALITE)
                 .execute();
 
-        Validator validator = localite.validateCreate();
+        Validation validation = localite.validateCreate();
 
         Long idPays = Optional.ofNullable(localite.getPays()).map(Model::getId).orElse(null);
 
         if (this.localiteRepository.existLocaliteByNpaAndNomAndIdPays(localite.getNpa(), localite.getNom(), idPays)) {
-            validator.addError(LocaliteConstantes.ERROR_LOCALITE_NOM_UNIQUE, LocaliteConstantes.FIELD_NOM);
+            validation.addError(LocaliteConstantes.ERROR_LOCALITE_NOM_UNIQUE, LocaliteConstantes.FIELD_NOM);
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.localiteRepository.createLocalite(localite);
     }
 
     @Override
     public Localite modifyLocalite(Localite localite) {
-        Validator.of(LocaliteServiceImpl.class)
+        Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(localite, LocaliteConstantes.FIELD_LOCALITE)
                 .execute();
 
         Localite oldLocalite = this.localiteRepository.getLocalite(localite.getId());
 
-        Validator validator = localite.validateModify();
+        Validation validation = localite.validateModify();
 
         if (Objects.nonNull(oldLocalite)) {
             Long idPays = Optional.ofNullable(localite.getPays()).map(Model::getId).orElse(null);
@@ -82,18 +82,18 @@ public class LocaliteServiceImpl implements LocaliteService {
                     !Objects.equals(oldLocalite.getNom(), localite.getNom()) ||
                     !Objects.equals(oldLocalite.getPays().getId(), idPays)
                 ) && this.localiteRepository.existLocaliteByNpaAndNomAndIdPays(localite.getNpa(), localite.getNom(), idPays)) {
-                validator.addError(LocaliteConstantes.ERROR_LOCALITE_NOM_UNIQUE, LocaliteConstantes.FIELD_NOM);
+                validation.addError(LocaliteConstantes.ERROR_LOCALITE_NOM_UNIQUE, LocaliteConstantes.FIELD_NOM);
             }
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.localiteRepository.modifyLocalite(localite);
     }
 
     @Override
     public void deleteLocalite(Long id) {
-        Validator.of(LocaliteServiceImpl.class)
+        Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(id, LocaliteConstantes.FIELD_ID)
                 .execute();
 

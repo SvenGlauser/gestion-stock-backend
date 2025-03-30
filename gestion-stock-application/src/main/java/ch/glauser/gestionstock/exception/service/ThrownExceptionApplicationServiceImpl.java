@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.exception.service;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.exception.dto.ThrownExceptionDto;
 import ch.glauser.gestionstock.exception.model.ThrownException;
 import ch.glauser.gestionstock.exception.model.ThrownExceptionConstantes;
@@ -21,7 +21,7 @@ public class ThrownExceptionApplicationServiceImpl implements ThrownExceptionApp
 
     @Override
     public SearchResult<ThrownExceptionDto> searchExceptions(SearchRequest searchRequest) {
-        Validator.of(ThrownExceptionApplicationServiceImpl.class)
+        Validation.of(ThrownExceptionApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -32,7 +32,7 @@ public class ThrownExceptionApplicationServiceImpl implements ThrownExceptionApp
 
     @Override
     public void changeStatus(Long id, Boolean actif) {
-        Validator.of(ThrownExceptionApplicationServiceImpl.class)
+        Validation.of(ThrownExceptionApplicationServiceImpl.class)
                 .validateNotNull(id, ThrownExceptionConstantes.FIELD_ID)
                 .validateNotNull(actif, ThrownExceptionConstantes.FIELD_ACTIF)
                 .execute();

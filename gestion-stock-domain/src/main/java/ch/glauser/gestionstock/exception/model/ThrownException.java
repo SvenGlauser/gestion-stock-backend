@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.exception.model;
 
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 import lombok.Data;
@@ -29,7 +29,7 @@ public class ThrownException extends Model {
     private boolean actif;
 
     @Override
-    protected Validator validateChild() {
-        return Validator.of(ThrownException.class);
+    protected Validation validateChild() {
+        return Validation.of(ThrownException.class);
     }
 }

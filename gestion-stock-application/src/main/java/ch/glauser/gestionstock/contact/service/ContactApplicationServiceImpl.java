@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.contact.dto.ContactDto;
 import ch.glauser.gestionstock.contact.model.Contact;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
 
     @Override
     public ContactDto getContact(Long id) {
-        Validator.of(ContactApplicationServiceImpl.class)
+        Validation.of(ContactApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
@@ -40,7 +40,7 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
 
     @Override
     public SearchResult<ContactDto> searchContact(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -52,7 +52,7 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
     @Override
     @Transactional
     public ContactDto createContact(ContactDto contact) {
-        Validator.of(ContactApplicationServiceImpl.class)
+        Validation.of(ContactApplicationServiceImpl.class)
                 .validateNotNull(contact, FIELD_CONTACT)
                 .execute();
 
@@ -66,7 +66,7 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
     @Override
     @Transactional
     public ContactDto modifyContact(ContactDto contact) {
-        Validator.of(ContactApplicationServiceImpl.class)
+        Validation.of(ContactApplicationServiceImpl.class)
                 .validateNotNull(contact, FIELD_CONTACT)
                 .execute();
 
@@ -80,7 +80,7 @@ public class ContactApplicationServiceImpl implements ContactApplicationService 
     @Override
     @Transactional
     public void deleteContact(Long id) {
-        Validator.of(ContactApplicationServiceImpl.class)
+        Validation.of(ContactApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 

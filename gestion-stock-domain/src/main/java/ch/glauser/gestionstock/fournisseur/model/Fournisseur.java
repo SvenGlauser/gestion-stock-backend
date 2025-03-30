@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.fournisseur.model;
 import ch.glauser.gestionstock.adresse.model.Adresse;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.validation.cascade.CascadeValidation;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ public class Fournisseur extends Model {
     private Adresse adresse;
 
     @Override
-    public Validator validateChild() {
-        return Validator.validate(this, Fournisseur.class);
+    public Validation validateChild() {
+        return Validation.validate(this, Fournisseur.class);
     }
 }

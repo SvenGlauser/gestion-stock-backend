@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.gestionstock.fournisseur.model.FournisseurConstantes;
@@ -26,7 +26,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 
     @Override
     public Fournisseur getFournisseur(Long id) {
-        Validator.of(FournisseurServiceImpl.class)
+        Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(id, FournisseurConstantes.FIELD_ID)
                 .execute();
 
@@ -35,7 +35,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 
     @Override
     public SearchResult<Fournisseur> searchFournisseur(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FournisseurConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -44,47 +44,47 @@ public class FournisseurServiceImpl implements FournisseurService {
 
     @Override
     public Fournisseur createFournisseur(Fournisseur fournisseur) {
-        Validator.of(FournisseurServiceImpl.class)
+        Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(fournisseur, FournisseurConstantes.FIELD_FOURNISSEUR)
                 .execute();
 
-        Validator validator = fournisseur.validateCreate();
+        Validation validation = fournisseur.validateCreate();
 
         if (this.fournisseurRepository.existFournisseurByNom(fournisseur.getNom())) {
-            validator.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
+            validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.fournisseurRepository.createFournisseur(fournisseur);
     }
 
     @Override
     public Fournisseur modifyFournisseur(Fournisseur fournisseur) {
-        Validator.of(FournisseurServiceImpl.class)
+        Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(fournisseur, FournisseurConstantes.FIELD_FOURNISSEUR)
                 .execute();
 
         Fournisseur oldFournisseur = this.fournisseurRepository.getFournisseur(fournisseur.getId());
 
-        Validator validator = fournisseur.validateModify();
+        Validation validation = fournisseur.validateModify();
 
         if (Objects.nonNull(oldFournisseur) &&
             !Objects.equals(oldFournisseur.getNom(), fournisseur.getNom()) &&
             this.fournisseurRepository.existFournisseurByNom(fournisseur.getNom())) {
 
             // Valide le cas dans lequel la catégorie a changé de nom
-            validator.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
+            validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.fournisseurRepository.modifyFournisseur(fournisseur);
     }
 
     @Override
     public void deleteFournisseur(Long id) {
-        Validator.of(FournisseurServiceImpl.class)
+        Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(id, FournisseurConstantes.FIELD_ID)
                 .execute();
 
