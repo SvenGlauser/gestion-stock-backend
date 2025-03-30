@@ -29,9 +29,8 @@ public class TestUtils {
      *
      * @param errors Nombre d'erreurs attendues
      * @param runnable Fonction à tester
-     * @param <T> Type de l'objet à valider
      */
-    public static <T> void testValidation(int errors, Runnable runnable) {
+    public static void testValidation(int errors, Runnable runnable) {
         assertThatThrownBy(runnable::run)
                 .isInstanceOf(ValidationException.class)
                 .extracting("errors")
