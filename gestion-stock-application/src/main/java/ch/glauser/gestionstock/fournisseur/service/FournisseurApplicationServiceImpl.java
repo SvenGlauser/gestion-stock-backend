@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
     @Override
     public FournisseurDto getFournisseur(Long id) {
-        Validator.of(FournisseurApplicationServiceImpl.class)
+        Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
@@ -40,7 +40,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
     @Override
     public SearchResult<FournisseurDto> searchFournisseur(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -52,7 +52,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     @Override
     @Transactional
     public FournisseurDto createFournisseur(FournisseurDto fournisseur) {
-        Validator.of(FournisseurApplicationServiceImpl.class)
+        Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
                 .execute();
 
@@ -66,7 +66,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     @Override
     @Transactional
     public FournisseurDto modifyFournisseur(FournisseurDto fournisseur) {
-        Validator.of(FournisseurApplicationServiceImpl.class)
+        Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
                 .execute();
 
@@ -80,7 +80,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     @Override
     @Transactional
     public void deleteFournisseur(Long id) {
-        Validator.of(FournisseurApplicationServiceImpl.class)
+        Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 

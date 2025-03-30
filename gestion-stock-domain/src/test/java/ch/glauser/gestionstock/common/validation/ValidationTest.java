@@ -1,12 +1,13 @@
 package ch.glauser.gestionstock.common.validation;
 
 import ch.glauser.gestionstock.common.validation.cascade.CascadeValidation;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
 import ch.glauser.gestionstock.common.validation.maxvalue.MaxValue;
 import ch.glauser.gestionstock.common.validation.minvalue.MinValue;
 import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.common.validation.notnull.NotNull;
+import ch.glauser.gestionstock.common.validation.unique.Unique;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -16,46 +17,27 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class ValidatorTest {
+class ValidationTest {
 
     @Test
     void validateNotNullWithNullValues() {
-        Validator validator = Validator.of(Object.class)
+        Validation validation = Validation.of(Object.class)
                  .validateNotNull(new Object(), "test1")
                  .validateNotNull(null, "test2")
                  .validateNotNull(null, "test3")
                  .validateNotNull(new Object(), "test4")
                  .validateNotNull(null, "test5");
 
-        TestUtils.testValidation(3, validator::execute);
+        TestUtils.testValidation(3, validation::execute);
     }
 
     @Test
     void validateNotNullWithoutNullValues() {
-        Validator validator = Validator.of(Object.class)
+        Validation validation = Validation.of(Object.class)
                 .validateNotNull(new Object(), "test1")
                 .validateNotNull(new Object(), "test2");
 
-        assertDoesNotThrow(validator::execute);
-    }
-
-    @Test
-    void validateUniqueWithNonUniqueValues() {
-        Validator validator = Validator.of(List.class)
-                .validateUnique(List.of(1, 1, 2, 3, 4, 5, 6), "test1")
-                .validateUnique(List.of(1, 2, 3, 4, 5, 6), "test2")
-                .validateUnique(null, "test3");
-
-        TestUtils.testValidation(1, validator::execute);
-    }
-
-    @Test
-    void validateUniqueWithoutUniqueValues() {
-        Validator validator = Validator.of(List.class)
-                .validateUnique(List.of(1, 2, 3, 4, 5, 6), "test2")
-                .validateUnique(null, "test3");
-
-        assertDoesNotThrow(validator::execute);
+        assertDoesNotThrow(validation::execute);
     }
 
     @Test
@@ -79,11 +61,11 @@ class ValidatorTest {
 
     @Test
     void validateIsNull() {
-        Validator validator = Validator.of(ValidatorTest.class);
+        Validation validation = Validation.of(ValidationTest.class);
 
-        validator.validateIsNull(new Object(), "test");
+        validation.validateIsNull(new Object(), "test");
 
-        TestUtils.testValidation(1, validator::execute);
+        TestUtils.testValidation(1, validation::execute);
     }
 
     @Test
@@ -133,6 +115,15 @@ class ValidatorTest {
     }
 
     @Test
+    void validateUnique() {
+        ValidationClassTest test = new ValidationClassTest();
+        test.init();
+        test.unique = List.of(1, 2, 3, 4, 5, 5, 6, 7, 8, 8, 9, 9, 10);
+
+        TestUtils.testValidation(test, ValidationClassTest.class, 1);
+    }
+
+    @Test
     void validateCascade() {
         ValidationClassTest testEnfant = new ValidationClassTest();
         testEnfant.init();
@@ -150,7 +141,7 @@ class ValidatorTest {
         ValidationClassTest test = new ValidationClassTest();
         test.cascadeValidation = testEnfant;
 
-        TestUtils.testValidation(test, ValidationClassTest.class, 10);
+        TestUtils.testValidation(test, ValidationClassTest.class, 12);
     }
 
     @Test
@@ -159,49 +150,63 @@ class ValidatorTest {
         test.init();
         test.cascadeValidation = test;
 
-        assertDoesNotThrow(() -> Validator.validate(test, ValidationClassTest.class));
+        assertDoesNotThrow(() -> Validation.validate(test, ValidationClassTest.class));
     }
 
     @Test
     void validateMinValueAnnotationType() {
         ValidationClassNotNumberMinValueTest test = new ValidationClassNotNumberMinValueTest();
-        test.minValue = new Object();
+        test.value = new Object();
 
-        assertThatThrownBy(() -> Validator.validate(test, ValidationClassNotNumberMinValueTest.class))
+        assertThatThrownBy(() -> Validation.validate(test, ValidationClassNotNumberMinValueTest.class))
                 .isInstanceOf(TechnicalException.class);
     }
 
     @Test
     void validateMaxValueAnnotationType() {
         ValidationClassNotNumberMaxValueTest test = new ValidationClassNotNumberMaxValueTest();
-        test.minValue = new Object();
+        test.value = new Object();
 
-        assertThatThrownBy(() -> Validator.validate(test, ValidationClassNotNumberMaxValueTest.class))
+        assertThatThrownBy(() -> Validation.validate(test, ValidationClassNotNumberMaxValueTest.class))
                 .isInstanceOf(TechnicalException.class);
     }
 
     @Test
     void validateNotEmptyValueAnnotationType() {
         ValidationClassNotStringOrCollectionTest test = new ValidationClassNotStringOrCollectionTest();
-        test.minValue = new Object();
+        test.value = new Object();
 
-        assertThatThrownBy(() -> Validator.validate(test, ValidationClassNotStringOrCollectionTest.class))
+        assertThatThrownBy(() -> Validation.validate(test, ValidationClassNotStringOrCollectionTest.class))
+                .isInstanceOf(TechnicalException.class);
+    }
+
+    @Test
+    void validateUniqueValueAnnotationType() {
+        ValidationClassNotCollectionTest test = new ValidationClassNotCollectionTest();
+        test.value = new Object();
+
+        assertThatThrownBy(() -> Validation.validate(test, ValidationClassNotCollectionTest.class))
                 .isInstanceOf(TechnicalException.class);
     }
 
     static class ValidationClassNotNumberMinValueTest {
         @MinValue(0)
-        Object minValue;
+        Object value;
     }
 
     static class ValidationClassNotNumberMaxValueTest {
         @MaxValue(0)
-        Object minValue;
+        Object value;
     }
 
     static class ValidationClassNotStringOrCollectionTest {
         @NotEmpty
-        Object minValue;
+        Object value;
+    }
+
+    static class ValidationClassNotCollectionTest {
+        @Unique
+        Object value;
     }
 
     static class ValidationClassTest {
@@ -216,6 +221,8 @@ class ValidatorTest {
         int minValue = 0;
         @MaxValue(100.1)
         double maxValue = 101;
+        @Unique
+        Collection<?> unique = List.of(1, 1);
         @CascadeValidation
         ValidationClassTest cascadeValidation;
 
@@ -226,6 +233,7 @@ class ValidatorTest {
             minValue = 1;
             maxValue = 100;
             cascadeValidation = null;
+            unique = null;
         }
     }
 }

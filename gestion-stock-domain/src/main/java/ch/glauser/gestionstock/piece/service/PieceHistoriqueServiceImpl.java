@@ -2,7 +2,7 @@ package ch.glauser.gestionstock.piece.service;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.piece.model.*;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public PieceHistorique getPieceHistorique(Long id) {
-        Validator.of(PieceHistoriqueServiceImpl.class)
+        Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(id, PieceHistoriqueConstantes.FIELD_ID)
                 .execute();
 
@@ -28,7 +28,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public SearchResult<PieceHistorique> searchPieceHistorique(SearchRequest searchRequest) {
-        Validator.of(PieceHistoriqueServiceImpl.class)
+        Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -37,7 +37,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     @Override
     public void createPieceHistoriqueFromPiece(Piece newPiece) {
-        Validator.of(PieceHistoriqueServiceImpl.class)
+        Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(newPiece, PieceHistoriqueConstantes.FIELD_NEW_PIECE)
                 .execute();
 
@@ -48,16 +48,16 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
         pieceHistorique.setSource(PieceHistoriqueSource.AUTOMATIQUE);
         pieceHistorique.setDate(LocalDate.now());
 
-        Validator validator = pieceHistorique.validateCreate();
+        Validation validation = pieceHistorique.validateCreate();
 
-        validator.execute();
+        validation.execute();
 
         this.pieceHistoriqueRepository.createPieceHistorique(pieceHistorique);
     }
 
     @Override
     public void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece) {
-        Validator.of(PieceHistoriqueServiceImpl.class)
+        Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(newPiece, PieceHistoriqueConstantes.FIELD_NEW_PIECE)
                 .validateNotNull(oldPiece, PieceHistoriqueConstantes.FIELD_OLD_PIECE)
                 .execute();
@@ -79,16 +79,16 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
         pieceHistorique.setSource(PieceHistoriqueSource.AUTOMATIQUE);
         pieceHistorique.setDate(LocalDate.now());
 
-        Validator validator = pieceHistorique.validateCreate();
+        Validation validation = pieceHistorique.validateCreate();
 
-        validator.execute();
+        validation.execute();
 
         this.pieceHistoriqueRepository.createPieceHistorique(pieceHistorique);
     }
 
     @Override
     public void deleteAllByIdPiece(Long idPiece) {
-        Validator.of(PieceHistoriqueServiceImpl.class)
+        Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(idPiece, PieceHistoriqueConstantes.FIELD_PIECE_ID)
                 .execute();
 

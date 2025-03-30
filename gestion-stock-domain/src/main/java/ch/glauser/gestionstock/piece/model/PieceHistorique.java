@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.piece.model;
 
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.minvalue.MinValue;
 import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class PieceHistorique extends Model {
     private PieceHistoriqueSource source;
 
     @Override
-    protected Validator validateChild() {
-        return Validator.validate(this, PieceHistorique.class);
+    protected Validation validateChild() {
+        return Validation.validate(this, PieceHistorique.class);
     }
 }

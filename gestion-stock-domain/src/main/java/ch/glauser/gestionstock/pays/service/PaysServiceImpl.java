@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.pays.model.Pays;
@@ -26,7 +26,7 @@ public class PaysServiceImpl implements PaysService {
 
     @Override
     public Pays getPays(Long id) {
-        Validator.of(PaysServiceImpl.class)
+        Validation.of(PaysServiceImpl.class)
                 .validateNotNull(id, PaysConstantes.FIELD_ID)
                 .execute();
 
@@ -35,7 +35,7 @@ public class PaysServiceImpl implements PaysService {
 
     @Override
     public Pays getPaysByAbreviation(String abreviation) {
-        Validator.of(PaysServiceImpl.class)
+        Validation.of(PaysServiceImpl.class)
                 .validateNotNull(abreviation, PaysConstantes.FIELD_ABREVIATION)
                 .execute();
 
@@ -44,7 +44,7 @@ public class PaysServiceImpl implements PaysService {
 
     @Override
     public SearchResult<Pays> searchPays(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, PaysConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -53,55 +53,55 @@ public class PaysServiceImpl implements PaysService {
 
     @Override
     public Pays createPays(Pays pays) {
-        Validator.of(PaysServiceImpl.class)
+        Validation.of(PaysServiceImpl.class)
                 .validateNotNull(pays, PaysConstantes.FIELD_PAYS)
                 .execute();
 
-        Validator validator = pays.validateCreate();
+        Validation validation = pays.validateCreate();
 
         if (this.paysRepository.existPaysByNom(pays.getNom())) {
-            validator.addError(PaysConstantes.ERROR_PAYS_NOM_UNIQUE, PaysConstantes.FIELD_NOM);
+            validation.addError(PaysConstantes.ERROR_PAYS_NOM_UNIQUE, PaysConstantes.FIELD_NOM);
         }
 
         if (this.paysRepository.existPaysByAbreviation(pays.getAbreviation())) {
-            validator.addError(PaysConstantes.ERROR_PAYS_ABREVIATION_UNIQUE, PaysConstantes.FIELD_ABREVIATION);
+            validation.addError(PaysConstantes.ERROR_PAYS_ABREVIATION_UNIQUE, PaysConstantes.FIELD_ABREVIATION);
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.paysRepository.createPays(pays);
     }
 
     @Override
     public Pays modifyPays(Pays pays) {
-        Validator.of(PaysServiceImpl.class)
+        Validation.of(PaysServiceImpl.class)
                 .validateNotNull(pays, PaysConstantes.FIELD_PAYS)
                 .execute();
 
         Pays oldPays = this.paysRepository.getPays(pays.getId());
 
-        Validator validator = pays.validateModify();
+        Validation validation = pays.validateModify();
 
         if (Objects.nonNull(oldPays)) {
             if (!Objects.equals(oldPays.getNom(), pays.getNom()) &&
                 this.paysRepository.existPaysByNom(pays.getNom())) {
-                validator.addError(PaysConstantes.ERROR_PAYS_NOM_UNIQUE, PaysConstantes.FIELD_NOM);
+                validation.addError(PaysConstantes.ERROR_PAYS_NOM_UNIQUE, PaysConstantes.FIELD_NOM);
             }
 
             if (!Objects.equals(oldPays.getAbreviation(), pays.getAbreviation()) &&
                 this.paysRepository.existPaysByAbreviation(pays.getAbreviation())) {
-                validator.addError(PaysConstantes.ERROR_PAYS_ABREVIATION_UNIQUE, PaysConstantes.FIELD_ABREVIATION);
+                validation.addError(PaysConstantes.ERROR_PAYS_ABREVIATION_UNIQUE, PaysConstantes.FIELD_ABREVIATION);
             }
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.paysRepository.modifyPays(pays);
     }
 
     @Override
     public void deletePays(Long id) {
-        Validator.of(PaysServiceImpl.class)
+        Validation.of(PaysServiceImpl.class)
                 .validateNotNull(id, PaysConstantes.FIELD_ID)
                 .execute();
 

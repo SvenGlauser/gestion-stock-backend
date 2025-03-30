@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.common.validation.unique.notnull;
+package ch.glauser.gestionstock.common.validation.unique;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

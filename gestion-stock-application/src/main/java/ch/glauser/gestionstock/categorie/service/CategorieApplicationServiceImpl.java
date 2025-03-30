@@ -5,7 +5,7 @@ import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
     @Override
     public CategorieDto getCategorie(Long id) {
-        Validator.of(CategorieApplicationServiceImpl.class)
+        Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
@@ -39,7 +39,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
     @Override
     public SearchResult<CategorieDto> searchCategorie(SearchRequest searchRequest) {
-        Validator.of(CategorieApplicationServiceImpl.class)
+        Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -51,7 +51,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     @Override
     @Transactional
     public CategorieDto createCategorie(CategorieDto categorie) {
-        Validator.of(CategorieApplicationServiceImpl.class)
+        Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
                 .execute();
 
@@ -65,7 +65,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     @Override
     @Transactional
     public CategorieDto modifyCategorie(CategorieDto categorie) {
-        Validator.of(CategorieApplicationServiceImpl.class)
+        Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
                 .execute();
 
@@ -79,7 +79,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     @Override
     @Transactional
     public void deleteCategorie(Long id) {
-        Validator.of(CategorieApplicationServiceImpl.class)
+        Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 

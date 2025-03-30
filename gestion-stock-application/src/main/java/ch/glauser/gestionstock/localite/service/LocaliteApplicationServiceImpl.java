@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import ch.glauser.gestionstock.localite.model.Localite;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
     @Override
     public LocaliteDto getLocalite(Long id) {
-        Validator.of(LocaliteApplicationServiceImpl.class)
+        Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
@@ -40,7 +40,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
     @Override
     public SearchResult<LocaliteDto> searchLocalite(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -52,7 +52,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
     @Override
     @Transactional
     public LocaliteDto createLocalite(LocaliteDto localite) {
-        Validator.of(LocaliteApplicationServiceImpl.class)
+        Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
                 .execute();
 
@@ -66,7 +66,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
     @Override
     @Transactional
     public LocaliteDto modifyLocalite(LocaliteDto localite) {
-        Validator.of(LocaliteApplicationServiceImpl.class)
+        Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
                 .execute();
 
@@ -80,7 +80,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
     @Override
     @Transactional
     public void deleteLocalite(Long id) {
-        Validator.of(LocaliteApplicationServiceImpl.class)
+        Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 

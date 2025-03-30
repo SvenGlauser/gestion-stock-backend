@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.pays.dto.PaysDto;
 import ch.glauser.gestionstock.pays.model.Pays;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
     @Override
     public PaysDto getPays(Long id) {
-        Validator.of(PaysApplicationServiceImpl.class)
+        Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
@@ -40,7 +40,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
     @Override
     public SearchResult<PaysDto> searchPays(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -52,7 +52,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
     @Override
     @Transactional
     public PaysDto createPays(PaysDto pays) {
-        Validator.of(PaysApplicationServiceImpl.class)
+        Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
                 .execute();
 
@@ -66,7 +66,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
     @Override
     @Transactional
     public PaysDto modifyPays(PaysDto pays) {
-        Validator.of(PaysApplicationServiceImpl.class)
+        Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
                 .execute();
 
@@ -80,7 +80,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
     @Override
     @Transactional
     public void deletePays(Long id) {
-        Validator.of(PaysApplicationServiceImpl.class)
+        Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 

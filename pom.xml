@@ -27,6 +27,7 @@
 
         <org.apache.commons.lang3.version>3.17.0</org.apache.commons.lang3.version>
         <org.apache.commons.collections4.version>4.4</org.apache.commons.collections4.version>
+        <org.apache.commons.validator.version>1.9.0</org.apache.commons.validator.version>
 
         <org.junit.jupiter.version>5.11.4</org.junit.jupiter.version>
         <org.assertj.core>3.26.0</org.assertj.core>
@@ -84,6 +85,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${org.apache.commons.collections4.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>${org.apache.commons.validator.version}</version>
             </dependency>
 
 

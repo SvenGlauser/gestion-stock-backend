@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.piece.service;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.piece.dto.PieceHistoriqueDto;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
@@ -26,7 +26,7 @@ public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApp
 
     @Override
     public PieceHistoriqueDto getPieceHistorique(Long id) {
-        Validator.of(PieceHistoriqueApplicationServiceImpl.class)
+        Validation.of(PieceHistoriqueApplicationServiceImpl.class)
                 .validateNotNull(id, PieceHistoriqueConstantes.FIELD_ID)
                 .execute();
 
@@ -37,7 +37,7 @@ public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApp
 
     @Override
     public SearchResult<PieceHistoriqueDto> searchPieceHistorique(SearchRequest searchRequest) {
-        Validator.of(PieceHistoriqueApplicationServiceImpl.class)
+        Validation.of(PieceHistoriqueApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 

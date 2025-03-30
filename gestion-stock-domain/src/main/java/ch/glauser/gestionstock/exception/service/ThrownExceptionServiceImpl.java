@@ -2,7 +2,7 @@ package ch.glauser.gestionstock.exception.service;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.exception.model.ThrownException;
 import ch.glauser.gestionstock.exception.model.ThrownExceptionConstantes;
 import ch.glauser.gestionstock.exception.repository.ThrownExceptionRepository;
@@ -23,7 +23,7 @@ public class ThrownExceptionServiceImpl implements ThrownExceptionService {
 
     @Override
     public SearchResult<ThrownException> searchExceptions(SearchRequest searchRequest) {
-        Validator.of(ThrownExceptionServiceImpl.class)
+        Validation.of(ThrownExceptionServiceImpl.class)
                 .validateNotNull(searchRequest, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -32,7 +32,7 @@ public class ThrownExceptionServiceImpl implements ThrownExceptionService {
 
     @Override
     public ThrownException createException(Exception exception) {
-        Validator.of(ThrownExceptionServiceImpl.class)
+        Validation.of(ThrownExceptionServiceImpl.class)
                 .validateNotNull(exception, ThrownExceptionConstantes.FIELD_EXCEPTION)
                 .execute();
 
@@ -55,7 +55,7 @@ public class ThrownExceptionServiceImpl implements ThrownExceptionService {
 
     @Override
     public void changeStatus(Long id, Boolean actif) {
-        Validator.of(ThrownExceptionServiceImpl.class)
+        Validation.of(ThrownExceptionServiceImpl.class)
                 .validateNotNull(id, ThrownExceptionConstantes.FIELD_ID)
                 .validateNotNull(actif, ThrownExceptionConstantes.FIELD_ACTIF)
                 .execute();

@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.contact.model.Contact;
 import ch.glauser.gestionstock.contact.model.ContactConstantes;
@@ -26,7 +26,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact getContact(Long id) {
-        Validator.of(ContactServiceImpl.class)
+        Validation.of(ContactServiceImpl.class)
                 .validateNotNull(id, ContactConstantes.FIELD_ID)
                 .execute();
 
@@ -35,7 +35,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public SearchResult<Contact> searchContact(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, ContactConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -44,7 +44,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact createContact(Contact contact) {
-        Validator.of(ContactServiceImpl.class)
+        Validation.of(ContactServiceImpl.class)
                 .validateNotNull(contact, ContactConstantes.FIELD_CONTACT)
                 .execute();
 
@@ -55,7 +55,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact modifyContact(Contact contact) {
-        Validator.of(ContactServiceImpl.class)
+        Validation.of(ContactServiceImpl.class)
                 .validateNotNull(contact, ContactConstantes.FIELD_CONTACT)
                 .execute();
 
@@ -66,7 +66,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public void deleteContact(Long id) {
-        Validator.of(ContactServiceImpl.class)
+        Validation.of(ContactServiceImpl.class)
                 .validateNotNull(id, ContactConstantes.FIELD_ID)
                 .execute();
 

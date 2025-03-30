@@ -6,7 +6,7 @@ import ch.glauser.gestionstock.categorie.repository.CategorieRepository;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validator;
+import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class CategorieServiceImpl implements CategorieService {
 
     @Override
     public Categorie getCategorie(Long id) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(id, CategorieConstantes.FIELD_ID)
                 .execute();
 
@@ -34,7 +34,7 @@ public class CategorieServiceImpl implements CategorieService {
 
     @Override
     public SearchResult<Categorie> searchCategorie(SearchRequest searchRequest) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, CategorieConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
@@ -43,47 +43,47 @@ public class CategorieServiceImpl implements CategorieService {
 
     @Override
     public Categorie createCategorie(Categorie categorie) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(categorie, CategorieConstantes.FIELD_CATEGORIE)
                 .execute();
 
-        Validator validator = categorie.validateCreate();
+        Validation validation = categorie.validateCreate();
 
         if (this.categorieRepository.existCategorieByNom(categorie.getNom())) {
-            validator.addError(CategorieConstantes.ERROR_CATEGORIE_NOM_UNIQUE, CategorieConstantes.FIELD_NOM);
+            validation.addError(CategorieConstantes.ERROR_CATEGORIE_NOM_UNIQUE, CategorieConstantes.FIELD_NOM);
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.categorieRepository.createCategorie(categorie);
     }
 
     @Override
     public Categorie modifyCategorie(Categorie categorie) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(categorie, CategorieConstantes.FIELD_CATEGORIE)
                 .execute();
 
         Categorie oldCategorie = this.categorieRepository.getCategorie(categorie.getId());
 
-        Validator validator = categorie.validateModify();
+        Validation validation = categorie.validateModify();
 
         if (Objects.nonNull(oldCategorie) &&
             !Objects.equals(oldCategorie.getNom(), categorie.getNom()) &&
             this.categorieRepository.existCategorieByNom(categorie.getNom())) {
 
             // Valide le cas dans lequel la catégorie a changé de nom
-            validator.addError(CategorieConstantes.ERROR_CATEGORIE_NOM_UNIQUE, CategorieConstantes.FIELD_NOM);
+            validation.addError(CategorieConstantes.ERROR_CATEGORIE_NOM_UNIQUE, CategorieConstantes.FIELD_NOM);
         }
 
-        validator.execute();
+        validation.execute();
 
         return this.categorieRepository.modifyCategorie(categorie);
     }
 
     @Override
     public void deleteCategorie(Long id) {
-        Validator.of(CategorieServiceImpl.class)
+        Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(id, CategorieConstantes.FIELD_ID)
                 .execute();
 
