@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.contact.repository;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.contact.entity.ContactEntity;
 import org.springframework.data.domain.Page;
@@ -36,7 +36,7 @@ public interface ContactJpaRepository extends JpaRepository<ContactEntity, Long>
     @Query("SELECT COUNT(contact) > 0 FROM Contact contact WHERE contact.adresse.localite.id = :id")
     boolean existsByIdLocalite(@Param("id") Long id);
 
-    default Page<ContactEntity> search(Collection<Filter> filters, Pageable pageable) {
+    default Page<ContactEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }

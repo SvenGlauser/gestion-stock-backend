@@ -28,7 +28,7 @@ public class LocaliteRepositoryImpl implements LocaliteRepository {
 
     @Override
     public SearchResult<Localite> searchLocalite(SearchRequest searchRequest) {
-        Page<LocaliteEntity> page = this.localiteJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<LocaliteEntity> page = this.localiteJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

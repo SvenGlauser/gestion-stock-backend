@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.machine.repository;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.machine.entity.MachineEntity;
 import org.springframework.data.domain.Page;
@@ -59,7 +59,7 @@ public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>
             AND machine.nom = :nom""")
     boolean existsByNomAndIdContact(@Param("nom") String nom, @Param("idContact") Long idContact);
 
-    default Page<MachineEntity> search(Collection<Filter> filters, Pageable pageable) {
+    default Page<MachineEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }

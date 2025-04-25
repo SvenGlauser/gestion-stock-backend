@@ -28,7 +28,7 @@ public class PieceRepositoryImpl implements PieceRepository {
 
     @Override
     public SearchResult<Piece> searchPiece(SearchRequest searchRequest) {
-        Page<PieceEntity> page = this.pieceJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<PieceEntity> page = this.pieceJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

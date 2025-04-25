@@ -28,7 +28,7 @@ public class CategorieRepositoryImpl implements CategorieRepository {
 
     @Override
     public SearchResult<Categorie> searchCategorie(SearchRequest searchRequest) {
-        Page<CategorieEntity> page = this.categorieJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<CategorieEntity> page = this.categorieJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

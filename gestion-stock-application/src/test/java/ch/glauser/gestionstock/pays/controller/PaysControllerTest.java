@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.pays.controller;
 
 import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.controller.LocaliteController;
@@ -112,7 +113,7 @@ class PaysControllerTest {
         nom.setValue("Pays - Test Search - 3");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
         SearchResult<PaysDto> result2 = paysController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

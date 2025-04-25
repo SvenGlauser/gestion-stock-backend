@@ -1,6 +1,8 @@
 package ch.glauser.gestionstock.common.repository;
 
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -21,36 +23,60 @@ public final class RepositoryUtils {
     /**
      * Créer des filtres automatiques pour les recherches
      *
-     * @param filters Filtres à appliquer
+     * @param combinators Filtres à appliquer
      * @return Une instance de Specification
      */
-    public static <T> Specification<T> specificationOf(Collection<Filter> filters) {
+    public static <T> Specification<T> specificationOf(Collection<FilterCombinator> combinators) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            for (Filter filter : filters) {
-                if (Objects.nonNull(filter.getValue())) {
-                    Path<?> jpaPath = getPath(root, filter);
-
-                    if (Objects.isNull(filter.getType())) {
-                        filter.setType(Filter.Type.EQUAL);
-                    }
-
-                    switch (filter.getType()) {
-                        case EQUAL -> predicates.add(
-                                criteriaBuilder.and(
-                                        criteriaBuilder.equal(jpaPath, filter.getValue())));
-                        case STRING_LIKE -> predicates.add(
-                                criteriaBuilder.and(
-                                        criteriaBuilder.like(
-                                                criteriaBuilder.lower((Path<String>) jpaPath),
-                                                "%" + filter.getValue().toString().toLowerCase() + "%")));
-                    }
+            for (FilterCombinator combinator : combinators) {
+                if (Objects.isNull(combinator.getType())) {
+                    combinator.setType(FilterCombinator.Type.AND);
                 }
+
+                if (Objects.requireNonNull(combinator.getType()) == FilterCombinator.Type.OR) {
+                    predicates.add(criteriaBuilder.or(RepositoryUtils.getPredicates(root, criteriaBuilder, combinator)));
+                } else if (combinator.getType() == FilterCombinator.Type.AND) {
+                    predicates.add(criteriaBuilder.and(RepositoryUtils.getPredicates(root, criteriaBuilder, combinator)));
+                }
+
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    private static <T> Predicate[] getPredicates(Root<T> root, CriteriaBuilder criteriaBuilder, FilterCombinator combinator) {
+        List<Predicate> predicatesOfCombinator = new ArrayList<>();
+
+        for (Filter filter : combinator.getFilters()) {
+            if (Objects.nonNull(filter.getValue())) {
+                Path<?> jpaPath = getPath(root, filter);
+
+                if (Objects.isNull(filter.getType())) {
+                    filter.setType(Filter.Type.EQUAL);
+                }
+
+                if (Objects.requireNonNull(filter.getType()) == Filter.Type.EQUAL) {
+                    predicatesOfCombinator.add(RepositoryUtils.equalCondition(criteriaBuilder, filter, jpaPath));
+                } else if (filter.getType() == Filter.Type.STRING_LIKE) {
+                    predicatesOfCombinator.add(RepositoryUtils.likeCondition(criteriaBuilder, filter, (Path<String>) jpaPath));
+                }
+            }
+        }
+
+        return predicatesOfCombinator.toArray(new Predicate[0]);
+    }
+
+    private static Predicate equalCondition(CriteriaBuilder criteriaBuilder, Filter filter, Path<?> jpaPath) {
+        return criteriaBuilder.equal(jpaPath, filter.getValue());
+    }
+
+    private static Predicate likeCondition(CriteriaBuilder criteriaBuilder, Filter filter, Path<String> jpaPath) {
+        return criteriaBuilder.like(
+                criteriaBuilder.lower(jpaPath),
+                "%" + filter.getValue().toString().toLowerCase() + "%");
     }
 
     /**

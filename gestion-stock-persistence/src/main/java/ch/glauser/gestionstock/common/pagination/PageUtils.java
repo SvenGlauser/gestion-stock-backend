@@ -50,6 +50,15 @@ public final class PageUtils {
     }
 
     public static Collection<Filter> getFilters(SearchRequest searchRequest) {
-        return CollectionUtils.emptyIfNull(searchRequest.getFilters());
+        return CollectionUtils
+                .emptyIfNull(searchRequest.getCombinators())
+                .stream()
+                .map(FilterCombinator::getFilters)
+                .flatMap(Collection::stream)
+                .toList();
+    }
+
+    public static Collection<FilterCombinator> getFiltersCombinators(SearchRequest searchRequest) {
+        return CollectionUtils.emptyIfNull(searchRequest.getCombinators());
     }
 }

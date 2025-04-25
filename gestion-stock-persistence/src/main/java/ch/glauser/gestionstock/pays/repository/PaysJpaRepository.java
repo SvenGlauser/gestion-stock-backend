@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.pays.repository;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.pays.entity.PaysEntity;
 import org.springframework.data.domain.Page;
@@ -49,7 +49,7 @@ public interface PaysJpaRepository extends JpaRepository<PaysEntity, Long>, JpaS
      */
     boolean existsByAbreviation(String abreviation);
 
-    default Page<PaysEntity> search(Collection<Filter> filters, Pageable pageable) {
+    default Page<PaysEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }

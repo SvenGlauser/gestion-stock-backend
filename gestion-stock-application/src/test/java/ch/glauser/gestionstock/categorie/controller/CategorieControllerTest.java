@@ -3,6 +3,7 @@ package ch.glauser.gestionstock.categorie.controller;
 import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
@@ -112,7 +113,7 @@ class CategorieControllerTest {
         actif.setValue(false);
         actif.setField("actif");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilters(List.of(actif));
+        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(actif))));
         SearchResult<CategorieDto> result1 = categorieController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -124,7 +125,7 @@ class CategorieControllerTest {
         nom.setValue("Categorie - Test Search - 3");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
         SearchResult<CategorieDto> result2 = categorieController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

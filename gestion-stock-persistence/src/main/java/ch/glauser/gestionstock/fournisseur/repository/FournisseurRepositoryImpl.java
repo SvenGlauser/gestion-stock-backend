@@ -28,7 +28,7 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
 
     @Override
     public SearchResult<Fournisseur> searchFournisseur(SearchRequest searchRequest) {
-        Page<FournisseurEntity> page = this.fournisseurJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<FournisseurEntity> page = this.fournisseurJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

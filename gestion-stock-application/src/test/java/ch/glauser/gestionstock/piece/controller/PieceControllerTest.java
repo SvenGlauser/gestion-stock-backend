@@ -4,6 +4,7 @@ import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.contact.controller.ContactController;
@@ -168,7 +169,7 @@ class PieceControllerTest {
         categorieFilter.setValue(categorie.getId());
         categorieFilter.setField("categorie.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilters(List.of(categorieFilter));
+        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(categorieFilter))));
         SearchResult<PieceDto> result1 = pieceController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -181,7 +182,7 @@ class PieceControllerTest {
         nom.setField("nom");
         nom.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
         SearchResult<PieceDto> result2 = pieceController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

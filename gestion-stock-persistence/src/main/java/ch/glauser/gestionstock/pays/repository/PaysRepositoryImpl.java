@@ -33,7 +33,7 @@ public class PaysRepositoryImpl implements PaysRepository {
 
     @Override
     public SearchResult<Pays> searchPays(SearchRequest searchRequest) {
-        Page<PaysEntity> page = this.paysJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<PaysEntity> page = this.paysJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

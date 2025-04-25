@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.machine.controller;
 
 import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.contact.controller.ContactController;
@@ -119,7 +120,7 @@ class MachineControllerTest {
         contactFilter.setValue(contact.getId());
         contactFilter.setField("contact.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilters(List.of(contactFilter));
+        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(contactFilter))));
         SearchResult<MachineDto> result1 = machineController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -131,7 +132,7 @@ class MachineControllerTest {
         nom.setValue("Machine");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
         SearchResult<MachineDto> result2 = machineController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
