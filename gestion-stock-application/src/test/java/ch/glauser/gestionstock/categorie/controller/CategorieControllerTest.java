@@ -5,6 +5,8 @@ import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
+import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.utils.TestUtils;
@@ -28,6 +30,9 @@ class CategorieControllerTest {
 
     @Autowired
     PieceController pieceController;
+
+    @Autowired
+    FournisseurController fournisseurController;
 
     @Test
     void get() {
@@ -214,10 +219,15 @@ class CategorieControllerTest {
         categorie2.setActif(true);
         categorie2 = categorieController.create(categorie2).getBody();
 
+        FournisseurDto fournisseur = new FournisseurDto();
+        fournisseur.setNom("Test");
+        fournisseur = this.fournisseurController.create(fournisseur).getBody();
+
         PieceDto piece = new PieceDto();
         piece.setNom("Piece - Test Delete - 2");
         piece.setNumeroInventaire("12345678");
         piece.setCategorie(categorie2);
+        piece.setFournisseur(fournisseur);
         piece.setQuantite(0L);
         piece.setPrix(0D);
         piece = pieceController.create(piece).getBody();

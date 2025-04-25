@@ -23,7 +23,7 @@ public class Piece extends Model {
     private String nom;
     private String description;
 
-    private String numeroFournisseur;
+    @NotNull
     private Fournisseur fournisseur;
 
     @NotNull
