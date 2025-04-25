@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.batch.localite;
 
 import ch.glauser.gestionstock.localite.model.Localite;
+import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.localite.service.LocaliteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.Chunk;
@@ -12,9 +13,18 @@ import org.springframework.stereotype.Component;
 public class LocaliteItemWriter implements ItemWriter<Localite> {
 
     private final LocaliteService localiteService;
+    private final LocaliteRepository localiteRepository;
 
     @Override
     public void write(Chunk<? extends Localite> chunk) {
-        chunk.forEach(localiteService::createLocalite);
+        chunk.forEach(localite -> {
+            if (!this.localiteRepository.existLocaliteByNpaAndNomAndIdPays(
+                    localite.getNpa(),
+                    localite.getNom(),
+                    localite.getPays().getId()
+            )) {
+                localiteService.createLocalite(localite);
+            }
+        });
     }
 }
