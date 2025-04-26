@@ -17,6 +17,10 @@ import java.util.*;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PageUtils {
+
+    public static final int DEFAULT_PAGE_NUMBER = 0;
+    public static final int DEFAULT_PAGE_SIZE = 10;
+
     public static <T extends ModelEntity<R>, R extends Model> SearchResult<R> transform(Page<T> page) {
         SearchResult<R> searchResult = new SearchResult<>();
         searchResult.setCurrentPage(page.getNumber());
@@ -43,8 +47,16 @@ public final class PageUtils {
         }
 
         return PageRequest.of(
-                Optional.ofNullable(searchRequest.getPage()).orElse(0),
-                Optional.ofNullable(searchRequest.getPageSize()).orElse(10),
+                Optional.ofNullable(searchRequest.getPage()).orElse(DEFAULT_PAGE_NUMBER),
+                Optional.ofNullable(searchRequest.getPageSize()).orElse(DEFAULT_PAGE_SIZE),
+                Sort.by(orders)
+        );
+    }
+
+    public static Pageable getDefaultPage(List<Sort.Order> orders) {
+        return PageRequest.of(
+                DEFAULT_PAGE_NUMBER,
+                DEFAULT_PAGE_SIZE,
                 Sort.by(orders)
         );
     }

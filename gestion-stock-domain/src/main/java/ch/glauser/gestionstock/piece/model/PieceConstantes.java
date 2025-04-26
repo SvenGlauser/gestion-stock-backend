@@ -15,6 +15,7 @@ public final class PieceConstantes {
     public static final String FIELD_CATEGORIE = "categorie";
     public static final String FIELD_NUMERO_INVENTAIRE = "numeroInventaire";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
+    public static final String FIELD_SEARCH_VALUE = "searchValue";
 
     public static final String ERROR_SUPPRESSION_PIECE_INEXISTANTE = "Impossible de supprimer cette pièce car elle n'existe pas";
     public static final String ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE = "Impossible de supprimer cette pièce car il existe une machine liée";

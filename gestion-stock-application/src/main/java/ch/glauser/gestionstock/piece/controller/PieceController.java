@@ -25,6 +25,11 @@ public class PieceController {
         return ResponseEntity.ok(this.pieceApplicationService.createPiece(piece));
     }
 
+    @GetMapping(path = "/autocomplete")
+    public ResponseEntity<SearchResult<PieceDto>> autocomplete(@RequestParam(name = "searchValue") String searchValue) {
+        return ResponseEntity.ok(this.pieceApplicationService.autocompletePiece(searchValue));
+    }
+
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<PieceDto>> search(@RequestBody SearchRequest searchRequest) {
         return ResponseEntity.ok(this.pieceApplicationService.searchPiece(searchRequest));

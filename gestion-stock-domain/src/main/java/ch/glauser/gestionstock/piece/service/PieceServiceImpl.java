@@ -46,6 +46,15 @@ public class PieceServiceImpl implements PieceService {
     }
 
     @Override
+    public SearchResult<Piece> autocompletePiece(String searchValue) {
+        Validation.of(PieceServiceImpl.class)
+                .validateNotNull(searchValue, PieceConstantes.FIELD_SEARCH_VALUE)
+                .execute();
+
+        return this.pieceRepository.autocompletePiece(searchValue);
+    }
+
+    @Override
     public Piece createPiece(Piece piece) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
