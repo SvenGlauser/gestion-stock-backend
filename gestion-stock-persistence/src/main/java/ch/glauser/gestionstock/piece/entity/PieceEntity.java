@@ -20,16 +20,13 @@ public class PieceEntity extends ModelEntity<Piece> {
     @Column(name = "NUMERO_INVENTAIRE", nullable = false, unique = true)
     private String numeroInventaire;
 
-    @Column(name = "NOM", nullable = false, unique = true)
+    @Column(name = "NOM", nullable = false)
     private String nom;
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "NUMERO_FOURNISSEUR")
-    private String numeroFournisseur;
-
-    @ManyToOne
-    @JoinColumn(name = "FOURNISSEUR_ID")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "FOURNISSEUR_ID", nullable = false)
     private FournisseurEntity fournisseur;
 
     @ManyToOne(optional = false)
@@ -46,7 +43,6 @@ public class PieceEntity extends ModelEntity<Piece> {
         this.numeroInventaire = piece.getNumeroInventaire();
         this.nom = piece.getNom();
         this.description = piece.getDescription();
-        this.numeroFournisseur = piece.getNumeroFournisseur();
         this.fournisseur = Optional.ofNullable(piece.getFournisseur()).map(FournisseurEntity::new).orElse(null);
         this.categorie = Optional.ofNullable(piece.getCategorie()).map(CategorieEntity::new).orElse(null);
         this.quantite = piece.getQuantite();
@@ -59,7 +55,6 @@ public class PieceEntity extends ModelEntity<Piece> {
         piece.setNumeroInventaire(this.numeroInventaire);
         piece.setNom(this.nom);
         piece.setDescription(this.description);
-        piece.setNumeroFournisseur(this.numeroFournisseur);
         piece.setFournisseur(Optional.ofNullable(this.fournisseur).map(ModelEntity::toDomain).orElse(null));
         piece.setCategorie(Optional.ofNullable(this.categorie).map(ModelEntity::toDomain).orElse(null));
         piece.setQuantite(this.quantite);

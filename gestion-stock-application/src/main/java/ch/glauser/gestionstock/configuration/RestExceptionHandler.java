@@ -23,7 +23,6 @@ public class RestExceptionHandler  {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleConflict(Exception e, HttpServletRequest request) {
         this.thrownExceptionService.createException(e);
-        e.printStackTrace();
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setTitle("Internal Server Error");

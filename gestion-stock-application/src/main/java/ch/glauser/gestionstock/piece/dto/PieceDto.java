@@ -20,7 +20,6 @@ public class PieceDto extends ModelDto<Piece> {
     private String nom;
     private String description;
 
-    private String numeroFournisseur;
     private FournisseurDto fournisseur;
 
     private CategorieDto categorie;
@@ -34,7 +33,6 @@ public class PieceDto extends ModelDto<Piece> {
         this.numeroInventaire = piece.getNumeroInventaire();
         this.nom = piece.getNom();
         this.description = piece.getDescription();
-        this.numeroFournisseur = piece.getNumeroFournisseur();
         this.fournisseur = Optional.ofNullable(piece.getFournisseur()).map(FournisseurDto::new).orElse(null);
         this.categorie = Optional.ofNullable(piece.getCategorie()).map(CategorieDto::new).orElse(null);
         this.quantite = piece.getQuantite();
@@ -47,7 +45,6 @@ public class PieceDto extends ModelDto<Piece> {
         piece.setNumeroInventaire(this.numeroInventaire);
         piece.setNom(this.nom);
         piece.setDescription(this.description);
-        piece.setNumeroFournisseur(this.numeroFournisseur);
         piece.setFournisseur(Optional.ofNullable(this.fournisseur).map(ModelDto::toDomain).orElse(null));
         piece.setCategorie(Optional.ofNullable(this.categorie).map(ModelDto::toDomain).orElse(null));
         piece.setQuantite(this.quantite);

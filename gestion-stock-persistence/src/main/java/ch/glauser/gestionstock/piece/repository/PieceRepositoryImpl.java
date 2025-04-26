@@ -6,8 +6,14 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
 import ch.glauser.gestionstock.piece.model.Piece;
+import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Implémentation du repository de gestion des pieces
@@ -28,7 +34,26 @@ public class PieceRepositoryImpl implements PieceRepository {
 
     @Override
     public SearchResult<Piece> searchPiece(SearchRequest searchRequest) {
-        Page<PieceEntity> page = this.pieceJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<PieceEntity> page = this.pieceJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+        return PageUtils.transform(page);
+    }
+
+    @Override
+    public SearchResult<Piece> autocompletePiece(String searchValue) {
+        Specification<PieceEntity> specification = (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(
+                        criteriaBuilder.lower(
+                        criteriaBuilder.concat("",
+                        criteriaBuilder.concat(root.get(PieceConstantes.FIELD_NUMERO_INVENTAIRE),
+                        criteriaBuilder.concat(" / ",
+                                               root.get(PieceConstantes.FIELD_NOM))))),
+                        "%" + searchValue.toLowerCase() + "%");
+
+        Pageable pageable = PageUtils.getDefaultPage(List.of(
+                Sort.Order.asc(PieceConstantes.FIELD_NUMERO_INVENTAIRE),
+                Sort.Order.asc(PieceConstantes.FIELD_NOM)));
+
+        Page<PieceEntity> page = this.pieceJpaRepository.findAll(specification, pageable);
         return PageUtils.transform(page);
     }
 
@@ -55,11 +80,6 @@ public class PieceRepositoryImpl implements PieceRepository {
     @Override
     public boolean existPieceByIdFournisseur(Long id) {
         return this.pieceJpaRepository.existsByIdFournisseur(id);
-    }
-
-    @Override
-    public boolean existPieceByNom(String nom) {
-        return this.pieceJpaRepository.existsByNom(nom);
     }
 
     @Override

@@ -25,6 +25,14 @@ public interface PieceApplicationService {
     SearchResult<PieceDto> searchPiece(SearchRequest searchRequest);
 
     /**
+     * Récupère les pièces pour l'autocomplétion
+     *
+     * @param searchValue Valeur de recherche
+     * @return Une liste de pièces paginée
+     */
+    SearchResult<PieceDto> autocompletePiece(String searchValue);
+
+    /**
      * Crée une pièce
      *
      * @param piece Pièce à créer

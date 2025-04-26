@@ -1,9 +1,27 @@
 services:
-  db:
+  app:
+    image: 'gestion-stock-backend:latest'
+    build:
+      context: .
+      args:
+        VERSION: 1.0-SNAPSHOT
+    container_name: gestion-stock-backend
+    depends_on:
+      - database
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8080:8080"
+  database:
     image: 'postgres:latest'
-    container_name: gestion-stock-db
+    container_name: gestion-stock-database
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=admin
     ports:
       - "5432:5432"
+    volumes:
+      - .\postgresl_dump:/backups

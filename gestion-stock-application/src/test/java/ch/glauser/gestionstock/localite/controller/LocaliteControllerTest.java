@@ -3,6 +3,7 @@ package ch.glauser.gestionstock.localite.controller;
 import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.adresse.dto.AdresseDto;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.contact.controller.ContactController;
@@ -135,7 +136,7 @@ class LocaliteControllerTest {
         paysFilter.setValue(pays.getId());
         paysFilter.setField("pays.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilters(List.of(paysFilter));
+        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(paysFilter))));
         SearchResult<LocaliteDto> result1 = localiteController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -151,7 +152,7 @@ class LocaliteControllerTest {
         npa.setField("npa");
         npa.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(npa, nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(npa, nom))));
         SearchResult<LocaliteDto> result2 = localiteController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

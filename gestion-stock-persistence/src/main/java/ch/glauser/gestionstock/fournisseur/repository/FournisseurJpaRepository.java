@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.fournisseur.repository;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.fournisseur.entity.FournisseurEntity;
 import org.springframework.data.domain.Page;
@@ -44,7 +44,7 @@ public interface FournisseurJpaRepository extends JpaRepository<FournisseurEntit
      */
     boolean existsByNom(String nom);
 
-    default Page<FournisseurEntity> search(Collection<Filter> filters, Pageable pageable) {
+    default Page<FournisseurEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }

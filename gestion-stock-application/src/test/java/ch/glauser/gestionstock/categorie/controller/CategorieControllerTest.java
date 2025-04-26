@@ -3,8 +3,11 @@ package ch.glauser.gestionstock.categorie.controller;
 import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
+import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.utils.TestUtils;
@@ -28,6 +31,9 @@ class CategorieControllerTest {
 
     @Autowired
     PieceController pieceController;
+
+    @Autowired
+    FournisseurController fournisseurController;
 
     @Test
     void get() {
@@ -107,7 +113,7 @@ class CategorieControllerTest {
         actif.setValue(false);
         actif.setField("actif");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilters(List.of(actif));
+        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(actif))));
         SearchResult<CategorieDto> result1 = categorieController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -119,7 +125,7 @@ class CategorieControllerTest {
         nom.setValue("Categorie - Test Search - 3");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
         SearchResult<CategorieDto> result2 = categorieController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
@@ -214,10 +220,15 @@ class CategorieControllerTest {
         categorie2.setActif(true);
         categorie2 = categorieController.create(categorie2).getBody();
 
+        FournisseurDto fournisseur = new FournisseurDto();
+        fournisseur.setNom("Test");
+        fournisseur = this.fournisseurController.create(fournisseur).getBody();
+
         PieceDto piece = new PieceDto();
         piece.setNom("Piece - Test Delete - 2");
         piece.setNumeroInventaire("12345678");
         piece.setCategorie(categorie2);
+        piece.setFournisseur(fournisseur);
         piece.setQuantite(0L);
         piece.setPrix(0D);
         piece = pieceController.create(piece).getBody();

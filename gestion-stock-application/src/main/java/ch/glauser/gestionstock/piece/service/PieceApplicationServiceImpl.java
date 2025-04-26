@@ -7,6 +7,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.piece.model.Piece;
+import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +22,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PieceApplicationServiceImpl implements PieceApplicationService {
 
-    public static final String FIELD_PIECE = "piece";
-    public static final String FIELD_ID = "id";
-    public static final String FIELD_SEARCH_REQUEST = "searchRequest";
-
     private final PieceService pieceService;
 
     @Override
     public PieceDto getPiece(Long id) {
         Validation.of(PieceApplicationServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
         Piece pays = this.pieceService.getPiece(id);
@@ -41,7 +38,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     @Override
     public SearchResult<PieceDto> searchPiece(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
         SearchResult<Piece> searchResult = this.pieceService.searchPiece(searchRequest);
@@ -50,10 +47,21 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     }
 
     @Override
+    public SearchResult<PieceDto> autocompletePiece(String searchValue) {
+        Validation.of(CategorieServiceImpl.class)
+                .validateNotNull(searchValue, PieceConstantes.FIELD_SEARCH_VALUE)
+                .execute();
+
+        SearchResult<Piece> searchResult = this.pieceService.autocompletePiece(searchValue);
+
+        return SearchResultUtils.transformDto(searchResult, PieceDto::new);
+    }
+
+    @Override
     @Transactional
     public PieceDto createPiece(PieceDto piece) {
         Validation.of(PieceApplicationServiceImpl.class)
-                .validateNotNull(piece, FIELD_PIECE)
+                .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
         Piece newPiece = piece.toDomain();
@@ -67,7 +75,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     @Transactional
     public PieceDto modifyPiece(PieceDto piece) {
         Validation.of(PieceApplicationServiceImpl.class)
-                .validateNotNull(piece, FIELD_PIECE)
+                .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
         Piece pieceToUpdate = piece.toDomain();
@@ -81,7 +89,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     @Transactional
     public void deletePiece(Long id) {
         Validation.of(PieceApplicationServiceImpl.class)
-                .validateNotNull(id, FIELD_ID)
+                .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
         this.pieceService.deletePiece(id);

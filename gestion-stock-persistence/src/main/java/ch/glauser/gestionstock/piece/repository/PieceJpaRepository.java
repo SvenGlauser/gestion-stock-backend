@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
 import org.springframework.data.domain.Page;
@@ -46,14 +46,6 @@ public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, Jp
     boolean existsByIdFournisseur(@Param("id") Long id);
 
     /**
-     * Vérifie s'il existe une pièce avec ce nom
-     *
-     * @param nom Nom de la catégorie
-     * @return {@code true} s'il en existe une, sinon {@code false}
-     */
-    boolean existsByNom(String nom);
-
-    /**
      * Vérifie s'il existe une pièce avec ce numéro d'inventaire
      *
      * @param numeroInventaire Numéro d'inventaire de la catégorie
@@ -61,7 +53,7 @@ public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, Jp
      */
     boolean existsByNumeroInventaire(String numeroInventaire);
 
-    default Page<PieceEntity> search(Collection<Filter> filters, Pageable pageable) {
+    default Page<PieceEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }

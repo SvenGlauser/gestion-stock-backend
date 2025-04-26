@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.localite.repository;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.localite.entity.LocaliteEntity;
 import org.springframework.data.domain.Page;
@@ -52,7 +52,7 @@ public interface LocaliteJpaRepository extends JpaRepository<LocaliteEntity, Lon
             AND localite.npa = :npa""")
     boolean existsByNpaAndNomAndIdPays(@Param("npa") String npa, @Param("nom") String nom, @Param("id") Long id);
 
-    default Page<LocaliteEntity> search(Collection<Filter> filters, Pageable pageable) {
+    default Page<LocaliteEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }

@@ -28,7 +28,7 @@ public class ContactRepositoryImpl implements ContactRepository {
 
     @Override
     public SearchResult<Contact> searchContact(SearchRequest searchRequest) {
-        Page<ContactEntity> page = this.contactJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<ContactEntity> page = this.contactJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

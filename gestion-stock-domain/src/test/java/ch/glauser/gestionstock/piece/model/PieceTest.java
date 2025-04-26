@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.piece.model;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
+import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ class PieceTest {
     void validateWithoutValue() {
         Piece piece = new Piece();
 
-        TestUtils.testValidation(piece, Piece.class, 5);
+        TestUtils.testValidation(piece, Piece.class, 6);
     }
 
     @Test
@@ -22,6 +23,7 @@ class PieceTest {
         piece.setPrix(2.50);
         piece.setQuantite(123L);
         piece.setCategorie(new Categorie());
+        piece.setFournisseur(new Fournisseur());
 
         assertDoesNotThrow(piece::validateCreate);
     }

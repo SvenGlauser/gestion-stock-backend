@@ -25,6 +25,14 @@ public interface PieceRepository {
     SearchResult<Piece> searchPiece(SearchRequest searchRequest);
 
     /**
+     * Récupère les pièces pour l'autocomplétion
+     *
+     * @param searchValue Valeur de recherche
+     * @return Une liste de pièces paginée
+     */
+    SearchResult<Piece> autocompletePiece(String searchValue);
+
+    /**
      * Crée une pièce
      *
      * @param piece Pièce à créer
@@ -62,14 +70,6 @@ public interface PieceRepository {
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
     boolean existPieceByIdFournisseur(Long id);
-
-    /**
-     * Vérifie s'il existe une pièce avec ce nom
-     *
-     * @param nom Nom de la catégorie
-     * @return {@code true} s'il en existe une, sinon {@code false}
-     */
-    boolean existPieceByNom(String nom);
 
     /**
      * Vérifie s'il existe une pièce avec ce numéro d'inventaire

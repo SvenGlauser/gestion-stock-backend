@@ -19,9 +19,9 @@ import java.time.LocalDateTime;
 public class ThrownExceptionEntity extends ModelEntity<ThrownException> {
     @Column(name = "STACKTRACE", columnDefinition = "TEXT", nullable = false)
     private String stacktrace;
-    @Column(name = "CLASS_NAME", nullable = false)
+    @Column(name = "CLASS_NAME", columnDefinition = "TEXT", nullable = false)
     private String className;
-    @Column(name = "MESSAGE")
+    @Column(name = "MESSAGE", columnDefinition = "TEXT")
     private String message;
     @Column(name = "TIMESTAMP", nullable = false)
     private LocalDateTime timestamp;

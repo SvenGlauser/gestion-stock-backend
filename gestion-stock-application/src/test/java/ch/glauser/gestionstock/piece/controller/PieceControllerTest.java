@@ -4,11 +4,14 @@ import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.contact.controller.ContactController;
 import ch.glauser.gestionstock.contact.dto.ContactDto;
 import ch.glauser.gestionstock.contact.model.Titre;
+import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
+import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.machine.controller.MachineController;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
@@ -40,10 +43,16 @@ class PieceControllerTest {
     @Autowired
     MachineController machineController;
 
+    @Autowired
+    FournisseurController fournisseurController;
+
     @Test
     void get() {
+        FournisseurDto fournisseur = this.getFournisseur();
+
         PieceDto piece = new PieceDto();
         piece.setNumeroInventaire("12345");
+        piece.setFournisseur(fournisseur);
         piece.setNom("Piece");
         piece.setDescription("Description");
         piece.setCategorie(this.getCategorie());
@@ -70,36 +79,28 @@ class PieceControllerTest {
     @Test
     void create() {
         CategorieDto categorie = this.getCategorie();
+        FournisseurDto fournisseur = this.getFournisseur();
 
         // Test validation bien mise en place
         PieceDto piece = new PieceDto();
-        TestUtils.testValidation(5, () -> pieceController.create(piece));
+        TestUtils.testValidation(6, () -> pieceController.create(piece));
 
         // Test cas OK
         piece.setNumeroInventaire("12345");
         piece.setNom("Piece");
         piece.setDescription("Description");
         piece.setCategorie(categorie);
+        piece.setFournisseur(fournisseur);
         piece.setQuantite(0L);
         piece.setPrix(1D);
         assertDoesNotThrow(() -> pieceController.create(piece));
-
-        PieceDto piece2 = new PieceDto();
-        piece2.setNumeroInventaire("123456");
-        piece2.setNom("Piece");
-        piece2.setDescription("Description");
-        piece2.setCategorie(categorie);
-        piece2.setQuantite(0L);
-        piece2.setPrix(1D);
-
-        // Test unicité du nom
-        TestUtils.testValidation(1, () -> pieceController.create(piece2));
 
         PieceDto piece3 = new PieceDto();
         piece3.setNumeroInventaire("12345");
         piece3.setNom("Piece 2");
         piece3.setDescription("Description");
         piece3.setCategorie(categorie);
+        piece3.setFournisseur(fournisseur);
         piece3.setQuantite(0L);
         piece3.setPrix(1D);
 
@@ -111,6 +112,7 @@ class PieceControllerTest {
         piece4.setNom("Piece 2");
         piece4.setDescription("Description");
         piece4.setCategorie(categorie);
+        piece4.setFournisseur(fournisseur);
         piece4.setQuantite(0L);
         piece4.setPrix(1D);
 
@@ -122,12 +124,14 @@ class PieceControllerTest {
     void search() {
         CategorieDto categorie = this.getCategorie();
         CategorieDto categorie1 = this.getCategorie1();
+        FournisseurDto fournisseur = this.getFournisseur();
 
         PieceDto piece = new PieceDto();
         piece.setNumeroInventaire("1");
         piece.setNom("Piece");
         piece.setDescription("Description");
         piece.setCategorie(categorie);
+        piece.setFournisseur(fournisseur);
         piece.setQuantite(0L);
         piece.setPrix(1D);
         assertDoesNotThrow(() -> pieceController.create(piece));
@@ -137,6 +141,7 @@ class PieceControllerTest {
         piece2.setNom("Piece 2");
         piece2.setDescription("Description");
         piece2.setCategorie(categorie1);
+        piece2.setFournisseur(fournisseur);
         piece2.setQuantite(0L);
         piece2.setPrix(1D);
         assertDoesNotThrow(() -> pieceController.create(piece2));
@@ -146,6 +151,7 @@ class PieceControllerTest {
         piece3.setNom("Piece 3");
         piece3.setDescription("Description");
         piece3.setCategorie(categorie);
+        piece3.setFournisseur(fournisseur);
         piece3.setQuantite(0L);
         piece3.setPrix(1D);
         assertDoesNotThrow(() -> pieceController.create(piece3));
@@ -163,7 +169,7 @@ class PieceControllerTest {
         categorieFilter.setValue(categorie.getId());
         categorieFilter.setField("categorie.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setFilters(List.of(categorieFilter));
+        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(categorieFilter))));
         SearchResult<PieceDto> result1 = pieceController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -176,7 +182,7 @@ class PieceControllerTest {
         nom.setField("nom");
         nom.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
         SearchResult<PieceDto> result2 = pieceController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
@@ -187,11 +193,13 @@ class PieceControllerTest {
 
     @Test
     void modify() {
+        FournisseurDto fournisseur = this.getFournisseur();
         PieceDto piece = new PieceDto();
         piece.setNumeroInventaire("1");
         piece.setNom("Piece");
         piece.setDescription("Description");
         piece.setCategorie(this.getCategorie());
+        piece.setFournisseur(fournisseur);
         piece.setQuantite(0L);
         piece.setPrix(1D);
 
@@ -225,12 +233,15 @@ class PieceControllerTest {
     }
 
     @Test
-    void modifyAvecNomUnique() {
+    void modifyAvecNumeroUnique() {
+        FournisseurDto fournisseur = this.getFournisseur();
+
         PieceDto piece = new PieceDto();
         piece.setNumeroInventaire("1");
         piece.setNom("Piece");
         piece.setDescription("Description");
         piece.setCategorie(this.getCategorie());
+        piece.setFournisseur(fournisseur);
         piece.setQuantite(0L);
         piece.setPrix(1D);
 
@@ -242,6 +253,7 @@ class PieceControllerTest {
         piece1.setNom("Piece 1");
         piece1.setDescription("Description");
         piece1.setCategorie(this.getCategorie1());
+        piece1.setFournisseur(fournisseur);
         piece1.setQuantite(0L);
         piece1.setPrix(1D);
 
@@ -250,25 +262,23 @@ class PieceControllerTest {
         assertThat(piece1).isNotNull();
 
         PieceDto piece1SameName = piece1;
-        piece1SameName.setNom("Piece");
-        TestUtils.testValidation(1, () -> pieceController.modify(piece1SameName));
-
         piece1SameName.setNumeroInventaire("1");
-        piece1SameName.setNom("Piece 1");
         TestUtils.testValidation(1, () -> pieceController.modify(piece1SameName));
 
         piece1SameName.setNumeroInventaire("2");
-        piece1SameName.setNom("Piece 2");
         assertDoesNotThrow(() -> pieceController.modify(piece1SameName));
     }
 
     @Test
     void delete() {
+        FournisseurDto fournisseur = this.getFournisseur();
+
         PieceDto piece = new PieceDto();
         piece.setNumeroInventaire("1");
         piece.setNom("Piece");
         piece.setDescription("Description");
         piece.setCategorie(this.getCategorie());
+        piece.setFournisseur(fournisseur);
         piece.setQuantite(0L);
         piece.setPrix(1D);
 
@@ -290,6 +300,7 @@ class PieceControllerTest {
         piece2.setNom("Piece 2");
         piece2.setDescription("Description");
         piece2.setCategorie(this.getCategorie1());
+        piece2.setFournisseur(fournisseur);
         piece2.setQuantite(0L);
         piece2.setPrix(1D);
         piece2 = pieceController.create(piece2).getBody();
@@ -330,5 +341,11 @@ class PieceControllerTest {
         categorie.setNom("Categorie 1");
         categorie.setActif(true);
         return categorieController.create(categorie).getBody();
+    }
+
+    private FournisseurDto getFournisseur() {
+        FournisseurDto fournisseurDto = new FournisseurDto();
+        fournisseurDto.setNom("Test");
+        return this.fournisseurController.create(fournisseurDto).getBody();
     }
 }

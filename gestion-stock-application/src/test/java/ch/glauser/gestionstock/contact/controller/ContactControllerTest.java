@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.contact.controller;
 
 import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.contact.dto.ContactDto;
@@ -94,7 +95,7 @@ class ContactControllerTest {
         nom.setValue("Nom");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setFilters(List.of(nom));
+        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
         SearchResult<ContactDto> result2 = contactController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

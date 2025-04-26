@@ -28,7 +28,7 @@ public class MachineRepositoryImpl implements MachineRepository {
 
     @Override
     public SearchResult<Machine> searchMachine(SearchRequest searchRequest) {
-        Page<MachineEntity> page = this.machineJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<MachineEntity> page = this.machineJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

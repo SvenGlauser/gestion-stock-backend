@@ -26,7 +26,7 @@ public class ThrownExceptionRepositoryImpl implements ThrownExceptionRepository 
 
     @Override
     public SearchResult<ThrownException> searchExceptions(SearchRequest searchRequest) {
-        Page<ThrownExceptionEntity> page = this.thrownExceptionJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<ThrownExceptionEntity> page = this.thrownExceptionJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

@@ -12,5 +12,5 @@ import java.util.List;
 public class SearchRequest {
     private Integer page;
     private Integer pageSize;
-    private List<Filter> filters;
+    private List<FilterCombinator> combinators;
 }

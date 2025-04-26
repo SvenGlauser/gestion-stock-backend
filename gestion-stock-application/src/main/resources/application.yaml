@@ -1,19 +1,16 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/gestion_stock
-    username: root
-    password: admin
-    driverClassName: org.postgresql.Driver
+  profiles:
+    active: @spring.profiles.active@
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
-        show_sql: true
+        show_sql: false
 
   batch:
     jdbc:

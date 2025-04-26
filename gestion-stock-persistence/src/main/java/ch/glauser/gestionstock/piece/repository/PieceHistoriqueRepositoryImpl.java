@@ -26,7 +26,7 @@ public class PieceHistoriqueRepositoryImpl implements PieceHistoriqueRepository 
 
     @Override
     public SearchResult<PieceHistorique> searchPieceHistorique(SearchRequest searchRequest) {
-        Page<PieceHistoriqueEntity> page = this.pieceHistoriqueJpaRepository.search(PageUtils.getFilters(searchRequest), PageUtils.paginate(searchRequest));
+        Page<PieceHistoriqueEntity> page = this.pieceHistoriqueJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
