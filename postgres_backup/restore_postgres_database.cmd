@@ -1,0 +1,1 @@
+docker compose exec -it database psql -d postgres -f /backups/backup.sql
