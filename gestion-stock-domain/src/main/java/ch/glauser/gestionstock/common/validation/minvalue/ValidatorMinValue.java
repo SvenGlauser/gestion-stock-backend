@@ -54,7 +54,7 @@ public class ValidatorMinValue extends Validator {
      */
     public void validate(Double object, Double minValue, String field) {
         if (object < minValue) {
-            this.validation.addError("La valeur du champ doit être inférieur à " + minValue, field);
+            this.validation.addError("La valeur du champ doit être supérieur à " + minValue, field);
         }
     }
 }
