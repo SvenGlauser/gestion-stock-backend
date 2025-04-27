@@ -5,6 +5,7 @@ import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.exception.service.ThrownExceptionService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @ControllerAdvice
 @RequiredArgsConstructor
 public class RestExceptionHandler  {
@@ -22,10 +24,13 @@ public class RestExceptionHandler  {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleConflict(Exception e, HttpServletRequest request) {
+        log.error(e.getClass().getSimpleName(), e);
+
         this.thrownExceptionService.createException(e);
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setTitle("Internal Server Error");
+        problemDetail.setDetail(e.getMessage());
         problemDetail.setProperty("exception", e.getClass().getSimpleName()); // Nom de l'exception
         problemDetail.setProperty("path", request.getRequestURI()); // Endpoint concerné
 
