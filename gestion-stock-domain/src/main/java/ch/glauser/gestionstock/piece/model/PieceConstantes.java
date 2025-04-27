@@ -14,6 +14,8 @@ public final class PieceConstantes {
     public static final String FIELD_NOM = "nom";
     public static final String FIELD_CATEGORIE = "categorie";
     public static final String FIELD_NUMERO_INVENTAIRE = "numeroInventaire";
+    public static final String FIELD_PRIX = "prix";
+    public static final String FIELD_QUANTITE = "quantite";
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
     public static final String FIELD_SEARCH_VALUE = "searchValue";
 

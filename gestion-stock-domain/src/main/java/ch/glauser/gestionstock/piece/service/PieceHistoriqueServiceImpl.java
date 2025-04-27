@@ -45,7 +45,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
         pieceHistorique.setPiece(newPiece);
         pieceHistorique.setDifference(newPiece.getQuantite());
         pieceHistorique.setType(PieceHistoriqueType.ENTREE);
-        pieceHistorique.setSource(PieceHistoriqueSource.AUTOMATIQUE);
+        pieceHistorique.setSource(PieceHistoriqueSource.CREATION);
         pieceHistorique.setDate(LocalDate.now());
 
         Validation validation = pieceHistorique.validateCreate();
@@ -56,10 +56,11 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
     }
 
     @Override
-    public void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece) {
+    public void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece, PieceHistoriqueSource source) {
         Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(newPiece, PieceHistoriqueConstantes.FIELD_NEW_PIECE)
                 .validateNotNull(oldPiece, PieceHistoriqueConstantes.FIELD_OLD_PIECE)
+                .validateNotNull(source, PieceHistoriqueConstantes.FIELD_SOURCE)
                 .execute();
 
         PieceHistorique pieceHistorique = new PieceHistorique();
@@ -76,7 +77,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
         pieceHistorique.setPiece(newPiece);
         pieceHistorique.setDifference(Math.abs(quantite));
-        pieceHistorique.setSource(PieceHistoriqueSource.AUTOMATIQUE);
+        pieceHistorique.setSource(source);
         pieceHistorique.setDate(LocalDate.now());
 
         Validation validation = pieceHistorique.validateCreate();

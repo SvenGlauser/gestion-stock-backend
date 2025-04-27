@@ -10,6 +10,8 @@ import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
+import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
+import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -86,6 +88,16 @@ public class PieceServiceImpl implements PieceService {
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
+        return this.modifyPiece(piece, PieceHistoriqueSource.MODIFICATION);
+    }
+
+    @Override
+    public Piece modifyPiece(Piece piece, PieceHistoriqueSource source) {
+        Validation.of(PieceServiceImpl.class)
+                .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
+                .validateNotNull(source, PieceHistoriqueConstantes.FIELD_SOURCE)
+                .execute();
+
         // Récupération de l'ancienne pièce
         Piece oldPiece = this.pieceRepository.getPiece(piece.getId());
 
@@ -94,7 +106,7 @@ public class PieceServiceImpl implements PieceService {
 
         if (Objects.nonNull(oldPiece)) {
             if (!Objects.equals(oldPiece.getNumeroInventaire(), piece.getNumeroInventaire()) &&
-                this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
+                    this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
 
                 // Valide le cas dans lequel la pièce a changé de numéro d'inventaire
                 validation.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
@@ -109,7 +121,7 @@ public class PieceServiceImpl implements PieceService {
         Piece newPiece = this.pieceRepository.modifyPiece(piece);
 
         // Mise à jour de l'historique
-        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece, oldPiece);
+        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece, oldPiece, source);
 
         return newPiece;
     }

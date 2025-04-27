@@ -4,6 +4,7 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
+import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
 
 /**
  * Service de gestion des mouvements de pièces
@@ -37,8 +38,9 @@ public interface PieceHistoriqueService {
      *
      * @param newPiece Nouvelle pièce
      * @param oldPiece Ancienne pièce
+     * @param source Source
      */
-    void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece);
+    void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece, PieceHistoriqueSource source);
 
     /**
      * Supprime tout l'historique d'une pièce

@@ -17,5 +17,5 @@ public final class FournisseurConstantes {
     public static final String ERROR_SUPPRESSION_FOURNISSEUR_INEXISTANTE = "Impossible de supprimer ce fournisseur car il n'existe pas";
     public static final String ERROR_SUPPRESSION_FOURNISSEUR_IMPOSSIBLE_EXISTE_CONTACT = "Impossible de supprimer ce fournisseur car il existe une pièce liée";
 
-    public static final String ERROR_FOURNISSEUR_NOM_UNIQUE = "Le nom de la catégorie doit être unique";
+    public static final String ERROR_FOURNISSEUR_NOM_UNIQUE = "Le nom du fournisseur doit être unique";
 }

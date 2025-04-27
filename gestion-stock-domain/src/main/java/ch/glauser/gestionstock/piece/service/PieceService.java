@@ -3,6 +3,7 @@ package ch.glauser.gestionstock.piece.service;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.Piece;
+import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
 
 /**
  * Service métier de gestion des pièces
@@ -47,6 +48,15 @@ public interface PieceService {
      * @return La pièce modifiée
      */
     Piece modifyPiece(Piece piece);
+
+    /**
+     * Modifie une pièce
+     *
+     * @param piece Pièce à modifier avec les nouvelles valeurs
+     * @param source Source spécifique pour l'historisation de la quantité
+     * @return La pièce modifiée
+     */
+    Piece modifyPiece(Piece piece, PieceHistoriqueSource source);
 
     /**
      * Supprime une pièce

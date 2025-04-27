@@ -25,6 +25,7 @@
 
         <org.projectlombok.lombok.version>1.18.36</org.projectlombok.lombok.version>
 
+        <org.apache.commons.csv.version>1.14.0</org.apache.commons.csv.version>
         <org.apache.commons.lang3.version>3.17.0</org.apache.commons.lang3.version>
         <org.apache.commons.collections4.version>4.4</org.apache.commons.collections4.version>
         <org.apache.commons.validator.version>1.9.0</org.apache.commons.validator.version>
@@ -73,6 +74,12 @@
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-csv</artifactId>
+                <version>${org.apache.commons.csv.version}</version>
             </dependency>
 
             <dependency>
