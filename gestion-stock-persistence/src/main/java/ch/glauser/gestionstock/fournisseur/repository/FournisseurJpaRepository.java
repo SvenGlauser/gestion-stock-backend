@@ -12,21 +12,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * JPA Repository pour la gestion des fournisseurs
  */
 @Repository
 public interface FournisseurJpaRepository extends JpaRepository<FournisseurEntity, Long>, JpaSpecificationExecutor<FournisseurEntity> {
-    /**
-     * Récupère un fournisseur par id
-     *
-     * @param id Id du fournisseur
-     * @return Un {@link Optional} de {@link FournisseurEntity}
-     */
-    Optional<FournisseurEntity> findOptionalById(Long id);
-
     /**
      * Vérifie s'il existe un fournisseur avec cette localité
      *

@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implémentation du repository de gestion des pieces
@@ -28,18 +29,18 @@ public class PieceRepositoryImpl implements PieceRepository {
     }
 
     @Override
-    public Piece getPiece(Long id) {
-        return this.pieceJpaRepository.findOptionalById(id).map(ModelEntity::toDomain).orElse(null);
+    public Optional<Piece> get(Long id) {
+        return this.pieceJpaRepository.findById(id).map(ModelEntity::toDomain);
     }
 
     @Override
-    public SearchResult<Piece> searchPiece(SearchRequest searchRequest) {
+    public SearchResult<Piece> search(SearchRequest searchRequest) {
         Page<PieceEntity> page = this.pieceJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
-    public SearchResult<Piece> autocompletePiece(String searchValue) {
+    public SearchResult<Piece> autocomplete(String searchValue) {
         Specification<PieceEntity> specification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.like(
                         criteriaBuilder.lower(
@@ -58,32 +59,32 @@ public class PieceRepositoryImpl implements PieceRepository {
     }
 
     @Override
-    public Piece createPiece(Piece piece) {
+    public Piece create(Piece piece) {
         return this.pieceJpaRepository.save(new PieceEntity(piece)).toDomain();
     }
 
     @Override
-    public Piece modifyPiece(Piece piece) {
+    public Piece modify(Piece piece) {
         return this.pieceJpaRepository.save(new PieceEntity(piece)).toDomain();
     }
 
     @Override
-    public void deletePiece(Long id) {
+    public void delete(Long id) {
         this.pieceJpaRepository.deleteById(id);
     }
 
     @Override
-    public boolean existPieceByIdCategorie(Long id) {
+    public boolean existByIdCategorie(Long id) {
         return this.pieceJpaRepository.existsByIdCategorie(id);
     }
 
     @Override
-    public boolean existPieceByIdFournisseur(Long id) {
+    public boolean existByIdFournisseur(Long id) {
         return this.pieceJpaRepository.existsByIdFournisseur(id);
     }
 
     @Override
-    public boolean existPieceByNumeroInventaire(String numeroInventaire) {
+    public boolean existByNumeroInventaire(String numeroInventaire) {
         return this.pieceJpaRepository.existsByNumeroInventaire(numeroInventaire);
     }
 }

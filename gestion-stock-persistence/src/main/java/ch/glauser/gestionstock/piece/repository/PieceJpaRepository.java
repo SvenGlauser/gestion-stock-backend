@@ -12,21 +12,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * JPA Repository pour la gestion des pieces
  */
 @Repository
 public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, JpaSpecificationExecutor<PieceEntity> {
-    /**
-     * Récupère une pièce par id
-     *
-     * @param id Id de la pièce
-     * @return Un {@link Optional} de {@link PieceEntity}
-     */
-    Optional<PieceEntity> findOptionalById(Long id);
-
     /**
      * Vérifie s'il existe une pièce avec cette catégorie
      *

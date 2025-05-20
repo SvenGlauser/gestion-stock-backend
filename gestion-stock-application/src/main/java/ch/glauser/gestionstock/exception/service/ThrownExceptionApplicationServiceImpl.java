@@ -20,7 +20,7 @@ public class ThrownExceptionApplicationServiceImpl implements ThrownExceptionApp
     private final ThrownExceptionService thrownExceptionService;
 
     @Override
-    public SearchResult<ThrownExceptionDto> searchExceptions(SearchRequest searchRequest) {
+    public SearchResult<ThrownExceptionDto> search(SearchRequest searchRequest) {
         Validation.of(ThrownExceptionApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
                 .execute();

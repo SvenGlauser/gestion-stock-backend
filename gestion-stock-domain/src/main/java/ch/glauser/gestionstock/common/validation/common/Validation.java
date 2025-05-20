@@ -77,15 +77,23 @@ public final class Validation {
 
         Validation validation = new Validation(classe);
 
-        validation.validatorNotNull.validate(object);
-        validation.validatorNotEmpty.validate(object);
-        validation.validatorUnique.validate(object);
-        validation.validatorMinValue.validate(object);
-        validation.validatorMaxValue.validate(object);
-        validation.validatorRegex.validate(object);
-        validation.validatorCascadeValidation.validate(object);
+        return validation.validate(object);
+    }
 
-        return validation;
+    public <T> Validation validate(T object) {
+        if (Objects.isNull(object)) {
+            throw new ValidationException(new Error("L'objet à valider ne doit pas être null", "object", classe));
+        }
+
+        this.validatorNotNull.validate(object);
+        this.validatorNotEmpty.validate(object);
+        this.validatorUnique.validate(object);
+        this.validatorMinValue.validate(object);
+        this.validatorMaxValue.validate(object);
+        this.validatorRegex.validate(object);
+        this.validatorCascadeValidation.validate(object);
+
+        return this;
     }
 
     /**

@@ -14,7 +14,7 @@ public interface MachineService {
      * @param id Id de la machine à récupérer
      * @return La machine ou null
      */
-    Machine getMachine(Long id);
+    Machine get(Long id);
 
     /**
      * Récupère les machines
@@ -22,7 +22,7 @@ public interface MachineService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de machine paginée
      */
-    SearchResult<Machine> searchMachine(SearchRequest searchRequest);
+    SearchResult<Machine> search(SearchRequest searchRequest);
 
     /**
      * Crée une machine
@@ -30,7 +30,7 @@ public interface MachineService {
      * @param machine Machine à créer
      * @return La machine créée
      */
-    Machine createMachine(Machine machine);
+    Machine create(Machine machine);
 
     /**
      * Modifie une machine
@@ -38,12 +38,12 @@ public interface MachineService {
      * @param machine Machine à modifier avec les nouvelles valeurs
      * @return La machine modifiée
      */
-    Machine modifyMachine(Machine machine);
+    Machine modify(Machine machine);
 
     /**
      * Supprime une machine
      *
      * @param id Id de la machine à supprimer
      */
-    void deleteMachine(Long id);
+    void delete(Long id);
 }

@@ -27,62 +27,62 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     private final CategorieService categorieService;
 
     @Override
-    public CategorieDto getCategorie(Long id) {
+    public CategorieDto get(Long id) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        Categorie categorie = this.categorieService.getCategorie(id);
+        Categorie categorie = this.categorieService.get(id);
 
         return Optional.ofNullable(categorie).map(CategorieDto::new).orElse(null);
     }
 
     @Override
-    public SearchResult<CategorieDto> searchCategorie(SearchRequest searchRequest) {
+    public SearchResult<CategorieDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Categorie> searchResult = this.categorieService.searchCategorie(searchRequest);
+        SearchResult<Categorie> searchResult = this.categorieService.search(searchRequest);
 
         return SearchResultUtils.transformDto(searchResult, CategorieDto::new);
     }
 
     @Override
     @Transactional
-    public CategorieDto createCategorie(CategorieDto categorie) {
+    public CategorieDto create(CategorieDto categorie) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
                 .execute();
 
         Categorie newCategorie = categorie.toDomain();
 
-        Categorie savedCategorie = this.categorieService.createCategorie(newCategorie);
+        Categorie savedCategorie = this.categorieService.create(newCategorie);
 
         return Optional.ofNullable(savedCategorie).map(CategorieDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public CategorieDto modifyCategorie(CategorieDto categorie) {
+    public CategorieDto modify(CategorieDto categorie) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
                 .execute();
 
         Categorie categorieToUpdate = categorie.toDomain();
 
-        Categorie savedCategorie = this.categorieService.modifyCategorie(categorieToUpdate);
+        Categorie savedCategorie = this.categorieService.modify(categorieToUpdate);
 
         return Optional.ofNullable(savedCategorie).map(CategorieDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public void deleteCategorie(Long id) {
+    public void delete(Long id) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        this.categorieService.deleteCategorie(id);
+        this.categorieService.delete(id);
     }
 }

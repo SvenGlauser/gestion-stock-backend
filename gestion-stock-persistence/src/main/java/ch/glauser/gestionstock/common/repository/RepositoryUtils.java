@@ -36,9 +36,9 @@ public final class RepositoryUtils {
                 }
 
                 if (Objects.requireNonNull(combinator.getType()) == FilterCombinator.Type.OR) {
-                    predicates.add(criteriaBuilder.or(RepositoryUtils.getPredicates(root, criteriaBuilder, combinator)));
+                    predicates.add(criteriaBuilder.or(RepositoryUtils.getPredicates(root, criteriaBuilder, combinator.getFilters())));
                 } else if (combinator.getType() == FilterCombinator.Type.AND) {
-                    predicates.add(criteriaBuilder.and(RepositoryUtils.getPredicates(root, criteriaBuilder, combinator)));
+                    predicates.add(criteriaBuilder.and(RepositoryUtils.getPredicates(root, criteriaBuilder, combinator.getFilters())));
                 }
 
             }
@@ -47,10 +47,10 @@ public final class RepositoryUtils {
         };
     }
 
-    private static <T> Predicate[] getPredicates(Root<T> root, CriteriaBuilder criteriaBuilder, FilterCombinator combinator) {
+    public static <T> Predicate[] getPredicates(Root<T> root, CriteriaBuilder criteriaBuilder, List<Filter> filtres) {
         List<Predicate> predicatesOfCombinator = new ArrayList<>();
 
-        for (Filter filter : combinator.getFilters()) {
+        for (Filter filter : filtres) {
             if (Objects.nonNull(filter.getValue())) {
                 Path<?> jpaPath = getPath(root, filter);
 

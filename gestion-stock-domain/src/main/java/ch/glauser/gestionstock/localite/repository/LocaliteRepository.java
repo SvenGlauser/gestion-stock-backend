@@ -4,6 +4,8 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.model.Localite;
 
+import java.util.Optional;
+
 /**
  * Repository de gestion des localités
  */
@@ -14,7 +16,7 @@ public interface LocaliteRepository {
      * @param id Id de la localité à récupérer
      * @return La localité ou null
      */
-    Localite getLocalite(Long id);
+    Optional<Localite> get(Long id);
 
     /**
      * Récupère les localités
@@ -22,7 +24,7 @@ public interface LocaliteRepository {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de localité paginée
      */
-    SearchResult<Localite> searchLocalite(SearchRequest searchRequest);
+    SearchResult<Localite> search(SearchRequest searchRequest);
 
     /**
      * Crée une localité
@@ -30,7 +32,7 @@ public interface LocaliteRepository {
      * @param localite Localité à créer
      * @return La localité créée
      */
-    Localite createLocalite(Localite localite);
+    Localite create(Localite localite);
 
     /**
      * Modifie une localité
@@ -38,14 +40,14 @@ public interface LocaliteRepository {
      * @param localite Localité à modifier avec les nouvelles valeurs
      * @return La localité modifiée
      */
-    Localite modifyLocalite(Localite localite);
+    Localite modify(Localite localite);
 
     /**
      * Supprime une localité
      *
      * @param id Id de la localité à supprimer
      */
-    void deleteLocalite(Long id);
+    void delete(Long id);
 
     /**
      * Vérifie s'il existe une localité avec ce pays
@@ -53,7 +55,7 @@ public interface LocaliteRepository {
      * @param id Id du pays
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existLocaliteByIdPays(Long id);
+    boolean existByIdPays(Long id);
 
     /**
      * Vérifie s'il existe une localité avec ce pays, nom, npa
@@ -63,5 +65,5 @@ public interface LocaliteRepository {
      * @param id Id du pays
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existLocaliteByNpaAndNomAndIdPays(String npa, String nom, Long id);
+    boolean existByNpaAndNomAndIdPays(String npa, String nom, Long id);
 }

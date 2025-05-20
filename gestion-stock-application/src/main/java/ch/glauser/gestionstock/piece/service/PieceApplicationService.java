@@ -14,7 +14,7 @@ public interface PieceApplicationService {
      * @param id Id de la pièce à récupérer
      * @return La pièce ou null
      */
-    PieceDto getPiece(Long id);
+    PieceDto get(Long id);
 
     /**
      * Récupère les pièces
@@ -22,7 +22,7 @@ public interface PieceApplicationService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pièces paginée
      */
-    SearchResult<PieceDto> searchPiece(SearchRequest searchRequest);
+    SearchResult<PieceDto> search(SearchRequest searchRequest);
 
     /**
      * Récupère les pièces pour l'autocomplétion
@@ -30,7 +30,7 @@ public interface PieceApplicationService {
      * @param searchValue Valeur de recherche
      * @return Une liste de pièces paginée
      */
-    SearchResult<PieceDto> autocompletePiece(String searchValue);
+    SearchResult<PieceDto> autocomplete(String searchValue);
 
     /**
      * Crée une pièce
@@ -38,7 +38,7 @@ public interface PieceApplicationService {
      * @param piece Pièce à créer
      * @return La pièce créée
      */
-    PieceDto createPiece(PieceDto piece);
+    PieceDto create(PieceDto piece);
 
     /**
      * Modifie une pièce
@@ -46,12 +46,12 @@ public interface PieceApplicationService {
      * @param piece Pièce à modifier avec les nouvelles valeurs
      * @return La pièce modifiée
      */
-    PieceDto modifyPiece(PieceDto piece);
+    PieceDto modify(PieceDto piece);
 
     /**
      * Supprime une pièce
      *
      * @param id Id de la pièce à supprimer
      */
-    void deletePiece(Long id);
+    void delete(Long id);
 }

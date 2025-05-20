@@ -5,6 +5,8 @@ import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.localite.controller.LocaliteController;
 import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import ch.glauser.gestionstock.pays.dto.PaysDto;
@@ -18,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = GestionStockApplication.class)
@@ -197,12 +200,13 @@ class PaysControllerTest {
 
         paysController.delete(pays.getId());
 
-        pays = paysController.get(pays.getId()).getBody();
-
-        assertThat(pays).isNull();
+        final PaysDto finalPays1 = pays;
+        assertThatThrownBy(() -> paysController.get(finalPays1.getId()))
+                .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        TestUtils.testValidation(1, () -> paysController.delete(1000L));
+        assertThatThrownBy(() -> paysController.delete(1000L))
+                .isInstanceOf(DeleteWithInexistingIdException.class);
 
         PaysDto pays2 = new PaysDto();
         pays2.setNom("Pays - Test Delete - 2");

@@ -7,6 +7,8 @@ import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
@@ -20,6 +22,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = GestionStockApplication.class)
@@ -209,12 +212,13 @@ class FournisseurControllerTest {
 
         fournisseurController.delete(fournisseur.getId());
 
-        fournisseur = fournisseurController.get(fournisseur.getId()).getBody();
-
-        assertThat(fournisseur).isNull();
+        FournisseurDto finalFournisseur1 = fournisseur;
+        assertThatThrownBy(() -> fournisseurController.get(finalFournisseur1.getId()))
+                .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        TestUtils.testValidation(1, () -> fournisseurController.delete(1000L));
+        assertThatThrownBy(() -> fournisseurController.delete(1000L))
+                .isInstanceOf(DeleteWithInexistingIdException.class);
 
         FournisseurDto fournisseur2 = new FournisseurDto();
         fournisseur2.setNom("Fournisseur 2");

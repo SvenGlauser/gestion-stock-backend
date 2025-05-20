@@ -7,8 +7,12 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
-import ch.glauser.gestionstock.contact.repository.ContactRepository;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
+import ch.glauser.gestionstock.identite.repository.IdentiteRepository;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.localite.model.LocaliteConstantes;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
@@ -25,29 +29,31 @@ public class LocaliteServiceImpl implements LocaliteService {
 
     private final LocaliteRepository localiteRepository;
 
-    private final ContactRepository contactRepository;
+    private final IdentiteRepository identiteRepository;
     private final FournisseurRepository fournisseurRepository;
 
     @Override
-    public Localite getLocalite(Long id) {
+    public Localite get(Long id) {
         Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(id, LocaliteConstantes.FIELD_ID)
                 .execute();
 
-        return this.localiteRepository.getLocalite(id);
+        return this.localiteRepository
+                .get(id)
+                .orElseThrow(() -> new SearchWithInexistingIdExceptionPerform(id, Localite.class));
     }
 
     @Override
-    public SearchResult<Localite> searchLocalite(SearchRequest searchRequest) {
+    public SearchResult<Localite> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, LocaliteConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.localiteRepository.searchLocalite(searchRequest);
+        return this.localiteRepository.search(searchRequest);
     }
 
     @Override
-    public Localite createLocalite(Localite localite) {
+    public Localite create(Localite localite) {
         Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(localite, LocaliteConstantes.FIELD_LOCALITE)
                 .execute();
@@ -56,22 +62,24 @@ public class LocaliteServiceImpl implements LocaliteService {
 
         Long idPays = Optional.ofNullable(localite.getPays()).map(Model::getId).orElse(null);
 
-        if (this.localiteRepository.existLocaliteByNpaAndNomAndIdPays(localite.getNpa(), localite.getNom(), idPays)) {
+        if (this.localiteRepository.existByNpaAndNomAndIdPays(localite.getNpa(), localite.getNom(), idPays)) {
             validation.addError(LocaliteConstantes.ERROR_LOCALITE_NOM_UNIQUE, LocaliteConstantes.FIELD_NOM);
         }
 
         validation.execute();
 
-        return this.localiteRepository.createLocalite(localite);
+        return this.localiteRepository.create(localite);
     }
 
     @Override
-    public Localite modifyLocalite(Localite localite) {
+    public Localite modify(Localite localite) {
         Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(localite, LocaliteConstantes.FIELD_LOCALITE)
                 .execute();
 
-        Localite oldLocalite = this.localiteRepository.getLocalite(localite.getId());
+        Localite oldLocalite = this.localiteRepository
+                .get(localite.getId())
+                .orElseThrow(() -> new ModifyWithInexistingIdException(localite.getId(), Localite.class));
 
         Validation validation = localite.validateModify();
 
@@ -81,52 +89,48 @@ public class LocaliteServiceImpl implements LocaliteService {
             if ((
                     !Objects.equals(oldLocalite.getNom(), localite.getNom()) ||
                     !Objects.equals(oldLocalite.getPays().getId(), idPays)
-                ) && this.localiteRepository.existLocaliteByNpaAndNomAndIdPays(localite.getNpa(), localite.getNom(), idPays)) {
+                ) && this.localiteRepository.existByNpaAndNomAndIdPays(localite.getNpa(), localite.getNom(), idPays)) {
                 validation.addError(LocaliteConstantes.ERROR_LOCALITE_NOM_UNIQUE, LocaliteConstantes.FIELD_NOM);
             }
         }
 
         validation.execute();
 
-        return this.localiteRepository.modifyLocalite(localite);
+        return this.localiteRepository.modify(localite);
     }
 
     @Override
-    public void deleteLocalite(Long id) {
+    public void delete(Long id) {
         Validation.of(LocaliteServiceImpl.class)
                 .validateNotNull(id, LocaliteConstantes.FIELD_ID)
                 .execute();
 
-        this.validateLocaliteExist(id);
-        this.validatePasUtiliseParContact(id);
+        this.validateExist(id, DeleteWithInexistingIdException::new);
+        this.validatePasUtiliseParIdentite(id);
         this.validatePasUtiliseParFournisseur(id);
 
-        this.localiteRepository.deleteLocalite(id);
+        this.localiteRepository.delete(id);
     }
 
     /**
      * Valide que la localité existe
      * @param id Id de la localité à supprimer
+     * @param exception Exception
      */
-    private void validateLocaliteExist(Long id) {
-        Localite localiteToDelete = this.getLocalite(id);
-
-        if (Objects.isNull(localiteToDelete)) {
-            throw new ValidationException(new Error(
-                    LocaliteConstantes.ERROR_SUPPRESSION_LOCALITE_INEXISTANTE,
-                    LocaliteConstantes.FIELD_LOCALITE,
-                    LocaliteServiceImpl.class));
-        }
+    private void validateExist(Long id, PerformActionWithInexistingIdFunction exception) {
+        this.localiteRepository
+                .get(id)
+                .orElseThrow(() -> exception.instantiate(id, Localite.class));
     }
 
     /**
-     * Valide que la localité n'est pas utilisé par un contact
+     * Valide que la localité n'est pas utilisé par une identité
      * @param id Id de la localité à supprimer
      */
-    private void validatePasUtiliseParContact(Long id) {
-        if (this.contactRepository.existContactByIdLocalite(id)) {
+    private void validatePasUtiliseParIdentite(Long id) {
+        if (this.identiteRepository.existByIdLocalite(id)) {
             throw new ValidationException(new Error(
-                    LocaliteConstantes.ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_CONTACT,
+                    LocaliteConstantes.ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_IDENTITE,
                     LocaliteConstantes.FIELD_LOCALITE,
                     LocaliteServiceImpl.class));
         }
@@ -137,7 +141,7 @@ public class LocaliteServiceImpl implements LocaliteService {
      * @param id Id de la localité à supprimer
      */
     private void validatePasUtiliseParFournisseur(Long id) {
-        if (this.fournisseurRepository.existFournisseurByIdLocalite(id)) {
+        if (this.fournisseurRepository.existByIdLocalite(id)) {
             throw new ValidationException(new Error(
                     LocaliteConstantes.ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_FOURNISSEUR,
                     LocaliteConstantes.FIELD_LOCALITE,

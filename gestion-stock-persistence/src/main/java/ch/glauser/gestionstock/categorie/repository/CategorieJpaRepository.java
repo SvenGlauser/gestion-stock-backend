@@ -10,20 +10,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * JPA Repository pour la gestion des categories
  */
 @Repository
 public interface CategorieJpaRepository extends JpaRepository<CategorieEntity, Long>, JpaSpecificationExecutor<CategorieEntity> {
-    /**
-     * Récupère une catégorie par id
-     *
-     * @param id Id de la catégorie
-     * @return Un {@link Optional} de {@link CategorieEntity}
-     */
-    Optional<CategorieEntity> findOptionalById(Long id);
 
     /**
      * Vérifie s'il existe une catégorie avec ce nom

@@ -17,27 +17,27 @@ public class MachineController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<MachineDto> get(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(this.machineApplicatifService.getMachine(id));
+        return ResponseEntity.ok(this.machineApplicatifService.get(id));
     }
 
     @PostMapping
     public ResponseEntity<MachineDto> create(@RequestBody MachineDto machine) {
-        return ResponseEntity.ok(this.machineApplicatifService.createMachine(machine));
+        return ResponseEntity.ok(this.machineApplicatifService.create(machine));
     }
 
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<MachineDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.machineApplicatifService.searchMachine(searchRequest));
+        return ResponseEntity.ok(this.machineApplicatifService.search(searchRequest));
     }
 
     @PutMapping
     public ResponseEntity<MachineDto> modify(@RequestBody MachineDto machine) {
-        return ResponseEntity.ok(this.machineApplicatifService.modifyMachine(machine));
+        return ResponseEntity.ok(this.machineApplicatifService.modify(machine));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
-        this.machineApplicatifService.deleteMachine(id);
+        this.machineApplicatifService.delete(id);
 
         return ResponseEntity.ok().build();
     }

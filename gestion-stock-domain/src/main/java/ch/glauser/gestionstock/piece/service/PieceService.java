@@ -15,7 +15,7 @@ public interface PieceService {
      * @param id Id de la pièce à récupérer
      * @return La pièce ou null
      */
-    Piece getPiece(Long id);
+    Piece get(Long id);
 
     /**
      * Récupère les pièces
@@ -23,7 +23,7 @@ public interface PieceService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pièces paginée
      */
-    SearchResult<Piece> searchPiece(SearchRequest searchRequest);
+    SearchResult<Piece> search(SearchRequest searchRequest);
 
     /**
      * Récupère les pièces pour l'autocomplétion
@@ -31,7 +31,7 @@ public interface PieceService {
      * @param searchValue Valeur de recherche
      * @return Une liste de pièces paginée
      */
-    SearchResult<Piece> autocompletePiece(String searchValue);
+    SearchResult<Piece> autocomplete(String searchValue);
 
     /**
      * Crée une pièce
@@ -39,7 +39,7 @@ public interface PieceService {
      * @param piece Pièce à créer
      * @return La pièce créée
      */
-    Piece createPiece(Piece piece);
+    Piece create(Piece piece);
 
     /**
      * Modifie une pièce
@@ -47,7 +47,7 @@ public interface PieceService {
      * @param piece Pièce à modifier avec les nouvelles valeurs
      * @return La pièce modifiée
      */
-    Piece modifyPiece(Piece piece);
+    Piece modify(Piece piece);
 
     /**
      * Modifie une pièce
@@ -56,12 +56,12 @@ public interface PieceService {
      * @param source Source spécifique pour l'historisation de la quantité
      * @return La pièce modifiée
      */
-    Piece modifyPiece(Piece piece, PieceHistoriqueSource source);
+    Piece modify(Piece piece, PieceHistoriqueSource source);
 
     /**
      * Supprime une pièce
      *
      * @param id Id de la pièce à supprimer
      */
-    void deletePiece(Long id);
+    void delete(Long id);
 }

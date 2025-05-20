@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Implémentation du repository de gestion des mouvements de pieces
  */
@@ -20,18 +22,18 @@ public class PieceHistoriqueRepositoryImpl implements PieceHistoriqueRepository 
     private final PieceHistoriqueJpaRepository pieceHistoriqueJpaRepository;
 
     @Override
-    public PieceHistorique getPieceHistorique(Long id) {
-        return this.pieceHistoriqueJpaRepository.findOptionalById(id).map(ModelEntity::toDomain).orElse(null);
+    public Optional<PieceHistorique> get(Long id) {
+        return this.pieceHistoriqueJpaRepository.findById(id).map(ModelEntity::toDomain);
     }
 
     @Override
-    public SearchResult<PieceHistorique> searchPieceHistorique(SearchRequest searchRequest) {
+    public SearchResult<PieceHistorique> search(SearchRequest searchRequest) {
         Page<PieceHistoriqueEntity> page = this.pieceHistoriqueJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
-    public void createPieceHistorique(PieceHistorique pieceHistorique) {
+    public void create(PieceHistorique pieceHistorique) {
         this.pieceHistoriqueJpaRepository.save(new PieceHistoriqueEntity(pieceHistorique));
     }
 

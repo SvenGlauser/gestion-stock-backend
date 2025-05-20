@@ -6,6 +6,10 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.gestionstock.pays.model.PaysConstantes;
@@ -25,105 +29,103 @@ public class PaysServiceImpl implements PaysService {
     private final LocaliteRepository localiteRepository;
 
     @Override
-    public Pays getPays(Long id) {
+    public Pays get(Long id) {
         Validation.of(PaysServiceImpl.class)
                 .validateNotNull(id, PaysConstantes.FIELD_ID)
                 .execute();
 
-        return this.paysRepository.getPays(id);
+        return this.paysRepository
+                .get(id)
+                .orElseThrow(() -> new SearchWithInexistingIdExceptionPerform(id, Pays.class));
     }
 
     @Override
-    public Pays getPaysByAbreviation(String abreviation) {
+    public Pays getByAbreviation(String abreviation) {
         Validation.of(PaysServiceImpl.class)
                 .validateNotNull(abreviation, PaysConstantes.FIELD_ABREVIATION)
                 .execute();
 
-        return this.paysRepository.getPaysByAbreviation(abreviation);
+        return this.paysRepository.getByAbreviation(abreviation);
     }
 
     @Override
-    public SearchResult<Pays> searchPays(SearchRequest searchRequest) {
+    public SearchResult<Pays> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, PaysConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.paysRepository.searchPays(searchRequest);
+        return this.paysRepository.search(searchRequest);
     }
 
     @Override
-    public Pays createPays(Pays pays) {
+    public Pays create(Pays pays) {
         Validation.of(PaysServiceImpl.class)
                 .validateNotNull(pays, PaysConstantes.FIELD_PAYS)
                 .execute();
 
         Validation validation = pays.validateCreate();
 
-        if (this.paysRepository.existPaysByNom(pays.getNom())) {
+        if (this.paysRepository.existByNom(pays.getNom())) {
             validation.addError(PaysConstantes.ERROR_PAYS_NOM_UNIQUE, PaysConstantes.FIELD_NOM);
         }
 
-        if (this.paysRepository.existPaysByAbreviation(pays.getAbreviation())) {
+        if (this.paysRepository.existByAbreviation(pays.getAbreviation())) {
             validation.addError(PaysConstantes.ERROR_PAYS_ABREVIATION_UNIQUE, PaysConstantes.FIELD_ABREVIATION);
         }
 
         validation.execute();
 
-        return this.paysRepository.createPays(pays);
+        return this.paysRepository.create(pays);
     }
 
     @Override
-    public Pays modifyPays(Pays pays) {
+    public Pays modify(Pays pays) {
         Validation.of(PaysServiceImpl.class)
                 .validateNotNull(pays, PaysConstantes.FIELD_PAYS)
                 .execute();
 
-        Pays oldPays = this.paysRepository.getPays(pays.getId());
+        Pays oldPays = this.paysRepository
+                .get(pays.getId())
+                .orElseThrow(() -> new ModifyWithInexistingIdException(pays.getId(), Pays.class));
 
         Validation validation = pays.validateModify();
 
-        if (Objects.nonNull(oldPays)) {
-            if (!Objects.equals(oldPays.getNom(), pays.getNom()) &&
-                this.paysRepository.existPaysByNom(pays.getNom())) {
-                validation.addError(PaysConstantes.ERROR_PAYS_NOM_UNIQUE, PaysConstantes.FIELD_NOM);
-            }
+        if (!Objects.equals(oldPays.getNom(), pays.getNom()) &&
+            this.paysRepository.existByNom(pays.getNom())) {
+            validation.addError(PaysConstantes.ERROR_PAYS_NOM_UNIQUE, PaysConstantes.FIELD_NOM);
+        }
 
-            if (!Objects.equals(oldPays.getAbreviation(), pays.getAbreviation()) &&
-                this.paysRepository.existPaysByAbreviation(pays.getAbreviation())) {
-                validation.addError(PaysConstantes.ERROR_PAYS_ABREVIATION_UNIQUE, PaysConstantes.FIELD_ABREVIATION);
-            }
+        if (!Objects.equals(oldPays.getAbreviation(), pays.getAbreviation()) &&
+            this.paysRepository.existByAbreviation(pays.getAbreviation())) {
+            validation.addError(PaysConstantes.ERROR_PAYS_ABREVIATION_UNIQUE, PaysConstantes.FIELD_ABREVIATION);
         }
 
         validation.execute();
 
-        return this.paysRepository.modifyPays(pays);
+        return this.paysRepository.modify(pays);
     }
 
     @Override
-    public void deletePays(Long id) {
+    public void delete(Long id) {
         Validation.of(PaysServiceImpl.class)
                 .validateNotNull(id, PaysConstantes.FIELD_ID)
                 .execute();
 
-        this.validatePaysExist(id);
+        this.validateExist(id, DeleteWithInexistingIdException::new);
         this.validatePasUtiliseParLocalite(id);
 
-        this.paysRepository.deletePays(id);
+        this.paysRepository.delete(id);
     }
 
     /**
      * Valide que le pays existe
      * @param id Id du pays à supprimer
+     * @param exception L'exception à instancier
      */
-    private void validatePaysExist(Long id) {
-        Pays paysToDelete = this.getPays(id);
-
-        if (Objects.isNull(paysToDelete)) {
-            throw new ValidationException(new Error(
-                    PaysConstantes.ERROR_SUPPRESSION_PAYS_INEXISTANTE,
-                    PaysConstantes.FIELD_PAYS,
-                    PaysServiceImpl.class));
-        }
+    private void validateExist(Long id, PerformActionWithInexistingIdFunction exception) {
+        this.paysRepository
+                .get(id)
+                .orElseThrow(() -> exception.instantiate(id, Pays.class));
     }
 
     /**
@@ -131,7 +133,7 @@ public class PaysServiceImpl implements PaysService {
      * @param id Id de la localité à supprimer
      */
     private void validatePasUtiliseParLocalite(Long id) {
-        if (this.localiteRepository.existLocaliteByIdPays(id)) {
+        if (this.localiteRepository.existByIdPays(id)) {
             throw new ValidationException(new Error(
                     PaysConstantes.ERROR_SUPPRESSION_PAYS_IMPOSSIBLE_EXISTE_LOCALITE,
                     PaysConstantes.FIELD_PAYS,

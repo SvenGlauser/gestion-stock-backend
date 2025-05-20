@@ -1,7 +1,12 @@
 package ch.glauser.gestionstock.machine.entity;
 
 import ch.glauser.gestionstock.common.entity.ModelEntity;
-import ch.glauser.gestionstock.contact.entity.ContactEntity;
+import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
+import ch.glauser.gestionstock.identite.entity.PersonneMoraleEntity;
+import ch.glauser.gestionstock.identite.entity.PersonnePhysiqueEntity;
+import ch.glauser.gestionstock.identite.model.PersonneMorale;
+import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
 import jakarta.persistence.*;
@@ -22,7 +27,7 @@ import java.util.stream.Collectors;
 @Table(
         name = "MACHINE",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"NOM", "CONTACT_ID"})})
+                @UniqueConstraint(columnNames = {"NOM", "PRORIETAIRE_ID"})})
 public class MachineEntity extends ModelEntity<Machine> {
     @Column(name = "NOM", nullable = false)
     private String nom;
@@ -30,8 +35,8 @@ public class MachineEntity extends ModelEntity<Machine> {
     private String description;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "CONTACT_ID", nullable = false)
-    private ContactEntity contact;
+    @JoinColumn(name = "PRORIETAIRE_ID", nullable = false)
+    private IdentiteEntity<?> proprietaire;
 
     @ManyToMany
     @JoinTable(
@@ -44,7 +49,14 @@ public class MachineEntity extends ModelEntity<Machine> {
         super(machine);
         this.nom = machine.getNom();
         this.description = machine.getDescription();
-        this.contact = Optional.ofNullable(machine.getContact()).map(ContactEntity::new).orElse(null);
+        this.proprietaire = Optional
+                .ofNullable(machine.getProprietaire())
+                .map(identite -> switch (identite) {
+                        case PersonnePhysique personnePhysique -> new PersonnePhysiqueEntity(personnePhysique);
+                        case PersonneMorale personneMorale -> new PersonneMoraleEntity(personneMorale);
+                        default -> throw new TechnicalException("Impossible de reconnaitre le type d'identité");
+                })
+                .orElse(null);
         this.pieces = CollectionUtils.emptyIfNull(machine.getPieces()).stream().map(PieceEntity::new).collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -53,7 +65,7 @@ public class MachineEntity extends ModelEntity<Machine> {
         Machine machine = new Machine();
         machine.setNom(this.nom);
         machine.setDescription(this.description);
-        machine.setContact(Optional.ofNullable(this.contact).map(ModelEntity::toDomain).orElse(null));
+        machine.setProprietaire(Optional.ofNullable(this.proprietaire).map(ModelEntity::toDomain).orElse(null));
         machine.setPieces(CollectionUtils.emptyIfNull(this.pieces).stream().map(ModelEntity::toDomain).collect(Collectors.toCollection(LinkedList::new)));
         return machine;
     }

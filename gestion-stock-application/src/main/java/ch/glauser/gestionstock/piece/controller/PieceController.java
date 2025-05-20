@@ -17,32 +17,32 @@ public class PieceController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<PieceDto> get(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(this.pieceApplicationService.getPiece(id));
+        return ResponseEntity.ok(this.pieceApplicationService.get(id));
     }
 
     @PostMapping
     public ResponseEntity<PieceDto> create(@RequestBody PieceDto piece) {
-        return ResponseEntity.ok(this.pieceApplicationService.createPiece(piece));
+        return ResponseEntity.ok(this.pieceApplicationService.create(piece));
     }
 
     @GetMapping(path = "/autocomplete")
     public ResponseEntity<SearchResult<PieceDto>> autocomplete(@RequestParam(name = "searchValue") String searchValue) {
-        return ResponseEntity.ok(this.pieceApplicationService.autocompletePiece(searchValue));
+        return ResponseEntity.ok(this.pieceApplicationService.autocomplete(searchValue));
     }
 
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<PieceDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.pieceApplicationService.searchPiece(searchRequest));
+        return ResponseEntity.ok(this.pieceApplicationService.search(searchRequest));
     }
 
     @PutMapping
     public ResponseEntity<PieceDto> modify(@RequestBody PieceDto piece) {
-        return ResponseEntity.ok(this.pieceApplicationService.modifyPiece(piece));
+        return ResponseEntity.ok(this.pieceApplicationService.modify(piece));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
-        this.pieceApplicationService.deletePiece(id);
+        this.pieceApplicationService.delete(id);
 
         return ResponseEntity.ok().build();
     }

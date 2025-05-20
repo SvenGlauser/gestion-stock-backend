@@ -14,7 +14,7 @@ public interface CategorieApplicationService {
      * @param id Id de la catégorie à récupérer
      * @return La catégorie ou null
      */
-    CategorieDto getCategorie(Long id);
+    CategorieDto get(Long id);
 
     /**
      * Récupère les catégories
@@ -22,7 +22,7 @@ public interface CategorieApplicationService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de catégorie paginée
      */
-    SearchResult<CategorieDto> searchCategorie(SearchRequest searchRequest);
+    SearchResult<CategorieDto> search(SearchRequest searchRequest);
 
     /**
      * Crée une catégorie
@@ -30,7 +30,7 @@ public interface CategorieApplicationService {
      * @param categorie Catégorie à créer
      * @return La catégorie créée
      */
-    CategorieDto createCategorie(CategorieDto categorie);
+    CategorieDto create(CategorieDto categorie);
 
     /**
      * Modifie une catégorie
@@ -38,12 +38,12 @@ public interface CategorieApplicationService {
      * @param categorie Catégorie à modifier avec les nouvelles valeurs
      * @return La catégorie modifiée
      */
-    CategorieDto modifyCategorie(CategorieDto categorie);
+    CategorieDto modify(CategorieDto categorie);
 
     /**
      * Supprime une catégorie
      *
      * @param id Id de la catégorie à supprimer
      */
-    void deleteCategorie(Long id);
+    void delete(Long id);
 }

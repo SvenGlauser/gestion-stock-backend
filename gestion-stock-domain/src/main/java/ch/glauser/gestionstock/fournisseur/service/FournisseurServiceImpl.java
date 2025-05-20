@@ -6,6 +6,10 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.gestionstock.fournisseur.model.FournisseurConstantes;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
@@ -25,53 +29,56 @@ public class FournisseurServiceImpl implements FournisseurService {
     private final PieceRepository pieceRepository;
 
     @Override
-    public Fournisseur getFournisseur(Long id) {
+    public Fournisseur get(Long id) {
         Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(id, FournisseurConstantes.FIELD_ID)
                 .execute();
 
-        return this.fournisseurRepository.getFournisseur(id);
+        return this.fournisseurRepository
+                .get(id)
+                .orElseThrow(() -> new SearchWithInexistingIdExceptionPerform(id, Fournisseur.class));
     }
 
     @Override
-    public SearchResult<Fournisseur> searchFournisseur(SearchRequest searchRequest) {
+    public SearchResult<Fournisseur> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FournisseurConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.fournisseurRepository.searchFournisseur(searchRequest);
+        return this.fournisseurRepository.search(searchRequest);
     }
 
     @Override
-    public Fournisseur createFournisseur(Fournisseur fournisseur) {
+    public Fournisseur create(Fournisseur fournisseur) {
         Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(fournisseur, FournisseurConstantes.FIELD_FOURNISSEUR)
                 .execute();
 
         Validation validation = fournisseur.validateCreate();
 
-        if (this.fournisseurRepository.existFournisseurByNom(fournisseur.getNom())) {
+        if (this.fournisseurRepository.existByNom(fournisseur.getNom())) {
             validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
         }
 
         validation.execute();
 
-        return this.fournisseurRepository.createFournisseur(fournisseur);
+        return this.fournisseurRepository.create(fournisseur);
     }
 
     @Override
-    public Fournisseur modifyFournisseur(Fournisseur fournisseur) {
+    public Fournisseur modify(Fournisseur fournisseur) {
         Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(fournisseur, FournisseurConstantes.FIELD_FOURNISSEUR)
                 .execute();
 
-        Fournisseur oldFournisseur = this.fournisseurRepository.getFournisseur(fournisseur.getId());
+        Fournisseur oldFournisseur = this.fournisseurRepository
+                .get(fournisseur.getId())
+                .orElseThrow(() -> new ModifyWithInexistingIdException(fournisseur.getId(), Fournisseur.class));
 
         Validation validation = fournisseur.validateModify();
 
-        if (Objects.nonNull(oldFournisseur) &&
-            !Objects.equals(oldFournisseur.getNom(), fournisseur.getNom()) &&
-            this.fournisseurRepository.existFournisseurByNom(fournisseur.getNom())) {
+        if (!Objects.equals(oldFournisseur.getNom(), fournisseur.getNom()) &&
+            this.fournisseurRepository.existByNom(fournisseur.getNom())) {
 
             // Valide le cas dans lequel la catégorie a changé de nom
             validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
@@ -79,44 +86,40 @@ public class FournisseurServiceImpl implements FournisseurService {
 
         validation.execute();
 
-        return this.fournisseurRepository.modifyFournisseur(fournisseur);
+        return this.fournisseurRepository.modify(fournisseur);
     }
 
     @Override
-    public void deleteFournisseur(Long id) {
+    public void delete(Long id) {
         Validation.of(FournisseurServiceImpl.class)
                 .validateNotNull(id, FournisseurConstantes.FIELD_ID)
                 .execute();
 
-        this.validateFournisseurExist(id);
-        this.validatePasUtiliseParContact(id);
+        this.validateExist(id, DeleteWithInexistingIdException::new);
+        this.validatePasUtiliseParPiece(id);
 
-        this.fournisseurRepository.deleteFournisseur(id);
+        this.fournisseurRepository.delete(id);
     }
 
     /**
      * Valide que le fournisseur existe
      * @param id Id du fournisseur à supprimer
+     * @param exception Exception
      */
-    private void validateFournisseurExist(Long id) {
-        Fournisseur fournisseurToDelete = this.getFournisseur(id);
-
-        if (Objects.isNull(fournisseurToDelete)) {
-            throw new ValidationException(new Error(
-                    FournisseurConstantes.ERROR_SUPPRESSION_FOURNISSEUR_INEXISTANTE,
-                    FournisseurConstantes.FIELD_FOURNISSEUR,
-                    FournisseurServiceImpl.class));
-        }
+    private void validateExist(Long id, PerformActionWithInexistingIdFunction exception) {
+        this.fournisseurRepository
+                .get(id)
+                .orElseThrow(() -> exception.instantiate(id, Fournisseur.class));
     }
 
     /**
      * Valide que le fournisseur n'est pas utilisé par une pièce
      * @param id Id du fournisseur à supprimer
      */
-    private void validatePasUtiliseParContact(Long id) {
-        if (this.pieceRepository.existPieceByIdFournisseur(id)) {
+    private void validatePasUtiliseParPiece(Long id) {
+        if (this.pieceRepository.existByIdFournisseur(id)) {
             throw new ValidationException(new Error(
-                    FournisseurConstantes.ERROR_SUPPRESSION_FOURNISSEUR_IMPOSSIBLE_EXISTE_CONTACT,
+                    FournisseurConstantes.ERROR_SUPPRESSION_FOURNISSEUR_IMPOSSIBLE_EXISTE_PIECE,
                     FournisseurConstantes.FIELD_FOURNISSEUR,
                     FournisseurServiceImpl.class));
         }

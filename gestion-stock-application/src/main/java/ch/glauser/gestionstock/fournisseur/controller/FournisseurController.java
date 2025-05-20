@@ -17,27 +17,27 @@ public class FournisseurController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<FournisseurDto> get(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(this.fournisseurApplicationService.getFournisseur(id));
+        return ResponseEntity.ok(this.fournisseurApplicationService.get(id));
     }
 
     @PostMapping
     public ResponseEntity<FournisseurDto> create(@RequestBody FournisseurDto fournisseur) {
-        return ResponseEntity.ok(this.fournisseurApplicationService.createFournisseur(fournisseur));
+        return ResponseEntity.ok(this.fournisseurApplicationService.create(fournisseur));
     }
 
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<FournisseurDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.fournisseurApplicationService.searchFournisseur(searchRequest));
+        return ResponseEntity.ok(this.fournisseurApplicationService.search(searchRequest));
     }
 
     @PutMapping
     public ResponseEntity<FournisseurDto> modify(@RequestBody FournisseurDto fournisseur) {
-        return ResponseEntity.ok(this.fournisseurApplicationService.modifyFournisseur(fournisseur));
+        return ResponseEntity.ok(this.fournisseurApplicationService.modify(fournisseur));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
-        this.fournisseurApplicationService.deleteFournisseur(id);
+        this.fournisseurApplicationService.delete(id);
 
         return ResponseEntity.ok().build();
     }

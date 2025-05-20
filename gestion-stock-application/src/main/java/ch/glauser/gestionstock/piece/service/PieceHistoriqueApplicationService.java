@@ -14,7 +14,7 @@ public interface PieceHistoriqueApplicationService {
      * @param id Id à récupérer
      * @return L'historique du mouvement
      */
-    PieceHistoriqueDto getPieceHistorique(Long id);
+    PieceHistoriqueDto get(Long id);
 
     /**
      * Récupère les mouvements de pièce
@@ -22,5 +22,5 @@ public interface PieceHistoriqueApplicationService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de mouvements de pièce
      */
-    SearchResult<PieceHistoriqueDto> searchPieceHistorique(SearchRequest searchRequest);
+    SearchResult<PieceHistoriqueDto> search(SearchRequest searchRequest);
 }

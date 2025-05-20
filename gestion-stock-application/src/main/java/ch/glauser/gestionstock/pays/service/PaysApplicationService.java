@@ -14,7 +14,7 @@ public interface PaysApplicationService {
      * @param id Id du pays à récupérer
      * @return Le pays ou null
      */
-    PaysDto getPays(Long id);
+    PaysDto get(Long id);
 
     /**
      * Récupère les pays
@@ -22,7 +22,7 @@ public interface PaysApplicationService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pays paginée
      */
-    SearchResult<PaysDto> searchPays(SearchRequest searchRequest);
+    SearchResult<PaysDto> search(SearchRequest searchRequest);
 
     /**
      * Crée un pays
@@ -30,7 +30,7 @@ public interface PaysApplicationService {
      * @param pays Pays à créer
      * @return Le pays créé
      */
-    PaysDto createPays(PaysDto pays);
+    PaysDto create(PaysDto pays);
 
     /**
      * Modifie un pays
@@ -38,12 +38,12 @@ public interface PaysApplicationService {
      * @param pays Pays à modifier avec les nouvelles valeurs
      * @return Le pays modifié
      */
-    PaysDto modifyPays(PaysDto pays);
+    PaysDto modify(PaysDto pays);
 
     /**
      * Supprime un pays
      *
      * @param id Id du pays à supprimer
      */
-    void deletePays(Long id);
+    void delete(Long id);
 }

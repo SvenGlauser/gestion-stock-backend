@@ -12,29 +12,21 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * JPA Repository pour la gestion des machines
  */
 @Repository
 public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>, JpaSpecificationExecutor<MachineEntity> {
-    /**
-     * Récupère une machine par id
-     *
-     * @param id Id de la machine
-     * @return Un {@link Optional} de {@link MachineEntity}
-     */
-    Optional<MachineEntity> findOptionalById(Long id);
 
     /**
-     * Vérifie s'il existe une machine avec ce contact
+     * Vérifie s'il existe une machine avec cette identité
      *
-     * @param id Id du contact
+     * @param idProprietaire Id de l'identité
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    @Query("SELECT COUNT(machine) > 0 FROM Machine machine WHERE machine.contact.id = :id")
-    boolean existsByIdContact(@Param("id") Long id);
+    @Query("SELECT COUNT(machine) > 0 FROM Machine machine WHERE machine.proprietaire.id = :id")
+    boolean existsByIdProprietaire(@Param("id") Long idProprietaire);
 
     /**
      * Vérifie s'il existe une machine avec cette pièce
@@ -46,18 +38,18 @@ public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>
     boolean existsByIdPiece(@Param("id") Long id);
 
     /**
-     * Vérifie s'il existe une machine avec ce contact et nom
+     * Vérifie s'il existe une machine avec cette identité et nom
      *
      * @param nom Nom de la pièce
-     * @param idContact Id du contact
+     * @param idProprietaire Id de l'identité
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
     @Query("""
             SELECT COUNT(machine) > 0 \
             FROM Machine machine \
-            WHERE machine.contact.id = :idContact \
+            WHERE machine.proprietaire.id = :idProprietaire \
             AND machine.nom = :nom""")
-    boolean existsByNomAndIdContact(@Param("nom") String nom, @Param("idContact") Long idContact);
+    boolean existsByNomAndIdProprietaire(@Param("nom") String nom, @Param("idProprietaire") Long idProprietaire);
 
     default Page<MachineEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);

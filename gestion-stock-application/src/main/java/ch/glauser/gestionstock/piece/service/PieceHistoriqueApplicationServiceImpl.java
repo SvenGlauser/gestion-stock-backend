@@ -7,7 +7,6 @@ import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.piece.dto.PieceHistoriqueDto;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
-import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,26 +21,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApplicationService {
 
-    private final PieceHistoriqueRepository pieceHistoriqueRepository;
+    private final PieceHistoriqueService pieceHistoriqueService;
 
     @Override
-    public PieceHistoriqueDto getPieceHistorique(Long id) {
+    public PieceHistoriqueDto get(Long id) {
         Validation.of(PieceHistoriqueApplicationServiceImpl.class)
                 .validateNotNull(id, PieceHistoriqueConstantes.FIELD_ID)
                 .execute();
 
-        PieceHistorique pieceHistorique = pieceHistoriqueRepository.getPieceHistorique(id);
+        PieceHistorique pieceHistorique = pieceHistoriqueService.get(id);
 
         return Optional.ofNullable(pieceHistorique).map(PieceHistoriqueDto::new).orElse(null);
     }
 
     @Override
-    public SearchResult<PieceHistoriqueDto> searchPieceHistorique(SearchRequest searchRequest) {
+    public SearchResult<PieceHistoriqueDto> search(SearchRequest searchRequest) {
         Validation.of(PieceHistoriqueApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<PieceHistorique> searchResult = this.pieceHistoriqueRepository.searchPieceHistorique(searchRequest);
+        SearchResult<PieceHistorique> searchResult = this.pieceHistoriqueService.search(searchRequest);
 
         return SearchResultUtils.transformDto(searchResult, PieceHistoriqueDto::new);
     }

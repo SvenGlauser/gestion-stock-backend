@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.machine.model;
 
-import ch.glauser.gestionstock.contact.model.Contact;
+import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class MachineTest {
     void validateWithValue() {
         Machine machine = new Machine();
         machine.setNom("Test");
-        machine.setContact(new Contact());
+        machine.setProprietaire(new PersonnePhysique());
 
         assertDoesNotThrow(machine::validateCreate);
     }

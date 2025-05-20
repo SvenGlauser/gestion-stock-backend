@@ -9,6 +9,8 @@ import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Implémentation du repository de gestion des fournisseurs
  */
@@ -22,38 +24,38 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
     }
 
     @Override
-    public Fournisseur getFournisseur(Long id) {
-        return this.fournisseurJpaRepository.findOptionalById(id).map(ModelEntity::toDomain).orElse(null);
+    public Optional<Fournisseur> get(Long id) {
+        return this.fournisseurJpaRepository.findById(id).map(ModelEntity::toDomain);
     }
 
     @Override
-    public SearchResult<Fournisseur> searchFournisseur(SearchRequest searchRequest) {
+    public SearchResult<Fournisseur> search(SearchRequest searchRequest) {
         Page<FournisseurEntity> page = this.fournisseurJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
-    public Fournisseur createFournisseur(Fournisseur fournisseur) {
+    public Fournisseur create(Fournisseur fournisseur) {
         return this.fournisseurJpaRepository.save(new FournisseurEntity(fournisseur)).toDomain();
     }
 
     @Override
-    public Fournisseur modifyFournisseur(Fournisseur fournisseur) {
+    public Fournisseur modify(Fournisseur fournisseur) {
         return this.fournisseurJpaRepository.save(new FournisseurEntity(fournisseur)).toDomain();
     }
 
     @Override
-    public void deleteFournisseur(Long id) {
+    public void delete(Long id) {
         this.fournisseurJpaRepository.deleteById(id);
     }
 
     @Override
-    public boolean existFournisseurByIdLocalite(Long id) {
+    public boolean existByIdLocalite(Long id) {
         return this.fournisseurJpaRepository.existsByIdLocalite(id);
     }
 
     @Override
-    public boolean existFournisseurByNom(String nom) {
+    public boolean existByNom(String nom) {
         return this.fournisseurJpaRepository.existsByNom(nom);
     }
 }

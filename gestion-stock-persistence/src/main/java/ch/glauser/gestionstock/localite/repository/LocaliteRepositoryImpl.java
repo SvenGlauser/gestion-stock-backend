@@ -9,6 +9,8 @@ import ch.glauser.gestionstock.localite.model.Localite;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Implémentation du repository de gestion des localités
  */
@@ -22,38 +24,38 @@ public class LocaliteRepositoryImpl implements LocaliteRepository {
     }
 
     @Override
-    public Localite getLocalite(Long id) {
-        return this.localiteJpaRepository.findOptionalById(id).map(ModelEntity::toDomain).orElse(null);
+    public Optional<Localite> get(Long id) {
+        return this.localiteJpaRepository.findById(id).map(ModelEntity::toDomain);
     }
 
     @Override
-    public SearchResult<Localite> searchLocalite(SearchRequest searchRequest) {
+    public SearchResult<Localite> search(SearchRequest searchRequest) {
         Page<LocaliteEntity> page = this.localiteJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
-    public Localite createLocalite(Localite localite) {
+    public Localite create(Localite localite) {
         return this.localiteJpaRepository.save(new LocaliteEntity(localite)).toDomain();
     }
 
     @Override
-    public Localite modifyLocalite(Localite localite) {
+    public Localite modify(Localite localite) {
         return this.localiteJpaRepository.save(new LocaliteEntity(localite)).toDomain();
     }
 
     @Override
-    public void deleteLocalite(Long id) {
+    public void delete(Long id) {
         this.localiteJpaRepository.deleteById(id);
     }
 
     @Override
-    public boolean existLocaliteByIdPays(Long id) {
+    public boolean existByIdPays(Long id) {
         return this.localiteJpaRepository.existsByIdPays(id);
     }
 
     @Override
-    public boolean existLocaliteByNpaAndNomAndIdPays(String npa, String nom, Long id) {
+    public boolean existByNpaAndNomAndIdPays(String npa, String nom, Long id) {
         return this.localiteJpaRepository.existsByNpaAndNomAndIdPays(npa, nom, id);
     }
 }

@@ -18,12 +18,12 @@ public class LocaliteItemWriter implements ItemWriter<Localite> {
     @Override
     public void write(Chunk<? extends Localite> chunk) {
         chunk.forEach(localite -> {
-            if (!this.localiteRepository.existLocaliteByNpaAndNomAndIdPays(
+            if (!this.localiteRepository.existByNpaAndNomAndIdPays(
                     localite.getNpa(),
                     localite.getNom(),
                     localite.getPays().getId()
             )) {
-                localiteService.createLocalite(localite);
+                localiteService.create(localite);
             }
         });
     }
