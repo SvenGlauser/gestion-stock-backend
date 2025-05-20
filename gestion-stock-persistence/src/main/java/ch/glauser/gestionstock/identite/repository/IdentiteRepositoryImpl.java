@@ -22,7 +22,7 @@ public class IdentiteRepositoryImpl implements IdentiteRepository {
 
     @Override
     public SearchResult<Identite> search(SearchRequest searchRequest) {
-        Page<IdentiteEntity<?>> page = this.identiteJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+        Page<IdentiteEntity> page = this.identiteJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
 
         SearchResult<Identite> searchResult = new SearchResult<>();
         searchResult.setCurrentPage(page.getNumber());

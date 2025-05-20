@@ -12,7 +12,7 @@ public enum IdentiteType {
     PERSONNE_PHYSIQUE,
     PERSONNE_MORALE;
 
-    public static IdentiteDto<?> castToDto(Identite identite) {
+    public static IdentiteDto castToDto(Identite identite) {
         return switch (identite) {
             case PersonnePhysique personnePhysique -> new PersonnePhysiqueDto(personnePhysique);
             case PersonneMorale personneMorale -> new PersonneMoraleDto(personneMorale);

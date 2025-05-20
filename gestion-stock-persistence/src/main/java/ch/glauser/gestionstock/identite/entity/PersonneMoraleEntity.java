@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity(name = "PersonneMorale")
-public class PersonneMoraleEntity extends IdentiteEntity<PersonneMorale> {
+public class PersonneMoraleEntity extends IdentiteEntity {
     @Column(name = "RAISON_SOCIALE", nullable = false)
     private String raisonSociale;
 
@@ -25,6 +25,11 @@ public class PersonneMoraleEntity extends IdentiteEntity<PersonneMorale> {
         PersonneMorale personneMorale = new PersonneMorale();
         personneMorale.setRaisonSociale(this.raisonSociale);
         return personneMorale;
+    }
+
+    @Override
+    public PersonneMorale toDomain() {
+        return (PersonneMorale) super.toDomain();
     }
 
     @Override

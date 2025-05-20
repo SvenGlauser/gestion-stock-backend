@@ -36,7 +36,7 @@ public class MachineEntity extends ModelEntity<Machine> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "PRORIETAIRE_ID", nullable = false)
-    private IdentiteEntity<?> proprietaire;
+    private IdentiteEntity proprietaire;
 
     @ManyToMany
     @JoinTable(

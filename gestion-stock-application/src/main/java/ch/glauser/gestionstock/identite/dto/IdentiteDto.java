@@ -19,7 +19,7 @@ import java.util.Optional;
         @JsonSubTypes.Type(value = PersonnePhysiqueDto.class, name = "PERSONNE_PHYSIQUE"),
         @JsonSubTypes.Type(value = PersonneMoraleDto.class, name = "PERSONNE_MORALE")
 })
-public abstract class IdentiteDto<T extends Identite> extends ModelDto<T> {
+public abstract class IdentiteDto extends ModelDto<Identite> {
 
     private String identiteType;
 
@@ -30,7 +30,7 @@ public abstract class IdentiteDto<T extends Identite> extends ModelDto<T> {
 
     private String remarques;
 
-    protected IdentiteDto(T identite) {
+    protected IdentiteDto(Identite identite) {
         super(identite);
         this.identiteType = IdentiteType.getType(identite).name();
         this.email = identite.getEmail();
@@ -40,8 +40,8 @@ public abstract class IdentiteDto<T extends Identite> extends ModelDto<T> {
     }
 
     @Override
-    public T toDomain() {
-        T identite = super.toDomain();
+    public Identite toDomain() {
+        Identite identite = super.toDomain();
         identite.setEmail(this.email);
         identite.setTelephone(this.telephone);
         identite.setAdresse(Optional.ofNullable(this.adresse).map(AdresseDto::toDomain).orElse(null));

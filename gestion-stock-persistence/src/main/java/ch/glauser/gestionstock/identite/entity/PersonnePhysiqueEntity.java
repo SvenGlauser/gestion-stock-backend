@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity(name = "PersonnePhysique")
-public class PersonnePhysiqueEntity extends IdentiteEntity<PersonnePhysique> {
+public class PersonnePhysiqueEntity extends IdentiteEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "TITRE", nullable = false)
     private Titre titre;
@@ -37,6 +37,11 @@ public class PersonnePhysiqueEntity extends IdentiteEntity<PersonnePhysique> {
         personnePhysique.setNom(this.nom);
         personnePhysique.setPrenom(this.prenom);
         return personnePhysique;
+    }
+
+    @Override
+    public PersonnePhysique toDomain() {
+        return (PersonnePhysique) super.toDomain();
     }
 
     @Override

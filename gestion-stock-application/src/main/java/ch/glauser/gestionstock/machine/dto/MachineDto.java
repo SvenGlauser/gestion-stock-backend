@@ -22,7 +22,7 @@ public class MachineDto extends ModelDto<Machine> {
 
     private String nom;
     private String description;
-    private IdentiteDto<?> proprietaire;
+    private IdentiteDto proprietaire;
     private List<PieceDto> pieces;
 
     public MachineDto(Machine machine) {

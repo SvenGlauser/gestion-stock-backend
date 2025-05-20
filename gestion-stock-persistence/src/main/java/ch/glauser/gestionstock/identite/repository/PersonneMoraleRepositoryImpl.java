@@ -1,6 +1,5 @@
 package ch.glauser.gestionstock.identite.repository;
 
-import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.identite.entity.PersonneMoraleEntity;
 import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public class PersonneMoraleRepositoryImpl implements PersonneMoraleRepository {
 
     @Override
     public Optional<PersonneMorale> get(Long id) {
-        return this.personneMoraleJpaRepository.findById(id).map(ModelEntity::toDomain);
+        return this.personneMoraleJpaRepository.findById(id).map(PersonneMoraleEntity::toDomain);
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.Optional;
 @Entity(name = "Identite")
 @Table(name = "IDENTITE")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class IdentiteEntity<T extends Identite> extends ModelEntity<T> {
+public abstract class IdentiteEntity extends ModelEntity<Identite> {
 
     @Column(name = "EMAIL")
     private String email;
@@ -37,7 +37,7 @@ public abstract class IdentiteEntity<T extends Identite> extends ModelEntity<T> 
     @Column(name = "DESIGNATION")
     private String designation;
 
-    protected IdentiteEntity(T identite) {
+    protected IdentiteEntity(Identite identite) {
         super(identite);
         this.email = identite.getEmail();
         this.telephone = identite.getTelephone();
@@ -47,8 +47,8 @@ public abstract class IdentiteEntity<T extends Identite> extends ModelEntity<T> 
     }
 
     @Override
-    public T toDomain() {
-        T identite = super.toDomain();
+    public Identite toDomain() {
+        Identite identite = super.toDomain();
         identite.setEmail(this.email);
         identite.setTelephone(this.telephone);
         identite.setAdresse(Optional.ofNullable(this.adresse).map(AdresseEntity::toDomain).orElse(null));

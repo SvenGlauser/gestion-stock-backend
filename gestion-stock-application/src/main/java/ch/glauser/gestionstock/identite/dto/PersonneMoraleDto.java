@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PersonneMoraleDto extends IdentiteDto<PersonneMorale> {
+public class PersonneMoraleDto extends IdentiteDto {
 
     private String raisonSociale;
 
@@ -22,5 +22,10 @@ public class PersonneMoraleDto extends IdentiteDto<PersonneMorale> {
         PersonneMorale personneMorale = new PersonneMorale();
         personneMorale.setRaisonSociale(this.raisonSociale);
         return personneMorale;
+    }
+
+    @Override
+    public PersonneMorale toDomain() {
+        return (PersonneMorale) super.toDomain();
     }
 }

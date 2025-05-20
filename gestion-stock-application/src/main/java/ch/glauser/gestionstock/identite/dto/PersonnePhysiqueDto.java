@@ -11,7 +11,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PersonnePhysiqueDto extends IdentiteDto<PersonnePhysique> {
+public class PersonnePhysiqueDto extends IdentiteDto {
 
     private String titre;
     private String nom;
@@ -30,5 +30,10 @@ public class PersonnePhysiqueDto extends IdentiteDto<PersonnePhysique> {
         personnePhysique.setNom(this.nom);
         personnePhysique.setPrenom(this.prenom);
         return personnePhysique;
+    }
+
+    @Override
+    public PersonnePhysique toDomain() {
+        return (PersonnePhysique) super.toDomain();
     }
 }

@@ -1,6 +1,5 @@
 package ch.glauser.gestionstock.identite.repository;
 
-import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.identite.entity.PersonnePhysiqueEntity;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public class PersonnePhysiqueRepositoryImpl implements PersonnePhysiqueRepositor
 
     @Override
     public Optional<PersonnePhysique> get(Long id) {
-        return this.personnePhysiqueJpaRepository.findById(id).map(ModelEntity::toDomain);
+        return this.personnePhysiqueJpaRepository.findById(id).map(PersonnePhysiqueEntity::toDomain);
     }
 
     @Override

@@ -3,7 +3,6 @@ package ch.glauser.gestionstock.identite.repository;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
-import ch.glauser.gestionstock.identite.model.Identite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +17,7 @@ import java.util.Collection;
  * JPA Repository pour la gestion des identités
  */
 @Repository
-public interface IdentiteJpaRepository extends JpaRepository<IdentiteEntity<?>, Long>, JpaSpecificationExecutor<IdentiteEntity<?>> {
+public interface IdentiteJpaRepository extends JpaRepository<IdentiteEntity, Long>, JpaSpecificationExecutor<IdentiteEntity> {
 
     /**
      * Vérifie s'il existe une identité avec cette localité
@@ -29,7 +28,7 @@ public interface IdentiteJpaRepository extends JpaRepository<IdentiteEntity<?>, 
     @Query("SELECT COUNT(identite) > 0 FROM Identite identite WHERE identite.adresse.localite.id = :id")
     boolean existsByIdLocalite(@Param("id") Long id);
 
-    default Page<IdentiteEntity<? extends Identite>> search(Collection<FilterCombinator> filters, Pageable pageable) {
+    default Page<IdentiteEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }
