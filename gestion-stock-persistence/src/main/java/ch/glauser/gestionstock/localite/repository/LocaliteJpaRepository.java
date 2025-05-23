@@ -12,21 +12,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * JPA Repository pour la gestion des localités
  */
 @Repository
 public interface LocaliteJpaRepository extends JpaRepository<LocaliteEntity, Long>, JpaSpecificationExecutor<LocaliteEntity> {
-    /**
-     * Récupère une localité par id
-     *
-     * @param id Id de la localité
-     * @return Un {@link Optional} de {@link LocaliteEntity}
-     */
-    Optional<LocaliteEntity> findOptionalById(Long id);
-
     /**
      * Vérifie s'il existe une localité avec ce pays
      *

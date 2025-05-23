@@ -28,62 +28,62 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     private final MachineService machineService;
 
     @Override
-    public MachineDto getMachine(Long id) {
+    public MachineDto get(Long id) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        Machine machine = this.machineService.getMachine(id);
+        Machine machine = this.machineService.get(id);
 
         return Optional.ofNullable(machine).map(MachineDto::new).orElse(null);
     }
 
     @Override
-    public SearchResult<MachineDto> searchMachine(SearchRequest searchRequest) {
+    public SearchResult<MachineDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Machine> searchResult = this.machineService.searchMachine(searchRequest);
+        SearchResult<Machine> searchResult = this.machineService.search(searchRequest);
 
         return SearchResultUtils.transformDto(searchResult, MachineDto::new);
     }
 
     @Override
     @Transactional
-    public MachineDto createMachine(MachineDto machine) {
+    public MachineDto create(MachineDto machine) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
                 .execute();
 
         Machine newMachine = machine.toDomain();
 
-        Machine savedMachine = this.machineService.createMachine(newMachine);
+        Machine savedMachine = this.machineService.create(newMachine);
 
         return Optional.ofNullable(savedMachine).map(MachineDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public MachineDto modifyMachine(MachineDto machine) {
+    public MachineDto modify(MachineDto machine) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
                 .execute();
 
         Machine machineToUpdate = machine.toDomain();
 
-        Machine savedMachine = this.machineService.modifyMachine(machineToUpdate);
+        Machine savedMachine = this.machineService.modify(machineToUpdate);
 
         return Optional.ofNullable(savedMachine).map(MachineDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public void deleteMachine(Long id) {
+    public void delete(Long id) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        this.machineService.deleteMachine(id);
+        this.machineService.delete(id);
     }
 }

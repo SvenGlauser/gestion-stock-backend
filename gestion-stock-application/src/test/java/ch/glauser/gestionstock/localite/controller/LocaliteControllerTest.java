@@ -6,11 +6,13 @@ import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.contact.controller.ContactController;
-import ch.glauser.gestionstock.contact.dto.ContactDto;
-import ch.glauser.gestionstock.contact.model.Titre;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
+import ch.glauser.gestionstock.identite.controller.PersonnePhysiqueController;
+import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
+import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import ch.glauser.gestionstock.pays.controller.PaysController;
 import ch.glauser.gestionstock.pays.dto.PaysDto;
@@ -23,6 +25,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = GestionStockApplication.class)
@@ -35,7 +38,7 @@ class LocaliteControllerTest {
     @Autowired
     PaysController paysController;
     @Autowired
-    ContactController contactController;
+    PersonnePhysiqueController personnePhysiqueController;
     @Autowired
     FournisseurController fournisseurController;
 
@@ -242,12 +245,13 @@ class LocaliteControllerTest {
 
         localiteController.delete(localite.getId());
 
-        localite = localiteController.get(localite.getId()).getBody();
-
-        assertThat(localite).isNull();
+        LocaliteDto finalLocalite = localite;
+        assertThatThrownBy(() -> localiteController.get(finalLocalite.getId()))
+                .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        TestUtils.testValidation(1, () -> localiteController.delete(1000L));
+        assertThatThrownBy(() -> localiteController.delete(1000L))
+                .isInstanceOf(DeleteWithInexistingIdException.class);
 
         LocaliteDto localite2 = new LocaliteDto();
         localite2.setNom("Localite");
@@ -258,16 +262,15 @@ class LocaliteControllerTest {
         AdresseDto adresse = new AdresseDto();
         adresse.setLocalite(localite2);
 
-        ContactDto contactDto = new ContactDto();
-        contactDto.setTitre(Titre.MADAME.name());
-        contactDto.setNom("Nom");
-        contactDto.setPrenom("Prenom");
-        contactDto.setAdresse(adresse);
-        contactDto = contactController.create(contactDto).getBody();
-        assertThat(contactDto).isNotNull();
+        PersonnePhysiqueDto identiteDto = new PersonnePhysiqueDto();
+        identiteDto.setTitre(Titre.MADAME.name());
+        identiteDto.setNom("Nom");
+        identiteDto.setPrenom("Prenom");
+        identiteDto.setAdresse(adresse);
+        identiteDto = personnePhysiqueController.create(identiteDto).getBody();
+        assertThat(identiteDto).isNotNull();
 
-        TestUtils.testValidation(1, () -> localiteController.delete(1000L));
-        contactController.delete(contactDto.getId());
+        personnePhysiqueController.delete(identiteDto.getId());
 
         FournisseurDto fournisseurDto = new FournisseurDto();
         fournisseurDto.setNom("Nom");
@@ -275,7 +278,6 @@ class LocaliteControllerTest {
         fournisseurDto = fournisseurController.create(fournisseurDto).getBody();
         assertThat(fournisseurDto).isNotNull();
 
-        TestUtils.testValidation(1, () -> localiteController.delete(1000L));
         fournisseurController.delete(fournisseurDto.getId());
 
         LocaliteDto localite2Final = localite2;

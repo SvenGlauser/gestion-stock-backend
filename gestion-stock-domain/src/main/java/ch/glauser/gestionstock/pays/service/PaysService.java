@@ -14,7 +14,7 @@ public interface PaysService {
      * @param id Id du pays à récupérer
      * @return Le pays ou null
      */
-    Pays getPays(Long id);
+    Pays get(Long id);
 
     /**
      * Récupère un pays
@@ -22,7 +22,7 @@ public interface PaysService {
      * @param abreviation Abréviation du pays à récupérer
      * @return Le pays ou null
      */
-    Pays getPaysByAbreviation(String abreviation);
+    Pays getByAbreviation(String abreviation);
 
     /**
      * Récupère les pays
@@ -30,7 +30,7 @@ public interface PaysService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pays paginée
      */
-    SearchResult<Pays> searchPays(SearchRequest searchRequest);
+    SearchResult<Pays> search(SearchRequest searchRequest);
 
     /**
      * Crée un pays
@@ -38,7 +38,7 @@ public interface PaysService {
      * @param pays Pays à créer
      * @return Le pays créé
      */
-    Pays createPays(Pays pays);
+    Pays create(Pays pays);
 
     /**
      * Modifie un pays
@@ -46,12 +46,12 @@ public interface PaysService {
      * @param pays Pays à modifier avec les nouvelles valeurs
      * @return Le pays modifié
      */
-    Pays modifyPays(Pays pays);
+    Pays modify(Pays pays);
 
     /**
      * Supprime un pays
      *
      * @param id Id du pays à supprimer
      */
-    void deletePays(Long id);
+    void delete(Long id);
 }

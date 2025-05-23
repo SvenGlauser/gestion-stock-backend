@@ -17,11 +17,11 @@ public class PieceHistoriqueController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<PieceHistoriqueDto> get(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(this.pieceHistoriqueApplicationService.getPieceHistorique(id));
+        return ResponseEntity.ok(this.pieceHistoriqueApplicationService.get(id));
     }
 
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<PieceHistoriqueDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.pieceHistoriqueApplicationService.searchPieceHistorique(searchRequest));
+        return ResponseEntity.ok(this.pieceHistoriqueApplicationService.search(searchRequest));
     }
 }

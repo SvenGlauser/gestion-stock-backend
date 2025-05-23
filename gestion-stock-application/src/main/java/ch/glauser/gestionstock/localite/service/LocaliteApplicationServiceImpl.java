@@ -28,62 +28,62 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
     private final LocaliteService localiteService;
 
     @Override
-    public LocaliteDto getLocalite(Long id) {
+    public LocaliteDto get(Long id) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        Localite localite = this.localiteService.getLocalite(id);
+        Localite localite = this.localiteService.get(id);
 
         return Optional.ofNullable(localite).map(LocaliteDto::new).orElse(null);
     }
 
     @Override
-    public SearchResult<LocaliteDto> searchLocalite(SearchRequest searchRequest) {
+    public SearchResult<LocaliteDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Localite> searchResult = this.localiteService.searchLocalite(searchRequest);
+        SearchResult<Localite> searchResult = this.localiteService.search(searchRequest);
 
         return SearchResultUtils.transformDto(searchResult, LocaliteDto::new);
     }
 
     @Override
     @Transactional
-    public LocaliteDto createLocalite(LocaliteDto localite) {
+    public LocaliteDto create(LocaliteDto localite) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
                 .execute();
 
         Localite newLocalite = localite.toDomain();
 
-        Localite savedCategorie = this.localiteService.createLocalite(newLocalite);
+        Localite savedCategorie = this.localiteService.create(newLocalite);
 
         return Optional.ofNullable(savedCategorie).map(LocaliteDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public LocaliteDto modifyLocalite(LocaliteDto localite) {
+    public LocaliteDto modify(LocaliteDto localite) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
                 .execute();
 
         Localite localiteToUpdate = localite.toDomain();
 
-        Localite savedCategorie = this.localiteService.modifyLocalite(localiteToUpdate);
+        Localite savedCategorie = this.localiteService.modify(localiteToUpdate);
 
         return Optional.ofNullable(savedCategorie).map(LocaliteDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public void deleteLocalite(Long id) {
+    public void delete(Long id) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        this.localiteService.deleteLocalite(id);
+        this.localiteService.delete(id);
     }
 }

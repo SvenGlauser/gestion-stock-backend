@@ -28,62 +28,62 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
     private final PaysService paysService;
 
     @Override
-    public PaysDto getPays(Long id) {
+    public PaysDto get(Long id) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        Pays pays = this.paysService.getPays(id);
+        Pays pays = this.paysService.get(id);
 
         return Optional.ofNullable(pays).map(PaysDto::new).orElse(null);
     }
 
     @Override
-    public SearchResult<PaysDto> searchPays(SearchRequest searchRequest) {
+    public SearchResult<PaysDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Pays> searchResult = this.paysService.searchPays(searchRequest);
+        SearchResult<Pays> searchResult = this.paysService.search(searchRequest);
 
         return SearchResultUtils.transformDto(searchResult, PaysDto::new);
     }
 
     @Override
     @Transactional
-    public PaysDto createPays(PaysDto pays) {
+    public PaysDto create(PaysDto pays) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
                 .execute();
 
         Pays newPays = pays.toDomain();
 
-        Pays savedPays = this.paysService.createPays(newPays);
+        Pays savedPays = this.paysService.create(newPays);
 
         return Optional.ofNullable(savedPays).map(PaysDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public PaysDto modifyPays(PaysDto pays) {
+    public PaysDto modify(PaysDto pays) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
                 .execute();
 
         Pays paysToUpdate = pays.toDomain();
 
-        Pays savedPays = this.paysService.modifyPays(paysToUpdate);
+        Pays savedPays = this.paysService.modify(paysToUpdate);
 
         return Optional.ofNullable(savedPays).map(PaysDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public void deletePays(Long id) {
+    public void delete(Long id) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        this.paysService.deletePays(id);
+        this.paysService.delete(id);
     }
 }

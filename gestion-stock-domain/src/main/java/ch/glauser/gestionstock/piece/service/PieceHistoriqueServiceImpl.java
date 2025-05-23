@@ -3,6 +3,7 @@ package ch.glauser.gestionstock.piece.service;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Validation;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.piece.model.*;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,25 +19,27 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
     private final PieceHistoriqueRepository pieceHistoriqueRepository;
 
     @Override
-    public PieceHistorique getPieceHistorique(Long id) {
+    public PieceHistorique get(Long id) {
         Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(id, PieceHistoriqueConstantes.FIELD_ID)
                 .execute();
 
-        return pieceHistoriqueRepository.getPieceHistorique(id);
+        return pieceHistoriqueRepository
+                .get(id)
+                .orElseThrow(() -> new SearchWithInexistingIdExceptionPerform(id, PieceHistorique.class));
     }
 
     @Override
-    public SearchResult<PieceHistorique> searchPieceHistorique(SearchRequest searchRequest) {
+    public SearchResult<PieceHistorique> search(SearchRequest searchRequest) {
         Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.pieceHistoriqueRepository.searchPieceHistorique(searchRequest);
+        return this.pieceHistoriqueRepository.search(searchRequest);
     }
 
     @Override
-    public void createPieceHistoriqueFromPiece(Piece newPiece) {
+    public void createFromPiece(Piece newPiece) {
         Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(newPiece, PieceHistoriqueConstantes.FIELD_NEW_PIECE)
                 .execute();
@@ -52,11 +55,11 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
         validation.execute();
 
-        this.pieceHistoriqueRepository.createPieceHistorique(pieceHistorique);
+        this.pieceHistoriqueRepository.create(pieceHistorique);
     }
 
     @Override
-    public void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece, PieceHistoriqueSource source) {
+    public void createFromPiece(Piece newPiece, Piece oldPiece, PieceHistoriqueSource source) {
         Validation.of(PieceHistoriqueServiceImpl.class)
                 .validateNotNull(newPiece, PieceHistoriqueConstantes.FIELD_NEW_PIECE)
                 .validateNotNull(oldPiece, PieceHistoriqueConstantes.FIELD_OLD_PIECE)
@@ -65,18 +68,19 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
         PieceHistorique pieceHistorique = new PieceHistorique();
 
-        long quantite = newPiece.getQuantite() - oldPiece.getQuantite();
+        long deltaQuantite = newPiece.getQuantite() - oldPiece.getQuantite();
 
-        if (quantite > 0) {
+        if (deltaQuantite > 0) {
             pieceHistorique.setType(PieceHistoriqueType.ENTREE);
-        } else if (quantite < 0) {
+        } else if (deltaQuantite < 0) {
             pieceHistorique.setType(PieceHistoriqueType.SORTIE);
         } else {
+            // Pas de besoin de créer un historique
             return;
         }
 
         pieceHistorique.setPiece(newPiece);
-        pieceHistorique.setDifference(Math.abs(quantite));
+        pieceHistorique.setDifference(Math.abs(deltaQuantite));
         pieceHistorique.setSource(source);
         pieceHistorique.setDate(LocalDate.now());
 
@@ -84,7 +88,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
         validation.execute();
 
-        this.pieceHistoriqueRepository.createPieceHistorique(pieceHistorique);
+        this.pieceHistoriqueRepository.create(pieceHistorique);
     }
 
     @Override

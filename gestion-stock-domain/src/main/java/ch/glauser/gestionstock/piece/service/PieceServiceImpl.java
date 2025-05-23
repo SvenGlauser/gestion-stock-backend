@@ -7,6 +7,11 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.common.validation.exception.ValidationException;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
+import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
@@ -30,34 +35,36 @@ public class PieceServiceImpl implements PieceService {
     private final MachineRepository machineRepository;
 
     @Override
-    public Piece getPiece(Long id) {
+    public Piece get(Long id) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
-        return this.pieceRepository.getPiece(id);
+        return this.pieceRepository
+                .get(id)
+                .orElseThrow(() -> new SearchWithInexistingIdExceptionPerform(id, Piece.class));
     }
 
     @Override
-    public SearchResult<Piece> searchPiece(SearchRequest searchRequest) {
+    public SearchResult<Piece> search(SearchRequest searchRequest) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.pieceRepository.searchPiece(searchRequest);
+        return this.pieceRepository.search(searchRequest);
     }
 
     @Override
-    public SearchResult<Piece> autocompletePiece(String searchValue) {
+    public SearchResult<Piece> autocomplete(String searchValue) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(searchValue, PieceConstantes.FIELD_SEARCH_VALUE)
                 .execute();
 
-        return this.pieceRepository.autocompletePiece(searchValue);
+        return this.pieceRepository.autocomplete(searchValue);
     }
 
     @Override
-    public Piece createPiece(Piece piece) {
+    public Piece create(Piece piece) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
@@ -65,7 +72,7 @@ public class PieceServiceImpl implements PieceService {
         // Validation
         Validation validation = piece.validateCreate();
 
-        if (this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
+        if (this.pieceRepository.existByNumeroInventaire(piece.getNumeroInventaire())) {
             validation.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
         }
 
@@ -74,43 +81,43 @@ public class PieceServiceImpl implements PieceService {
         validation.execute();
 
         // Création de la pièce
-        Piece newPiece = this.pieceRepository.createPiece(piece);
+        Piece newPiece = this.pieceRepository.create(piece);
 
         // Mise à jour de l'historique
-        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece);
+        this.pieceHistoriqueService.createFromPiece(newPiece);
 
         return newPiece;
     }
 
     @Override
-    public Piece modifyPiece(Piece piece) {
+    public Piece modify(Piece piece) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
-        return this.modifyPiece(piece, PieceHistoriqueSource.MODIFICATION);
+        return this.modify(piece, PieceHistoriqueSource.MODIFICATION);
     }
 
     @Override
-    public Piece modifyPiece(Piece piece, PieceHistoriqueSource source) {
+    public Piece modify(Piece piece, PieceHistoriqueSource source) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .validateNotNull(source, PieceHistoriqueConstantes.FIELD_SOURCE)
                 .execute();
 
         // Récupération de l'ancienne pièce
-        Piece oldPiece = this.pieceRepository.getPiece(piece.getId());
+        Piece oldPiece = this.pieceRepository
+                .get(piece.getId())
+                .orElseThrow(() -> new ModifyWithInexistingIdException(piece.getId(), Piece.class));
 
         // Validation
         Validation validation = piece.validateModify();
 
-        if (Objects.nonNull(oldPiece)) {
-            if (!Objects.equals(oldPiece.getNumeroInventaire(), piece.getNumeroInventaire()) &&
-                    this.pieceRepository.existPieceByNumeroInventaire(piece.getNumeroInventaire())) {
+        if (!Objects.equals(oldPiece.getNumeroInventaire(), piece.getNumeroInventaire()) &&
+                this.pieceRepository.existByNumeroInventaire(piece.getNumeroInventaire())) {
 
-                // Valide le cas dans lequel la pièce a changé de numéro d'inventaire
-                validation.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
-            }
+            // Valide le cas dans lequel la pièce a changé de numéro d'inventaire
+            validation.addError(PieceConstantes.ERROR_PIECE_NUMERO_INVENTAIRE_UNIQUE, PieceConstantes.FIELD_NUMERO_INVENTAIRE);
         }
 
         this.validateCategorieActive(piece, validation);
@@ -118,40 +125,36 @@ public class PieceServiceImpl implements PieceService {
         validation.execute();
 
         // Création de la pièce
-        Piece newPiece = this.pieceRepository.modifyPiece(piece);
+        Piece newPiece = this.pieceRepository.modify(piece);
 
         // Mise à jour de l'historique
-        this.pieceHistoriqueService.createPieceHistoriqueFromPiece(newPiece, oldPiece, source);
+        this.pieceHistoriqueService.createFromPiece(newPiece, oldPiece, source);
 
         return newPiece;
     }
 
     @Override
-    public void deletePiece(Long id) {
+    public void delete(Long id) {
         Validation.of(PieceServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
-        this.validatePieceExist(id);
+        this.validateExist(id, DeleteWithInexistingIdException::new);
         this.validatePasUtiliseParMachine(id);
 
         this.pieceHistoriqueService.deleteAllByIdPiece(id);
-        this.pieceRepository.deletePiece(id);
+        this.pieceRepository.delete(id);
     }
 
     /**
      * Valide que la pièce existe
      * @param id Id de la pièce à supprimer
+     * @param exception L'exception à instancier
      */
-    private void validatePieceExist(Long id) {
-        Piece pieceToDelete = this.getPiece(id);
-
-        if (Objects.isNull(pieceToDelete)) {
-            throw new ValidationException(new Error(
-                    PieceConstantes.ERROR_SUPPRESSION_PIECE_INEXISTANTE,
-                    PieceConstantes.FIELD_PIECE,
-                    PieceServiceImpl.class));
-        }
+    private void validateExist(Long id, PerformActionWithInexistingIdFunction exception) {
+        this.pieceRepository
+                .get(id)
+                .orElseThrow(() -> exception.instantiate(id, PersonnePhysique.class));
     }
 
     /**
@@ -159,7 +162,7 @@ public class PieceServiceImpl implements PieceService {
      * @param id Id de la pièce à supprimer
      */
     private void validatePasUtiliseParMachine(Long id) {
-        if (this.machineRepository.existMachineByIdPiece(id)) {
+        if (this.machineRepository.existByIdPiece(id)) {
             throw new ValidationException(new Error(
                     PieceConstantes.ERROR_SUPPRESSION_PIECE_IMPOSSIBLE_EXISTE_MACHINE,
                     PieceConstantes.FIELD_PIECE,
@@ -177,7 +180,7 @@ public class PieceServiceImpl implements PieceService {
             return;
         }
 
-        Categorie categorie = this.categorieService.getCategorie(piece.getCategorie().getId());
+        Categorie categorie = this.categorieService.get(piece.getCategorie().getId());
         if (Objects.nonNull(categorie) && Boolean.FALSE == categorie.getActif()) {
             validation.addError(PieceConstantes.ERROR_CATEGORIE_DOIT_ETRE_ACTIVE, PieceConstantes.FIELD_CATEGORIE);
         }

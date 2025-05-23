@@ -4,13 +4,14 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.exception.ValidationException;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.machine.model.MachineConstantes;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
-import ch.glauser.gestionstock.pays.service.PaysServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
@@ -25,91 +26,89 @@ public class MachineServiceImpl implements MachineService {
     private final MachineRepository machineRepository;
 
     @Override
-    public Machine getMachine(Long id) {
+    public Machine get(Long id) {
         Validation.of(MachineServiceImpl.class)
                 .validateNotNull(id, MachineConstantes.FIELD_ID)
                 .execute();
 
-        return this.machineRepository.getMachine(id);
+        return this.machineRepository
+                .get(id)
+                .orElseThrow(() -> new SearchWithInexistingIdExceptionPerform(id, Machine.class));
     }
 
     @Override
-    public SearchResult<Machine> searchMachine(SearchRequest searchRequest) {
+    public SearchResult<Machine> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, MachineConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.machineRepository.searchMachine(searchRequest);
+        return this.machineRepository.search(searchRequest);
     }
 
     @Override
-    public Machine createMachine(Machine machine) {
+    public Machine create(Machine machine) {
         Validation.of(MachineServiceImpl.class)
                 .validateNotNull(machine, MachineConstantes.FIELD_MACHINE)
                 .execute();
 
         Validation validation = machine.validateCreate();
 
-        Long idContact = Optional.ofNullable(machine.getContact()).map(Model::getId).orElse(null);
+        Long idProprietaire = Optional.ofNullable(machine.getProprietaire()).map(Model::getId).orElse(null);
 
-        if (this.machineRepository.existMachineByNomAndIdContact(machine.getNom(), idContact)) {
+        if (this.machineRepository.existByNomAndIdProprietaire(machine.getNom(), idProprietaire)) {
             validation.addError(MachineConstantes.ERROR_MACHINE_NOM_UNIQUE, MachineConstantes.FIELD_NOM);
         }
 
         validation.execute();
 
-        return this.machineRepository.createMachine(machine);
+        return this.machineRepository.create(machine);
     }
 
     @Override
-    public Machine modifyMachine(Machine machine) {
+    public Machine modify(Machine machine) {
         Validation.of(MachineServiceImpl.class)
                 .validateNotNull(machine, MachineConstantes.FIELD_MACHINE)
                 .execute();
 
-        Machine oldMachine = this.machineRepository.getMachine(machine.getId());
+        Machine oldMachine = this.machineRepository
+                .get(machine.getId())
+                .orElseThrow(() -> new ModifyWithInexistingIdException(machine.getId(), Machine.class));
 
         Validation validation = machine.validateModify();
 
-        if (Objects.nonNull(oldMachine)) {
-            Long idContact = Optional.ofNullable(machine.getContact()).map(Model::getId).orElse(null);
+        Long idProprietaire = Optional.ofNullable(machine.getProprietaire()).map(Model::getId).orElse(null);
 
-            if ((
-                    !Objects.equals(oldMachine.getNom(), machine.getNom()) ||
-                    !Objects.equals(oldMachine.getContact().getId(), idContact)
-                ) && this.machineRepository.existMachineByNomAndIdContact(machine.getNom(), idContact)) {
-                validation.addError(MachineConstantes.ERROR_MACHINE_NOM_UNIQUE, MachineConstantes.FIELD_NOM);
-            }
+        if ((
+                !Objects.equals(oldMachine.getNom(), machine.getNom()) ||
+                !Objects.equals(oldMachine.getProprietaire().getId(), idProprietaire)
+            ) && this.machineRepository.existByNomAndIdProprietaire(machine.getNom(), idProprietaire)) {
+            validation.addError(MachineConstantes.ERROR_MACHINE_NOM_UNIQUE, MachineConstantes.FIELD_NOM);
         }
 
         validation.execute();
 
-        return this.machineRepository.modifyMachine(machine);
+        return this.machineRepository.modify(machine);
     }
 
     @Override
-    public void deleteMachine(Long id) {
+    public void delete(Long id) {
         Validation.of(MachineServiceImpl.class)
                 .validateNotNull(id, MachineConstantes.FIELD_ID)
                 .execute();
 
-        this.validateMachineExist(id);
+        this.validateExist(id, DeleteWithInexistingIdException::new);
 
-        this.machineRepository.deleteMachine(id);
+        this.machineRepository.delete(id);
     }
 
     /**
      * Valide que la machine existe
      * @param id Id de la machine à supprimer
+     * @param exception Exception
      */
-    private void validateMachineExist(Long id) {
-        Machine machineToDelete = this.getMachine(id);
-
-        if (Objects.isNull(machineToDelete)) {
-            throw new ValidationException(new Error(
-                    MachineConstantes.ERROR_SUPPRESSION_MACHINE_INEXISTANTE,
-                    MachineConstantes.FIELD_MACHINE,
-                    PaysServiceImpl.class));
-        }
+    private void validateExist(Long id, PerformActionWithInexistingIdFunction exception) {
+        this.machineRepository
+                .get(id)
+                .orElseThrow(() -> exception.instantiate(id, Machine.class));
     }
 }

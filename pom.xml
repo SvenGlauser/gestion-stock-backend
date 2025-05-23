@@ -25,6 +25,7 @@
 
         <org.projectlombok.lombok.version>1.18.36</org.projectlombok.lombok.version>
 
+        <org.apache.commons.io.version>2.19.0</org.apache.commons.io.version>
         <org.apache.commons.csv.version>1.14.0</org.apache.commons.csv.version>
         <org.apache.commons.lang3.version>3.17.0</org.apache.commons.lang3.version>
         <org.apache.commons.collections4.version>4.4</org.apache.commons.collections4.version>
@@ -39,25 +40,25 @@
             <dependency>
                 <groupId>ch.glauser</groupId>
                 <artifactId>gestion-stock-domain</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>ch.glauser</groupId>
                 <artifactId>gestion-stock-persistence</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>ch.glauser</groupId>
                 <artifactId>gestion-stock-application</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>ch.glauser</groupId>
                 <artifactId>gestion-stock-batch</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies -->
@@ -74,6 +75,12 @@
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${org.apache.commons.io.version}</version>
             </dependency>
 
             <dependency>

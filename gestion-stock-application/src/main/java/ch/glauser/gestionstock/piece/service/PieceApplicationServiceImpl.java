@@ -25,73 +25,73 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     private final PieceService pieceService;
 
     @Override
-    public PieceDto getPiece(Long id) {
+    public PieceDto get(Long id) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
-        Piece pays = this.pieceService.getPiece(id);
+        Piece pays = this.pieceService.get(id);
 
         return Optional.ofNullable(pays).map(PieceDto::new).orElse(null);
     }
 
     @Override
-    public SearchResult<PieceDto> searchPiece(SearchRequest searchRequest) {
+    public SearchResult<PieceDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Piece> searchResult = this.pieceService.searchPiece(searchRequest);
+        SearchResult<Piece> searchResult = this.pieceService.search(searchRequest);
 
         return SearchResultUtils.transformDto(searchResult, PieceDto::new);
     }
 
     @Override
-    public SearchResult<PieceDto> autocompletePiece(String searchValue) {
+    public SearchResult<PieceDto> autocomplete(String searchValue) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchValue, PieceConstantes.FIELD_SEARCH_VALUE)
                 .execute();
 
-        SearchResult<Piece> searchResult = this.pieceService.autocompletePiece(searchValue);
+        SearchResult<Piece> searchResult = this.pieceService.autocomplete(searchValue);
 
         return SearchResultUtils.transformDto(searchResult, PieceDto::new);
     }
 
     @Override
     @Transactional
-    public PieceDto createPiece(PieceDto piece) {
+    public PieceDto create(PieceDto piece) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
         Piece newPiece = piece.toDomain();
 
-        Piece savedPiece = this.pieceService.createPiece(newPiece);
+        Piece savedPiece = this.pieceService.create(newPiece);
 
         return Optional.ofNullable(savedPiece).map(PieceDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public PieceDto modifyPiece(PieceDto piece) {
+    public PieceDto modify(PieceDto piece) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
                 .execute();
 
         Piece pieceToUpdate = piece.toDomain();
 
-        Piece savedPiece = this.pieceService.modifyPiece(pieceToUpdate);
+        Piece savedPiece = this.pieceService.modify(pieceToUpdate);
 
         return Optional.ofNullable(savedPiece).map(PieceDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public void deletePiece(Long id) {
+    public void delete(Long id) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)
                 .execute();
 
-        this.pieceService.deletePiece(id);
+        this.pieceService.delete(id);
     }
 }

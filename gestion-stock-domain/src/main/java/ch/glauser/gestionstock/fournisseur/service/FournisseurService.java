@@ -14,7 +14,7 @@ public interface FournisseurService {
      * @param id Id du fournisseur à récupérer
      * @return Le fournisseur ou null
      */
-    Fournisseur getFournisseur(Long id);
+    Fournisseur get(Long id);
 
     /**
      * Récupère les fournisseurs
@@ -22,7 +22,7 @@ public interface FournisseurService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de fournisseur paginée
      */
-    SearchResult<Fournisseur> searchFournisseur(SearchRequest searchRequest);
+    SearchResult<Fournisseur> search(SearchRequest searchRequest);
 
     /**
      * Crée un fournisseur
@@ -30,7 +30,7 @@ public interface FournisseurService {
      * @param fournisseur Fournisseur à créer
      * @return Le fournisseur créé
      */
-    Fournisseur createFournisseur(Fournisseur fournisseur);
+    Fournisseur create(Fournisseur fournisseur);
 
     /**
      * Modifie un fournisseur
@@ -38,12 +38,12 @@ public interface FournisseurService {
      * @param fournisseur Fournisseur à modifier avec les nouvelles valeurs
      * @return Le fournisseur modifié
      */
-    Fournisseur modifyFournisseur(Fournisseur fournisseur);
+    Fournisseur modify(Fournisseur fournisseur);
 
     /**
      * Supprime un fournisseur
      *
      * @param id Id du fournisseur à supprimer
      */
-    void deleteFournisseur(Long id);
+    void delete(Long id);
 }

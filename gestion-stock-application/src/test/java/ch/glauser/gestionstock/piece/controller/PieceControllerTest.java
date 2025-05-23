@@ -7,11 +7,13 @@ import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.contact.controller.ContactController;
-import ch.glauser.gestionstock.contact.dto.ContactDto;
-import ch.glauser.gestionstock.contact.model.Titre;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
+import ch.glauser.gestionstock.identite.controller.PersonnePhysiqueController;
+import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
+import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.controller.MachineController;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
@@ -25,6 +27,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = GestionStockApplication.class)
@@ -38,7 +41,7 @@ class PieceControllerTest {
     CategorieController categorieController;
 
     @Autowired
-    ContactController contactController;
+    PersonnePhysiqueController personnePhysiqueController;
 
     @Autowired
     MachineController machineController;
@@ -288,12 +291,13 @@ class PieceControllerTest {
 
         pieceController.delete(piece.getId());
 
-        piece = pieceController.get(piece.getId()).getBody();
-
-        assertThat(piece).isNull();
+        final PieceDto finalPiece1 = piece;
+        assertThatThrownBy(() -> pieceController.get(finalPiece1.getId()))
+                .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        TestUtils.testValidation(1, () -> pieceController.delete(1000L));
+        assertThatThrownBy(() -> pieceController.delete(1000L))
+                .isInstanceOf(DeleteWithInexistingIdException.class);
 
         PieceDto piece2 = new PieceDto();
         piece2.setNumeroInventaire("2");
@@ -306,15 +310,15 @@ class PieceControllerTest {
         piece2 = pieceController.create(piece2).getBody();
         assertThat(piece2).isNotNull();
 
-        ContactDto contactDto = new ContactDto();
-        contactDto.setNom("Contact");
-        contactDto.setPrenom("Prenom");
-        contactDto.setTitre(Titre.MONSIEUR.name());
-        contactDto = contactController.create(contactDto).getBody();
+        PersonnePhysiqueDto identiteDto = new PersonnePhysiqueDto();
+        identiteDto.setNom("Contact");
+        identiteDto.setPrenom("Prenom");
+        identiteDto.setTitre(Titre.MONSIEUR.name());
+        identiteDto = personnePhysiqueController.create(identiteDto).getBody();
 
         MachineDto machineDto = new MachineDto();
         machineDto.setNom("Machine");
-        machineDto.setContact(contactDto);
+        machineDto.setProprietaire(identiteDto);
         machineDto.setPieces(List.of(piece2));
         machineDto = machineController.create(machineDto).getBody();
 

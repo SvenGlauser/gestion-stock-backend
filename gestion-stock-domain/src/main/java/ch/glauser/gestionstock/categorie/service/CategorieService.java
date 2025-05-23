@@ -14,7 +14,7 @@ public interface CategorieService {
      * @param id Id de la catégorie à récupérer
      * @return La catégorie ou null
      */
-    Categorie getCategorie(Long id);
+    Categorie get(Long id);
 
     /**
      * Récupère les catégories
@@ -22,7 +22,7 @@ public interface CategorieService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de catégorie paginée
      */
-    SearchResult<Categorie> searchCategorie(SearchRequest searchRequest);
+    SearchResult<Categorie> search(SearchRequest searchRequest);
 
     /**
      * Crée une catégorie
@@ -30,7 +30,7 @@ public interface CategorieService {
      * @param categorie Catégorie à créer
      * @return La catégorie créée
      */
-    Categorie createCategorie(Categorie categorie);
+    Categorie create(Categorie categorie);
 
     /**
      * Modifie une catégorie
@@ -38,12 +38,12 @@ public interface CategorieService {
      * @param categorie Catégorie à modifier avec les nouvelles valeurs
      * @return La catégorie modifiée
      */
-    Categorie modifyCategorie(Categorie categorie);
+    Categorie modify(Categorie categorie);
 
     /**
      * Supprime une catégorie
      *
      * @param id Id de la catégorie à supprimer
      */
-    void deleteCategorie(Long id);
+    void delete(Long id);
 }

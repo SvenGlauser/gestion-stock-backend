@@ -16,7 +16,7 @@ public interface PieceHistoriqueService {
      * @param id Id à récupérer
      * @return L'historique du mouvement
      */
-    PieceHistorique getPieceHistorique(Long id);
+    PieceHistorique get(Long id);
 
     /**
      * Récupère les mouvements de pièce
@@ -24,14 +24,14 @@ public interface PieceHistoriqueService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de mouvements de pièce
      */
-    SearchResult<PieceHistorique> searchPieceHistorique(SearchRequest searchRequest);
+    SearchResult<PieceHistorique> search(SearchRequest searchRequest);
 
     /**
      * Créer un mouvement de pièce suite à la création d'une pièce
      *
      * @param newPiece Nouvelle pièce
      */
-    void createPieceHistoriqueFromPiece(Piece newPiece);
+    void createFromPiece(Piece newPiece);
 
     /**
      * Créer un mouvement de pièce suite à la modification d'une pièce
@@ -40,7 +40,7 @@ public interface PieceHistoriqueService {
      * @param oldPiece Ancienne pièce
      * @param source Source
      */
-    void createPieceHistoriqueFromPiece(Piece newPiece, Piece oldPiece, PieceHistoriqueSource source);
+    void createFromPiece(Piece newPiece, Piece oldPiece, PieceHistoriqueSource source);
 
     /**
      * Supprime tout l'historique d'une pièce

@@ -14,7 +14,7 @@ public interface MachineApplicatifService {
      * @param id Id de la machine à récupérer
      * @return La machine ou null
      */
-    MachineDto getMachine(Long id);
+    MachineDto get(Long id);
 
     /**
      * Récupère les machines
@@ -22,7 +22,7 @@ public interface MachineApplicatifService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de machine paginée
      */
-    SearchResult<MachineDto> searchMachine(SearchRequest searchRequest);
+    SearchResult<MachineDto> search(SearchRequest searchRequest);
 
     /**
      * Crée une machine
@@ -30,7 +30,7 @@ public interface MachineApplicatifService {
      * @param machine Machine à créer
      * @return La machine créée
      */
-    MachineDto createMachine(MachineDto machine);
+    MachineDto create(MachineDto machine);
 
     /**
      * Modifie une machine
@@ -38,12 +38,12 @@ public interface MachineApplicatifService {
      * @param machine Machine à modifier avec les nouvelles valeurs
      * @return La machine modifiée
      */
-    MachineDto modifyMachine(MachineDto machine);
+    MachineDto modify(MachineDto machine);
 
     /**
      * Supprime une machine
      *
      * @param id Id de la machine à supprimer
      */
-    void deleteMachine(Long id);
+    void delete(Long id);
 }

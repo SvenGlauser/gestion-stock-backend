@@ -26,6 +26,6 @@ public class ThrownExceptionController {
 
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<ThrownExceptionDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.thrownExceptionApplicationService.searchExceptions(searchRequest));
+        return ResponseEntity.ok(this.thrownExceptionApplicationService.search(searchRequest));
     }
 }

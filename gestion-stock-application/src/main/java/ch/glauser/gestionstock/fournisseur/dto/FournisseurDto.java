@@ -6,6 +6,7 @@ import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
@@ -30,9 +31,9 @@ public class FournisseurDto extends ModelDto<Fournisseur> {
     @Override
     protected Fournisseur toDomainChild() {
         Fournisseur fournisseur = new Fournisseur();
-        fournisseur.setNom(this.nom);
-        fournisseur.setDescription(this.description);
-        fournisseur.setUrl(this.url);
+        fournisseur.setNom(Optional.ofNullable(this.nom).map(StringUtils::trimToNull).orElse(null));
+        fournisseur.setDescription(Optional.ofNullable(this.description).map(StringUtils::trimToNull).orElse(null));
+        fournisseur.setUrl(Optional.ofNullable(this.url).map(StringUtils::trimToNull).orElse(null));
         fournisseur.setAdresse(Optional.ofNullable(this.adresse).map(AdresseDto::toDomain).orElse(null));
         return fournisseur;
     }

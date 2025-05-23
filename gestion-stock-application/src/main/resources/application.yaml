@@ -5,11 +5,10 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
-        use_sql_comments: true
         show_sql: false
 
   batch:
@@ -21,3 +20,15 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+
+  liquibase:
+    enabled: true
+    change-log: 'classpath:db/changelog-master.xml'
+    default-schema: public
+    drop-first: false
+    clear-checksums: false
+
+gestion-stock:
+  batch:
+    username: gestionstock-batch-user
+    password: admin

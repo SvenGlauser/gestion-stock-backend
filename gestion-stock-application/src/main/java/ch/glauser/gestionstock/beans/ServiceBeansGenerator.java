@@ -3,15 +3,16 @@ package ch.glauser.gestionstock.beans;
 import ch.glauser.gestionstock.categorie.repository.CategorieRepository;
 import ch.glauser.gestionstock.categorie.service.CategorieService;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
-import ch.glauser.gestionstock.contact.repository.ContactRepository;
-import ch.glauser.gestionstock.contact.service.ContactService;
-import ch.glauser.gestionstock.contact.service.ContactServiceImpl;
 import ch.glauser.gestionstock.exception.repository.ThrownExceptionRepository;
 import ch.glauser.gestionstock.exception.service.ThrownExceptionService;
 import ch.glauser.gestionstock.exception.service.ThrownExceptionServiceImpl;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.fournisseur.service.FournisseurService;
 import ch.glauser.gestionstock.fournisseur.service.FournisseurServiceImpl;
+import ch.glauser.gestionstock.identite.repository.IdentiteRepository;
+import ch.glauser.gestionstock.identite.repository.PersonneMoraleRepository;
+import ch.glauser.gestionstock.identite.repository.PersonnePhysiqueRepository;
+import ch.glauser.gestionstock.identite.service.*;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.localite.service.LocaliteService;
 import ch.glauser.gestionstock.localite.service.LocaliteServiceImpl;
@@ -40,9 +41,21 @@ public class ServiceBeansGenerator {
     }
 
     @Bean
-    public ContactService contactService(ContactRepository contactRepository,
-                                         MachineRepository machineRepository) {
-        return new ContactServiceImpl(contactRepository, machineRepository);
+    public IdentiteService identiteService(IdentiteRepository identiteRepository,
+                                           MachineRepository machineRepository) {
+        return new IdentiteServiceImpl(identiteRepository, machineRepository);
+    }
+
+    @Bean
+    public PersonneMoraleService personneMoraleService(PersonneMoraleRepository personneMoraleRepository,
+                                                       IdentiteService identiteService) {
+        return new PersonneMoraleServiceImpl(personneMoraleRepository, identiteService);
+    }
+
+    @Bean
+    public PersonnePhysiqueService personnePhysiqueService(PersonnePhysiqueRepository personnePhysiqueRepository,
+                                                  IdentiteService identiteService) {
+        return new PersonnePhysiqueServiceImpl(personnePhysiqueRepository, identiteService);
     }
 
     @Bean
@@ -53,9 +66,9 @@ public class ServiceBeansGenerator {
 
     @Bean
     public LocaliteService localiteService(LocaliteRepository localiteRepository,
-                                           ContactRepository contactRepository,
+                                           IdentiteRepository identiteRepository,
                                            FournisseurRepository fournisseurRepository) {
-        return new LocaliteServiceImpl(localiteRepository, contactRepository, fournisseurRepository);
+        return new LocaliteServiceImpl(localiteRepository, identiteRepository, fournisseurRepository);
     }
 
     @Bean

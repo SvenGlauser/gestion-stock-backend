@@ -9,6 +9,8 @@ import ch.glauser.gestionstock.pays.model.Pays;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Implémentation du repository de gestion des pays
  */
@@ -22,43 +24,43 @@ public class PaysRepositoryImpl implements PaysRepository {
     }
 
     @Override
-    public Pays getPays(Long id) {
-        return this.paysJpaRepository.findOptionalById(id).map(ModelEntity::toDomain).orElse(null);
+    public Optional<Pays> get(Long id) {
+        return this.paysJpaRepository.findById(id).map(ModelEntity::toDomain);
     }
 
     @Override
-    public Pays getPaysByAbreviation(String abreviation) {
-        return this.paysJpaRepository.findOptionalByAbreviation(abreviation).map(ModelEntity::toDomain).orElse(null);
+    public Pays getByAbreviation(String abreviation) {
+        return this.paysJpaRepository.findByAbreviation(abreviation).map(ModelEntity::toDomain).orElse(null);
     }
 
     @Override
-    public SearchResult<Pays> searchPays(SearchRequest searchRequest) {
+    public SearchResult<Pays> search(SearchRequest searchRequest) {
         Page<PaysEntity> page = this.paysJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
-    public Pays createPays(Pays pays) {
+    public Pays create(Pays pays) {
         return this.paysJpaRepository.save(new PaysEntity(pays)).toDomain();
     }
 
     @Override
-    public Pays modifyPays(Pays pays) {
+    public Pays modify(Pays pays) {
         return this.paysJpaRepository.save(new PaysEntity(pays)).toDomain();
     }
 
     @Override
-    public void deletePays(Long id) {
+    public void delete(Long id) {
         this.paysJpaRepository.deleteById(id);
     }
 
     @Override
-    public boolean existPaysByNom(String nom) {
+    public boolean existByNom(String nom) {
         return this.paysJpaRepository.existsByNom(nom);
     }
 
     @Override
-    public boolean existPaysByAbreviation(String abreviation) {
+    public boolean existByAbreviation(String abreviation) {
         return this.paysJpaRepository.existsByAbreviation(abreviation);
     }
 }

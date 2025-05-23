@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="svenglauser" id="machine-piece-create-table">
+        <createTable tableName="MACHINE_PIECE">
+            <column name="MACHINE_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PIECE_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="MACHINE_ID"
+                                 baseTableName="MACHINE_PIECE"
+                                 constraintName="FK_MACHINE_PIECE_MACHINE_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="MACHINE"/>
+
+        <addForeignKeyConstraint baseColumnNames="PIECE_ID"
+                                 baseTableName="MACHINE_PIECE"
+                                 constraintName="FK_MACHINE_PIECE_PIECE_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="PIECE"/>
+    </changeSet>
+</databaseChangeLog>

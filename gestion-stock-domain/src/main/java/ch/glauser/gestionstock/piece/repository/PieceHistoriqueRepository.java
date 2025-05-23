@@ -4,6 +4,8 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
 
+import java.util.Optional;
+
 /**
  * Repository de gestion des mouvements de pièces
  */
@@ -14,7 +16,7 @@ public interface PieceHistoriqueRepository {
      * @param id Id à récupérer
      * @return L'historique du mouvement
      */
-    PieceHistorique getPieceHistorique(Long id);
+    Optional<PieceHistorique> get(Long id);
 
     /**
      * Récupère les mouvements de pièce
@@ -22,14 +24,14 @@ public interface PieceHistoriqueRepository {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de mouvements de pièce
      */
-    SearchResult<PieceHistorique> searchPieceHistorique(SearchRequest searchRequest);
+    SearchResult<PieceHistorique> search(SearchRequest searchRequest);
 
     /**
      * Créer un mouvement de pièce
      *
      * @param pieceHistorique Mouvement à créer
      */
-    void createPieceHistorique(PieceHistorique pieceHistorique);
+    void create(PieceHistorique pieceHistorique);
 
     /**
      * Supprime tout l'historique d'une pièce

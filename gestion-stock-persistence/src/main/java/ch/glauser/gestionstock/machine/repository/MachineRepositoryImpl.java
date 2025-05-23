@@ -9,6 +9,8 @@ import ch.glauser.gestionstock.machine.model.Machine;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Implémentation du repository de gestion des machines
  */
@@ -22,43 +24,43 @@ public class MachineRepositoryImpl implements MachineRepository {
     }
 
     @Override
-    public Machine getMachine(Long id) {
-        return this.machineJpaRepository.findOptionalById(id).map(ModelEntity::toDomain).orElse(null);
+    public Optional<Machine> get(Long id) {
+        return this.machineJpaRepository.findById(id).map(ModelEntity::toDomain);
     }
 
     @Override
-    public SearchResult<Machine> searchMachine(SearchRequest searchRequest) {
+    public SearchResult<Machine> search(SearchRequest searchRequest) {
         Page<MachineEntity> page = this.machineJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
-    public Machine createMachine(Machine machine) {
+    public Machine create(Machine machine) {
         return this.machineJpaRepository.save(new MachineEntity(machine)).toDomain();
     }
 
     @Override
-    public Machine modifyMachine(Machine machine) {
+    public Machine modify(Machine machine) {
         return this.machineJpaRepository.save(new MachineEntity(machine)).toDomain();
     }
 
     @Override
-    public void deleteMachine(Long id) {
+    public void delete(Long id) {
         this.machineJpaRepository.deleteById(id);
     }
 
     @Override
-    public boolean existMachineByIdContact(Long id) {
-        return this.machineJpaRepository.existsByIdContact(id);
+    public boolean existByIdProprietaire(Long id) {
+        return this.machineJpaRepository.existsByIdProprietaire(id);
     }
 
     @Override
-    public boolean existMachineByIdPiece(Long id) {
+    public boolean existByIdPiece(Long id) {
         return this.machineJpaRepository.existsByIdPiece(id);
     }
 
     @Override
-    public boolean existMachineByNomAndIdContact(String nom, Long idContact) {
-        return this.machineJpaRepository.existsByNomAndIdContact(nom, idContact);
+    public boolean existByNomAndIdProprietaire(String nom, Long idProprietaire) {
+        return this.machineJpaRepository.existsByNomAndIdProprietaire(nom, idProprietaire);
     }
 }

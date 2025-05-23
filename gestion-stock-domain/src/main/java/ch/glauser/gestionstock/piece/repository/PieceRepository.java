@@ -4,6 +4,8 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.Piece;
 
+import java.util.Optional;
+
 /**
  * Repository de gestion des pièces
  */
@@ -14,7 +16,7 @@ public interface PieceRepository {
      * @param id Id de la pièce à récupérer
      * @return La pièce ou null
      */
-    Piece getPiece(Long id);
+    Optional<Piece> get(Long id);
 
     /**
      * Récupère les pièces
@@ -22,7 +24,7 @@ public interface PieceRepository {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pièces paginée
      */
-    SearchResult<Piece> searchPiece(SearchRequest searchRequest);
+    SearchResult<Piece> search(SearchRequest searchRequest);
 
     /**
      * Récupère les pièces pour l'autocomplétion
@@ -30,7 +32,7 @@ public interface PieceRepository {
      * @param searchValue Valeur de recherche
      * @return Une liste de pièces paginée
      */
-    SearchResult<Piece> autocompletePiece(String searchValue);
+    SearchResult<Piece> autocomplete(String searchValue);
 
     /**
      * Crée une pièce
@@ -38,7 +40,7 @@ public interface PieceRepository {
      * @param piece Pièce à créer
      * @return La pièce créée
      */
-    Piece createPiece(Piece piece);
+    Piece create(Piece piece);
 
     /**
      * Modifie une pièce
@@ -46,14 +48,14 @@ public interface PieceRepository {
      * @param piece Pièce à modifier avec les nouvelles valeurs
      * @return La pièce modifiée
      */
-    Piece modifyPiece(Piece piece);
+    Piece modify(Piece piece);
 
     /**
      * Supprime une pièce
      *
      * @param id Id de la pièce à supprimer
      */
-    void deletePiece(Long id);
+    void delete(Long id);
 
     /**
      * Vérifie s'il existe une pièce avec cette catégorie
@@ -61,7 +63,7 @@ public interface PieceRepository {
      * @param id Id de la catégorie
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
-    boolean existPieceByIdCategorie(Long id);
+    boolean existByIdCategorie(Long id);
 
     /**
      * Vérifie s'il existe une pièce avec ce fournisseur
@@ -69,7 +71,7 @@ public interface PieceRepository {
      * @param id Id du fournisseur
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
-    boolean existPieceByIdFournisseur(Long id);
+    boolean existByIdFournisseur(Long id);
 
     /**
      * Vérifie s'il existe une pièce avec ce numéro d'inventaire
@@ -77,5 +79,5 @@ public interface PieceRepository {
      * @param numeroInventaire Numéro d'inventaire de la catégorie
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
-    boolean existPieceByNumeroInventaire(String numeroInventaire);
+    boolean existByNumeroInventaire(String numeroInventaire);
 }

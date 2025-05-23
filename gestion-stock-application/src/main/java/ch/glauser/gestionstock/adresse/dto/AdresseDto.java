@@ -6,6 +6,7 @@ import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
@@ -36,8 +37,8 @@ public class AdresseDto {
      */
     public Adresse toDomain() {
         Adresse adresse = new Adresse();
-        adresse.setRue(this.rue);
-        adresse.setNumero(this.numero);
+        adresse.setRue(Optional.ofNullable(this.rue).map(StringUtils::trimToNull).orElse(null));
+        adresse.setNumero(Optional.ofNullable(this.numero).map(StringUtils::trimToNull).orElse(null));
         adresse.setLocalite(Optional.ofNullable(this.localite).map(ModelDto::toDomain).orElse(null));
         return adresse;
     }

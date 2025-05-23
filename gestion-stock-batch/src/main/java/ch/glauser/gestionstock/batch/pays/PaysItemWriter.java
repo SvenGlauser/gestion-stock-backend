@@ -15,6 +15,6 @@ public class PaysItemWriter implements ItemWriter<Pays> {
 
     @Override
     public void write(Chunk<? extends Pays> chunk) {
-        chunk.forEach(paysService::createPays);
+        chunk.forEach(paysService::create);
     }
 }

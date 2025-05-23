@@ -17,27 +17,27 @@ public class PaysController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<PaysDto> get(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(this.paysApplicationService.getPays(id));
+        return ResponseEntity.ok(this.paysApplicationService.get(id));
     }
 
     @PostMapping
     public ResponseEntity<PaysDto> create(@RequestBody PaysDto pays) {
-        return ResponseEntity.ok(this.paysApplicationService.createPays(pays));
+        return ResponseEntity.ok(this.paysApplicationService.create(pays));
     }
 
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<PaysDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.paysApplicationService.searchPays(searchRequest));
+        return ResponseEntity.ok(this.paysApplicationService.search(searchRequest));
     }
 
     @PutMapping
     public ResponseEntity<PaysDto> modify(@RequestBody PaysDto pays) {
-        return ResponseEntity.ok(this.paysApplicationService.modifyPays(pays));
+        return ResponseEntity.ok(this.paysApplicationService.modify(pays));
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
-        this.paysApplicationService.deletePays(id);
+        this.paysApplicationService.delete(id);
 
         return ResponseEntity.ok().build();
     }

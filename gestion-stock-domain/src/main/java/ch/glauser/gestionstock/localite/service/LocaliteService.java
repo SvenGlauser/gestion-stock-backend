@@ -14,7 +14,7 @@ public interface LocaliteService {
      * @param id Id de la localité à récupérer
      * @return La localité ou null
      */
-    Localite getLocalite(Long id);
+    Localite get(Long id);
 
     /**
      * Récupère les localités
@@ -22,7 +22,7 @@ public interface LocaliteService {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de localité paginée
      */
-    SearchResult<Localite> searchLocalite(SearchRequest searchRequest);
+    SearchResult<Localite> search(SearchRequest searchRequest);
 
     /**
      * Crée une localité
@@ -30,7 +30,7 @@ public interface LocaliteService {
      * @param localite Localité à créer
      * @return La localité créée
      */
-    Localite createLocalite(Localite localite);
+    Localite create(Localite localite);
 
     /**
      * Modifie une localité
@@ -38,12 +38,12 @@ public interface LocaliteService {
      * @param localite Localité à modifier avec les nouvelles valeurs
      * @return La localité modifiée
      */
-    Localite modifyLocalite(Localite localite);
+    Localite modify(Localite localite);
 
     /**
      * Supprime une localité
      *
      * @param id Id de la localité à supprimer
      */
-    void deleteLocalite(Long id);
+    void delete(Long id);
 }

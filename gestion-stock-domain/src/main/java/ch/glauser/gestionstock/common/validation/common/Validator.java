@@ -26,10 +26,16 @@ public abstract class Validator {
             return;
         }
 
-        Arrays.stream(object.getClass().getDeclaredFields())
-               .filter(field -> !Modifier.isStatic(field.getModifiers()))
-               .filter(field -> field.isAnnotationPresent(this.getAnnotationClass()))
-               .forEach(field -> this.validate(object, field));
+        Class<?> classToValidate = object.getClass();
+
+        while (Objects.nonNull(classToValidate) && !Object.class.equals(classToValidate)) {
+            Arrays.stream(classToValidate.getDeclaredFields())
+                    .filter(field -> !Modifier.isStatic(field.getModifiers()))
+                    .filter(field -> field.isAnnotationPresent(this.getAnnotationClass()))
+                    .forEach(field -> this.validate(object, field));
+
+            classToValidate = classToValidate.getSuperclass();
+        }
     }
 
     /**

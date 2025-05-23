@@ -18,20 +18,12 @@ import java.util.Optional;
 @Repository
 public interface PaysJpaRepository extends JpaRepository<PaysEntity, Long>, JpaSpecificationExecutor<PaysEntity> {
     /**
-     * Récupère un pays par id
-     *
-     * @param id Id du pays
-     * @return Un {@link Optional} de {@link PaysEntity}
-     */
-    Optional<PaysEntity> findOptionalById(Long id);
-
-    /**
      * Récupère un pays par abréviation
      *
      * @param abreviation Abréviation du pays
      * @return Un {@link Optional} de {@link PaysEntity}
      */
-    Optional<PaysEntity> findOptionalByAbreviation(String abreviation);
+    Optional<PaysEntity> findByAbreviation(String abreviation);
 
     /**
      * Vérifie s'il existe un pays avec ce nom

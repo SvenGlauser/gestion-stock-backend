@@ -5,9 +5,11 @@ import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.contact.controller.ContactController;
-import ch.glauser.gestionstock.contact.dto.ContactDto;
-import ch.glauser.gestionstock.contact.model.Titre;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
+import ch.glauser.gestionstock.identite.controller.PersonnePhysiqueController;
+import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
+import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = GestionStockApplication.class)
@@ -28,14 +31,14 @@ class MachineControllerTest {
     MachineController machineController;
 
     @Autowired
-    ContactController contactController;
+    PersonnePhysiqueController personnePhysiqueController;
 
     @Test
     void get() {
         MachineDto machine = new MachineDto();
         machine.setNom("Machine");
         machine.setDescription("Machine - Description");
-        machine.setContact(this.getContact());
+        machine.setProprietaire(this.getPersonnePhysique());
 
         machine = machineController.create(machine).getBody();
 
@@ -49,13 +52,13 @@ class MachineControllerTest {
         assertThat(machineDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Machine - Description");
-        assertThat(machineDto.getContact())
+        assertThat(machineDto.getProprietaire())
                 .isNotNull();
     }
 
     @Test
     void create() {
-        ContactDto contact = this.getContact();
+        PersonnePhysiqueDto contact = this.getPersonnePhysique();
 
         // Test validation bien mise en place
         MachineDto machine = new MachineDto();
@@ -63,26 +66,26 @@ class MachineControllerTest {
 
         // Test cas OK
         machine.setNom("Machine");
-        machine.setContact(contact);
+        machine.setProprietaire(contact);
         assertDoesNotThrow(() -> machineController.create(machine));
 
         MachineDto machine2 = new MachineDto();
         machine2.setNom("Machine");
-        machine2.setContact(contact);
+        machine2.setProprietaire(contact);
 
         // Test unicité du nom
         TestUtils.testValidation(1, () -> machineController.create(machine2));
 
         MachineDto machine3 = new MachineDto();
         machine3.setNom("Machine");
-        machine3.setContact(this.getContact2());
+        machine3.setProprietaire(this.getPersonnePhysique2());
 
         // Test unicité du nom
         assertDoesNotThrow(() -> machineController.create(machine3));
 
         MachineDto machine4 = new MachineDto();
         machine4.setNom("Machine 2");
-        machine4.setContact(contact);
+        machine4.setProprietaire(contact);
 
         // Test unicité du nom
         assertDoesNotThrow(() -> machineController.create(machine4));
@@ -90,21 +93,21 @@ class MachineControllerTest {
 
     @Test
     void search() {
-        ContactDto contact = this.getContact();
+        PersonnePhysiqueDto contact = this.getPersonnePhysique();
 
         MachineDto machine = new MachineDto();
         machine.setNom("Machine");
-        machine.setContact(contact);
+        machine.setProprietaire(contact);
         assertDoesNotThrow(() -> machineController.create(machine));
 
         MachineDto machine2 = new MachineDto();
         machine2.setNom("Machine 2");
-        machine2.setContact(contact);
+        machine2.setProprietaire(contact);
         assertDoesNotThrow(() -> machineController.create(machine2));
 
         MachineDto machine3 = new MachineDto();
         machine3.setNom("Machine");
-        machine3.setContact(this.getContact2());
+        machine3.setProprietaire(this.getPersonnePhysique2());
         assertDoesNotThrow(() -> machineController.create(machine3));
 
         SearchRequest searchRequest = new SearchRequest();
@@ -118,7 +121,7 @@ class MachineControllerTest {
 
         Filter contactFilter = new Filter();
         contactFilter.setValue(contact.getId());
-        contactFilter.setField("contact.id");
+        contactFilter.setField("proprietaire.id");
         SearchRequest searchRequest1 = new SearchRequest();
         searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(contactFilter))));
         SearchResult<MachineDto> result1 = machineController.search(searchRequest1).getBody();
@@ -146,7 +149,7 @@ class MachineControllerTest {
         MachineDto machine = new MachineDto();
         machine.setNom("Machine");
         machine.setDescription("Machine - Description");
-        machine.setContact(this.getContact());
+        machine.setProprietaire(this.getPersonnePhysique());
 
         machine = machineController.create(machine).getBody();
 
@@ -160,7 +163,7 @@ class MachineControllerTest {
         assertThat(machineDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Machine - Description");
-        assertThat(machineDto.getContact())
+        assertThat(machineDto.getProprietaire())
                 .isNotNull();
 
         machine.setNom("Machine 2");
@@ -181,12 +184,12 @@ class MachineControllerTest {
 
     @Test
     void modifyAvecNomUnique() {
-        ContactDto contact1 = this.getContact();
-        ContactDto contact2 = this.getContact2();
+        PersonnePhysiqueDto contact1 = this.getPersonnePhysique();
+        PersonnePhysiqueDto contact2 = this.getPersonnePhysique2();
 
         MachineDto machine = new MachineDto();
         machine.setNom("Machine");
-        machine.setContact(contact1);
+        machine.setProprietaire(contact1);
 
         machine = machineController.create(machine).getBody();
 
@@ -194,14 +197,14 @@ class MachineControllerTest {
 
         MachineDto machine2 = new MachineDto();
         machine2.setNom("Machine");
-        machine2.setContact(contact2);
+        machine2.setProprietaire(contact2);
 
         machine2 = machineController.create(machine2).getBody();
 
         assertThat(machine2).isNotNull();
 
         MachineDto machine1SameName = machine;
-        machine1SameName.setContact(contact2);
+        machine1SameName.setProprietaire(contact2);
         TestUtils.testValidation(1, () -> machineController.modify(machine1SameName));
     }
 
@@ -209,7 +212,7 @@ class MachineControllerTest {
     void delete() {
         MachineDto machine = new MachineDto();
         machine.setNom("Machine");
-        machine.setContact(this.getContact());
+        machine.setProprietaire(this.getPersonnePhysique());
 
         machine = machineController.create(machine).getBody();
 
@@ -217,29 +220,30 @@ class MachineControllerTest {
 
         machineController.delete(machine.getId());
 
-        machine = machineController.get(machine.getId()).getBody();
-
-        assertThat(machine).isNull();
+        MachineDto finalMachine = machine;
+        assertThatThrownBy(() -> machineController.get(finalMachine.getId()))
+                .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        TestUtils.testValidation(1, () -> machineController.delete(1000L));
+        assertThatThrownBy(() -> machineController.delete(1000L))
+                .isInstanceOf(DeleteWithInexistingIdException.class);
     }
 
-    private ContactDto getContact() {
-        ContactDto contact = new ContactDto();
-        contact.setTitre(Titre.MONSIEUR.name());
-        contact.setNom("Nom");
-        contact.setPrenom("Prenom");
+    private PersonnePhysiqueDto getPersonnePhysique() {
+        PersonnePhysiqueDto personnePhysiqueDto = new PersonnePhysiqueDto();
+        personnePhysiqueDto.setTitre(Titre.MONSIEUR.name());
+        personnePhysiqueDto.setNom("Nom");
+        personnePhysiqueDto.setPrenom("Prenom");
 
-        return contactController.create(contact).getBody();
+        return personnePhysiqueController.create(personnePhysiqueDto).getBody();
     }
 
-    private ContactDto getContact2() {
-        ContactDto contact = new ContactDto();
-        contact.setTitre(Titre.MONSIEUR.name());
-        contact.setNom("Nom - 2");
-        contact.setPrenom("Prenom - 2");
+    private PersonnePhysiqueDto getPersonnePhysique2() {
+        PersonnePhysiqueDto personnePhysiqueDto = new PersonnePhysiqueDto();
+        personnePhysiqueDto.setTitre(Titre.MONSIEUR.name());
+        personnePhysiqueDto.setNom("Nom - 2");
+        personnePhysiqueDto.setPrenom("Prenom - 2");
 
-        return contactController.create(contact).getBody();
+        return personnePhysiqueController.create(personnePhysiqueDto).getBody();
     }
 }

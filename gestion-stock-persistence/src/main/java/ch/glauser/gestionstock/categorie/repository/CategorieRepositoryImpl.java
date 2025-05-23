@@ -9,6 +9,8 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Implémentation du repository de gestion des catégories
  */
@@ -22,33 +24,33 @@ public class CategorieRepositoryImpl implements CategorieRepository {
     }
 
     @Override
-    public Categorie getCategorie(Long id) {
-        return this.categorieJpaRepository.findOptionalById(id).map(ModelEntity::toDomain).orElse(null);
+    public Optional<Categorie> get(Long id) {
+        return this.categorieJpaRepository.findById(id).map(ModelEntity::toDomain);
     }
 
     @Override
-    public SearchResult<Categorie> searchCategorie(SearchRequest searchRequest) {
+    public SearchResult<Categorie> search(SearchRequest searchRequest) {
         Page<CategorieEntity> page = this.categorieJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
-    public Categorie createCategorie(Categorie categorie) {
+    public Categorie create(Categorie categorie) {
         return this.categorieJpaRepository.save(new CategorieEntity(categorie)).toDomain();
     }
 
     @Override
-    public Categorie modifyCategorie(Categorie categorie) {
+    public Categorie modify(Categorie categorie) {
         return this.categorieJpaRepository.save(new CategorieEntity(categorie)).toDomain();
     }
 
     @Override
-    public void deleteCategorie(Long id) {
+    public void delete(Long id) {
         this.categorieJpaRepository.deleteById(id);
     }
 
     @Override
-    public boolean existCategorieByNom(String nom) {
+    public boolean existByNom(String nom) {
         return this.categorieJpaRepository.existsByNom(nom);
     }
 }

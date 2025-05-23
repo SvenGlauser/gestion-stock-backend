@@ -28,7 +28,7 @@ public class LocaliteItemProcessor implements ItemProcessor<Object, Localite> {
     @Override
     public Localite process(@NonNull Object item) {
         if (Objects.isNull(this.suisse)) {
-            this.suisse = this.paysService.getPaysByAbreviation(ABREVIATION_SUISSE);
+            this.suisse = this.paysService.getByAbreviation(ABREVIATION_SUISSE);
 
             if (Objects.isNull(this.suisse)) {
                 throw new TechnicalException(ERROR_IMPORT_LOCALITE_PAYS_SUISSE_INTROUVABLE);

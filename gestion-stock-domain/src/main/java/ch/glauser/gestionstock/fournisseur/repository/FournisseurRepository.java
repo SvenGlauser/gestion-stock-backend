@@ -4,6 +4,8 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 
+import java.util.Optional;
+
 /**
  * Repository de gestion des fournisseurs
  */
@@ -14,7 +16,7 @@ public interface FournisseurRepository {
      * @param id Id du fournisseur à récupérer
      * @return La fournisseur ou null
      */
-    Fournisseur getFournisseur(Long id);
+    Optional<Fournisseur> get(Long id);
 
     /**
      * Récupère les fournisseurs
@@ -22,7 +24,7 @@ public interface FournisseurRepository {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de fournisseur paginée
      */
-    SearchResult<Fournisseur> searchFournisseur(SearchRequest searchRequest);
+    SearchResult<Fournisseur> search(SearchRequest searchRequest);
 
     /**
      * Crée un fournisseur
@@ -30,7 +32,7 @@ public interface FournisseurRepository {
      * @param fournisseur Fournisseur à créer
      * @return Le fournisseur créé
      */
-    Fournisseur createFournisseur(Fournisseur fournisseur);
+    Fournisseur create(Fournisseur fournisseur);
 
     /**
      * Modifie un fournisseur
@@ -38,14 +40,14 @@ public interface FournisseurRepository {
      * @param fournisseur Fournisseur à modifier avec les nouvelles valeurs
      * @return Le fournisseur modifié
      */
-    Fournisseur modifyFournisseur(Fournisseur fournisseur);
+    Fournisseur modify(Fournisseur fournisseur);
 
     /**
      * Supprime un fournisseur
      *
      * @param id Id du fournisseur à supprimer
      */
-    void deleteFournisseur(Long id);
+    void delete(Long id);
 
     /**
      * Vérifie s'il existe un fournisseur avec cette localité
@@ -53,7 +55,7 @@ public interface FournisseurRepository {
      * @param id Id de la localité
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    boolean existFournisseurByIdLocalite(Long id);
+    boolean existByIdLocalite(Long id);
 
     /**
      * Vérifie s'il existe un fournisseur avec ce nom
@@ -61,5 +63,5 @@ public interface FournisseurRepository {
      * @param nom Nom du fournisseur
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
-    boolean existFournisseurByNom(String nom);
+    boolean existByNom(String nom);
 }

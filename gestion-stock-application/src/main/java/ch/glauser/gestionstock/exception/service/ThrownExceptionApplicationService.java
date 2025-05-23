@@ -13,7 +13,7 @@ public interface ThrownExceptionApplicationService {
      * @param searchRequest Requête
      * @return Une liste d'exception paginée
      */
-    SearchResult<ThrownExceptionDto> searchExceptions(SearchRequest searchRequest);
+    SearchResult<ThrownExceptionDto> search(SearchRequest searchRequest);
 
     /**
      * Modifie le status d'une exception

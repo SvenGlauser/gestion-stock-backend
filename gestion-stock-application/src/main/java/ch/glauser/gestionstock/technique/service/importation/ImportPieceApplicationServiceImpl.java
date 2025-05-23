@@ -113,7 +113,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
         }
 
         categorie.setActif(false);
-        this.categorieService.modifyCategorie(categorie);
+        this.categorieService.modify(categorie);
     }
 
     private void createPiece(CSVRecord csvRecord, Fournisseur fournisseurParDefaut, Categorie categorie) {
@@ -151,11 +151,11 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
             throw new ValidationException(new Error("La quantité n'est pas un nombre valide", PieceConstantes.FIELD_QUANTITE, Piece.class));
         }
 
-        piece = this.pieceService.createPiece(piece);
+        piece = this.pieceService.create(piece);
 
         if (quantiteAnneeLong != 0) {
             piece.setQuantite(piece.getQuantite()-quantiteAnneeLong);
-            this.pieceService.modifyPiece(piece, PieceHistoriqueSource.IMPORTATION);
+            this.pieceService.modify(piece, PieceHistoriqueSource.IMPORTATION);
         }
     }
 
@@ -165,7 +165,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
         categorie.setDescription("Catégorie regroupant toutes les pièces importées depuis un fichier CSV");
         categorie.setActif(true);
 
-        categorie = this.categorieService.createCategorie(categorie);
+        categorie = this.categorieService.create(categorie);
         return categorie;
     }
 
@@ -180,7 +180,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
             } else {
                 fournisseur = new Fournisseur();
                 fournisseur.setNom(fournisseurNom);
-                fournisseur = this.fournisseurService.createFournisseur(fournisseur);
+                fournisseur = this.fournisseurService.create(fournisseur);
             }
         } else {
             fournisseur = fournisseurParDefaut;
@@ -198,7 +198,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
         } else {
             fournisseurParDefaut = new Fournisseur();
             fournisseurParDefaut.setNom("Inconnu");
-            fournisseurParDefaut = this.fournisseurService.createFournisseur(fournisseurParDefaut);
+            fournisseurParDefaut = this.fournisseurService.create(fournisseurParDefaut);
         }
         return fournisseurParDefaut;
     }
@@ -211,7 +211,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
 
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.setCombinators(List.of(FilterCombinator.and(List.of(nameFilter))));
-        return this.fournisseurService.searchFournisseur(searchRequest);
+        return this.fournisseurService.search(searchRequest);
     }
 
     private static String getString(CSVRecord csvRecord, String idColumn) {

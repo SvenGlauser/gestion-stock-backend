@@ -28,62 +28,62 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     private final FournisseurService fournisseurService;
 
     @Override
-    public FournisseurDto getFournisseur(Long id) {
+    public FournisseurDto get(Long id) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        Fournisseur fournisseur = this.fournisseurService.getFournisseur(id);
+        Fournisseur fournisseur = this.fournisseurService.get(id);
 
         return Optional.ofNullable(fournisseur).map(FournisseurDto::new).orElse(null);
     }
 
     @Override
-    public SearchResult<FournisseurDto> searchFournisseur(SearchRequest searchRequest) {
+    public SearchResult<FournisseurDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Fournisseur> searchResult = this.fournisseurService.searchFournisseur(searchRequest);
+        SearchResult<Fournisseur> searchResult = this.fournisseurService.search(searchRequest);
 
         return SearchResultUtils.transformDto(searchResult, FournisseurDto::new);
     }
 
     @Override
     @Transactional
-    public FournisseurDto createFournisseur(FournisseurDto fournisseur) {
+    public FournisseurDto create(FournisseurDto fournisseur) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
                 .execute();
 
         Fournisseur newFournisseur = fournisseur.toDomain();
 
-        Fournisseur savedFournisseur = this.fournisseurService.createFournisseur(newFournisseur);
+        Fournisseur savedFournisseur = this.fournisseurService.create(newFournisseur);
 
         return Optional.ofNullable(savedFournisseur).map(FournisseurDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public FournisseurDto modifyFournisseur(FournisseurDto fournisseur) {
+    public FournisseurDto modify(FournisseurDto fournisseur) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
                 .execute();
 
         Fournisseur fournisseurToUpdate = fournisseur.toDomain();
 
-        Fournisseur savedFournisseur = this.fournisseurService.modifyFournisseur(fournisseurToUpdate);
+        Fournisseur savedFournisseur = this.fournisseurService.modify(fournisseurToUpdate);
 
         return Optional.ofNullable(savedFournisseur).map(FournisseurDto::new).orElse(null);
     }
 
     @Override
     @Transactional
-    public void deleteFournisseur(Long id) {
+    public void delete(Long id) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
-        this.fournisseurService.deleteFournisseur(id);
+        this.fournisseurService.delete(id);
     }
 }
