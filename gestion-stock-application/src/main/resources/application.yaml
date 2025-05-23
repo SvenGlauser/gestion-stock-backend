@@ -23,7 +23,7 @@ spring:
 
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog-master.xml
+    change-log: 'classpath:db/changelog-master.xml'
     default-schema: public
     drop-first: false
     clear-checksums: false

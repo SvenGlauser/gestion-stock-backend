@@ -11,12 +11,8 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_LOCALITE"/>
             </column>
 
-            <column name="CREATION_DATE" type="TIMESTAMP WITHOUT TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATION_USER" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="CREATION_DATE" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="CREATION_USER" type="VARCHAR(255)"/>
             <column name="MODIFICATION_DATE" type="TIMESTAMP WITHOUT TIME ZONE"/>
             <column name="MODIFICATION_USER" type="VARCHAR(255)"/>
 

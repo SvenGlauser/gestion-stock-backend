@@ -31,15 +31,11 @@ public abstract class ModelEntity<T extends Model> {
     private Long id;
 
     @CreatedBy
-    @Column(name = "CREATION_USER",
-            nullable = false,
-            updatable = false)
+    @Column(name = "CREATION_USER", updatable = false)
     private String creationUser;
 
     @CreatedDate
-    @Column(name = "CREATION_DATE",
-            nullable = false,
-            updatable = false)
+    @Column(name = "CREATION_DATE", updatable = false)
     private LocalDateTime creationDate;
 
     @LastModifiedBy
