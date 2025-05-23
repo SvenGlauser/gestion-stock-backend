@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="svenglauser" id="personne-physique-create-table">
+        <createTable tableName="PERSONNE_PHYSIQUE">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PERSONNE_PHYSIQUE"/>
+            </column>
+            <column name="NOM" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRENOM" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TITRE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="ID"
+                                 baseTableName="PERSONNE_PHYSIQUE"
+                                 constraintName="FK_PERSONNE_PHYSIQUE_IDENTITE_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="IDENTITE"/>
+    </changeSet>
+</databaseChangeLog>

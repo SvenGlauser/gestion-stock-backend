@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="svenglauser" id="piece-create-table">
+        <createTable tableName="PIECE">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PIECE"/>
+            </column>
+
+            <column name="CREATION_DATE" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATION_USER" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MODIFICATION_DATE" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="MODIFICATION_USER" type="VARCHAR(255)"/>
+
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="NOM" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NUMERO_INVENTAIRE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PRIX" type="FLOAT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="QUANITE" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATEGORIE_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FOURNISSEUR_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="CATEGORIE_ID"
+                                 baseTableName="PIECE"
+                                 constraintName="FK_PIECE_CATEGORIE_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="CATEGORIE"/>
+
+        <addForeignKeyConstraint baseColumnNames="FOURNISSEUR_ID"
+                                 baseTableName="PIECE"
+                                 constraintName="FK_PIECE_FOURNISSEUR_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="FOURNISSEUR"/>
+
+        <addUniqueConstraint columnNames="NUMERO_INVENTAIRE" constraintName="UK_PIECE_NUMERO_INVENTAIRE" tableName="PIECE"/>
+    </changeSet>
+</databaseChangeLog>

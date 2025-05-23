@@ -32,11 +32,13 @@ public abstract class ModelEntity<T extends Model> {
 
     @CreatedBy
     @Column(name = "CREATION_USER",
+            nullable = false,
             updatable = false)
     private String creationUser;
 
     @CreatedDate
     @Column(name = "CREATION_DATE",
+            nullable = false,
             updatable = false)
     private LocalDateTime creationDate;
 

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,8 +37,8 @@ public class MachineDto extends ModelDto<Machine> {
     @Override
     protected Machine toDomainChild() {
         Machine machine = new Machine();
-        machine.setNom(this.nom);
-        machine.setDescription(this.description);
+        machine.setNom(Optional.ofNullable(this.nom).map(StringUtils::trimToNull).orElse(null));
+        machine.setDescription(Optional.ofNullable(this.description).map(StringUtils::trimToNull).orElse(null));
         machine.setProprietaire(Optional.ofNullable(proprietaire).map(ModelDto::toDomain).orElse(null));
         machine.setPieces(CollectionUtils.emptyIfNull(this.pieces).stream().map(ModelDto::toDomain).collect(Collectors.toCollection(LinkedList::new)));
         return machine;

@@ -5,8 +5,10 @@ import ch.glauser.gestionstock.exception.model.ThrownException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -30,9 +32,9 @@ public class ThrownExceptionDto extends ModelDto<ThrownException> {
     @Override
     protected ThrownException toDomainChild() {
         ThrownException thrownException = new ThrownException();
-        thrownException.setStacktrace(this.stacktrace);
-        thrownException.setClassName(this.className);
-        thrownException.setMessage(this.message);
+        thrownException.setStacktrace(Optional.ofNullable(this.stacktrace).map(StringUtils::trimToNull).orElse(null));
+        thrownException.setClassName(Optional.ofNullable(this.className).map(StringUtils::trimToNull).orElse(null));
+        thrownException.setMessage(Optional.ofNullable(this.message).map(StringUtils::trimToNull).orElse(null));
         thrownException.setTimestamp(this.timestamp);
         thrownException.setActif(this.actif);
         return thrownException;

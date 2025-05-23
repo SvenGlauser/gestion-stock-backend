@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="svenglauser" id="personne-morale-create-table">
+        <createTable tableName="PERSONNE_MORALE">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PERSONNE_MORALE"/>
+            </column>
+            <column name="RAISON_SOCIALE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="ID"
+                                 baseTableName="PERSONNE_MORALE"
+                                 constraintName="FK_PERSONNE_MORALE_IDENTITE_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="IDENTITE"/>
+    </changeSet>
+</databaseChangeLog>

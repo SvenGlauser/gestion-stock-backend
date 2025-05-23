@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
@@ -42,10 +43,10 @@ public abstract class IdentiteDto extends ModelDto<Identite> {
     @Override
     public Identite toDomain() {
         Identite identite = super.toDomain();
-        identite.setEmail(this.email);
-        identite.setTelephone(this.telephone);
+        identite.setEmail(Optional.ofNullable(this.email).map(StringUtils::trimToNull).orElse(null));
+        identite.setTelephone(Optional.ofNullable(this.telephone).map(StringUtils::trimToNull).orElse(null));
         identite.setAdresse(Optional.ofNullable(this.adresse).map(AdresseDto::toDomain).orElse(null));
-        identite.setRemarques(this.remarques);
+        identite.setRemarques(Optional.ofNullable(this.remarques).map(StringUtils::trimToNull).orElse(null));
         return identite;
     }
 }

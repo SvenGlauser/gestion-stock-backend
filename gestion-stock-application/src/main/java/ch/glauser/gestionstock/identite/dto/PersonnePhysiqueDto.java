@@ -5,6 +5,7 @@ import ch.glauser.gestionstock.identite.model.Titre;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
@@ -27,8 +28,8 @@ public class PersonnePhysiqueDto extends IdentiteDto {
     protected PersonnePhysique toDomainChild() {
         PersonnePhysique personnePhysique = new PersonnePhysique();
         personnePhysique.setTitre(Optional.ofNullable(titre).map(Titre::valueOf).orElse(null));
-        personnePhysique.setNom(this.nom);
-        personnePhysique.setPrenom(this.prenom);
+        personnePhysique.setNom(Optional.ofNullable(this.nom).map(StringUtils::trimToNull).orElse(null));
+        personnePhysique.setPrenom(Optional.ofNullable(this.prenom).map(StringUtils::trimToNull).orElse(null));
         return personnePhysique;
     }
 

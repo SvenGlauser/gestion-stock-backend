@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Table(
         name = "MACHINE",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"NOM", "PRORIETAIRE_ID"})})
+                @UniqueConstraint(columnNames = {"NOM", "PROPRIETAIRE_ID"})})
 public class MachineEntity extends ModelEntity<Machine> {
     @Column(name = "NOM", nullable = false)
     private String nom;
@@ -35,7 +35,7 @@ public class MachineEntity extends ModelEntity<Machine> {
     private String description;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "PRORIETAIRE_ID", nullable = false)
+    @JoinColumn(name = "PROPRIETAIRE_ID", nullable = false)
     private IdentiteEntity proprietaire;
 
     @ManyToMany

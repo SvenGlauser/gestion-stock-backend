@@ -4,6 +4,9 @@ import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -20,7 +23,7 @@ public class PersonneMoraleDto extends IdentiteDto {
     @Override
     protected PersonneMorale toDomainChild() {
         PersonneMorale personneMorale = new PersonneMorale();
-        personneMorale.setRaisonSociale(this.raisonSociale);
+        personneMorale.setRaisonSociale(Optional.ofNullable(this.raisonSociale).map(StringUtils::trimToNull).orElse(null));
         return personneMorale;
     }
 

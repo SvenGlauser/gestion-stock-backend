@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.batch;
+package ch.glauser.gestionstock.batch.configuration;
 
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.pays.model.Pays;
@@ -21,10 +21,12 @@ public class BatchConfiguration {
     @Bean("jobPays")
     public Job jobPays(JobRepository jobRepository,
                        @Qualifier("stepPays") Step stepPays,
-                       @Qualifier("stepLocaliteCH") Step stepLocaliteCH) {
+                       @Qualifier("stepLocaliteCH") Step stepLocaliteCH,
+                       WithSecurityJobExecutionListener jobExecutionListener) {
         return new JobBuilder("job-pays", jobRepository)
                 .start(stepPays)
                 .next(stepLocaliteCH)
+                .listener(jobExecutionListener)
                 .build();
     }
 
