@@ -40,6 +40,11 @@ public class PieceRepositoryImpl implements PieceRepository {
     }
 
     @Override
+    public List<Piece> findAll() {
+        return this.pieceJpaRepository.findAll().stream().map(ModelEntity::toDomain).toList();
+    }
+
+    @Override
     public SearchResult<Piece> autocomplete(String searchValue) {
         Specification<PieceEntity> specification = (root, query, criteriaBuilder) ->
                 criteriaBuilder.like(

@@ -44,4 +44,14 @@ public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApp
 
         return SearchResultUtils.transformDto(searchResult, PieceHistoriqueDto::new);
     }
+
+    @Override
+    @Transactional
+    public void delete(Long idPieceHistorique) {
+        Validation.of(PieceHistoriqueApplicationServiceImpl.class)
+                .validateNotNull(idPieceHistorique, PieceHistoriqueConstantes.FIELD_ID)
+                .execute();
+
+        this.pieceHistoriqueService.delete(idPieceHistorique);
+    }
 }

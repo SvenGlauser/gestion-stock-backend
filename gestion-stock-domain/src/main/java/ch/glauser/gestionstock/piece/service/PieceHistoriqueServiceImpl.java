@@ -2,13 +2,18 @@ package ch.glauser.gestionstock.piece.service;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import ch.glauser.gestionstock.common.validation.common.Error;
 import ch.glauser.gestionstock.common.validation.common.Validation;
+import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.common.validation.exception.ValidationException;
+import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.piece.model.*;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
+import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Implémentation du service de gestion des mouvements de pièces
@@ -17,6 +22,7 @@ import java.time.LocalDate;
 public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
 
     private final PieceHistoriqueRepository pieceHistoriqueRepository;
+    private final PieceRepository pieceRepository;
 
     @Override
     public PieceHistorique get(Long id) {
@@ -49,7 +55,7 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
         pieceHistorique.setDifference(newPiece.getQuantite());
         pieceHistorique.setType(PieceHistoriqueType.ENTREE);
         pieceHistorique.setSource(PieceHistoriqueSource.CREATION);
-        pieceHistorique.setDate(LocalDate.now());
+        pieceHistorique.setHeure(LocalDateTime.now());
 
         Validation validation = pieceHistorique.validateCreate();
 
@@ -82,13 +88,45 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
         pieceHistorique.setPiece(newPiece);
         pieceHistorique.setDifference(Math.abs(deltaQuantite));
         pieceHistorique.setSource(source);
-        pieceHistorique.setDate(LocalDate.now());
+        pieceHistorique.setHeure(LocalDateTime.now());
 
         Validation validation = pieceHistorique.validateCreate();
 
         validation.execute();
 
         this.pieceHistoriqueRepository.create(pieceHistorique);
+    }
+
+    @Override
+    public void delete(Long idPieceHistorique) {
+        Validation.of(PieceHistoriqueServiceImpl.class)
+                .validateNotNull(idPieceHistorique, PieceHistoriqueConstantes.FIELD_ID)
+                .execute();
+
+        PieceHistorique pieceHistorique = this.pieceHistoriqueRepository
+                .get(idPieceHistorique)
+                .orElseThrow(() -> new DeleteWithInexistingIdException(idPieceHistorique, PieceHistorique.class));
+
+        PieceHistorique lastPieceHistorique = this.pieceHistoriqueRepository.getLastHistoriqueFromPieceId(pieceHistorique.getPiece().getId());
+
+        if (lastPieceHistorique.getId().equals(pieceHistorique.getId())) {
+            Piece piece = this.pieceRepository
+                    .get(pieceHistorique.getPiece().getId())
+                    .orElseThrow(() -> new TechnicalException("Impossible de récupérer la pièce lié"));
+            if (pieceHistorique.getType() == PieceHistoriqueType.ENTREE) {
+                piece.setQuantite(piece.getQuantite() - pieceHistorique.getDifference());
+            } else if (pieceHistorique.getType() == PieceHistoriqueType.SORTIE) {
+                piece.setQuantite(piece.getQuantite() + pieceHistorique.getDifference());
+            }
+
+            this.pieceRepository.modify(piece);
+            this.pieceHistoriqueRepository.delete(pieceHistorique.getId());
+        } else {
+            throw new ValidationException(new Error(
+                    PieceHistoriqueConstantes.ERROR_IMPOSSIBLE_SUPPRIMER_HISTORIQUE_PIECE_NON_DERNIER,
+                    PieceHistoriqueConstantes.FIELD_PIECE_HISTORIQUE,
+                    PieceHistorique.class));
+        }
     }
 
     @Override

@@ -4,9 +4,13 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.piece.service.PieceApplicationService;
+import ch.glauser.gestionstock.piece.service.PieceStatistiqueApplicationService;
+import ch.glauser.gestionstock.piece.statistique.PieceStatistique;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/piece", produces="application/json")
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class PieceController {
 
     private final PieceApplicationService pieceApplicationService;
+    private final PieceStatistiqueApplicationService pieceStatistiqueApplicationService;
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<PieceDto> get(@PathVariable(name = "id") Long id) {
@@ -28,6 +33,11 @@ public class PieceController {
     @GetMapping(path = "/autocomplete")
     public ResponseEntity<SearchResult<PieceDto>> autocomplete(@RequestParam(name = "searchValue") String searchValue) {
         return ResponseEntity.ok(this.pieceApplicationService.autocomplete(searchValue));
+    }
+
+    @GetMapping(path = "/statistiques")
+    public ResponseEntity<List<PieceStatistique>> statistiques() {
+        return ResponseEntity.ok(this.pieceStatistiqueApplicationService.getStatistiques());
     }
 
     @PostMapping(path = "/search")

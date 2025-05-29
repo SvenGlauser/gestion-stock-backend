@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,14 +28,29 @@ public class PieceHistoriqueRepositoryImpl implements PieceHistoriqueRepository 
     }
 
     @Override
+    public PieceHistorique getLastHistoriqueFromPieceId(Long idPiece) {
+        return this.pieceHistoriqueJpaRepository.getLastHistoriqueFromPieceId(idPiece).map(ModelEntity::toDomain).orElse(null);
+    }
+
+    @Override
     public SearchResult<PieceHistorique> search(SearchRequest searchRequest) {
         Page<PieceHistoriqueEntity> page = this.pieceHistoriqueJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
     @Override
+    public List<PieceHistorique> findAllByIdPiece(Long idPiece) {
+        return this.pieceHistoriqueJpaRepository.findAllByIdPiece(idPiece).stream().map(ModelEntity::toDomain).toList();
+    }
+
+    @Override
     public void create(PieceHistorique pieceHistorique) {
         this.pieceHistoriqueJpaRepository.save(new PieceHistoriqueEntity(pieceHistorique));
+    }
+
+    @Override
+    public void delete(Long id) {
+        this.pieceHistoriqueJpaRepository.deleteById(id);
     }
 
     @Override

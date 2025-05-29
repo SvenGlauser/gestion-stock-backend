@@ -23,4 +23,11 @@ public interface PieceHistoriqueApplicationService {
      * @return Une liste de mouvements de pièce
      */
     SearchResult<PieceHistoriqueDto> search(SearchRequest searchRequest);
+
+    /**
+     * Supprime une entrée de l'historique
+     *
+     * @param idPieceHistorique Id de l'historique à supprimer
+     */
+    void delete(Long idPieceHistorique);
 }

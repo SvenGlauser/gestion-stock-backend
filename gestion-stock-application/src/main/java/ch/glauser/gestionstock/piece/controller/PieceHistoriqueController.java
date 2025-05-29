@@ -24,4 +24,11 @@ public class PieceHistoriqueController {
     public ResponseEntity<SearchResult<PieceHistoriqueDto>> search(@RequestBody SearchRequest searchRequest) {
         return ResponseEntity.ok(this.pieceHistoriqueApplicationService.search(searchRequest));
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
+        this.pieceHistoriqueApplicationService.delete(id);
+
+        return ResponseEntity.ok().build();
+    }
 }

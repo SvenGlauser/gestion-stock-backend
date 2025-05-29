@@ -20,5 +20,5 @@ public final class PieceHistoriqueConstantes {
 
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
 
-    public static final String ERROR_IMPOSSIBLE_CREER_PIECE_NON_MANUEL = "Impossible un mouvement de pièce non manuel";
+    public static final String ERROR_IMPOSSIBLE_SUPPRIMER_HISTORIQUE_PIECE_NON_DERNIER = "Impossible de supprimer un autre élément d'historique que le dernier";
 }

@@ -7,7 +7,7 @@ import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Model représentant le mouvement d'une pièce dans l'inventaire
@@ -22,7 +22,7 @@ public class PieceHistorique extends Model {
     private Long difference;
 
     @NotNull
-    private LocalDate date;
+    private LocalDateTime heure;
 
     @NotNull
     private PieceHistoriqueType type;
