@@ -1,5 +1,6 @@
 package ch.glauser.gestionstock.piece.service;
 
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
@@ -22,10 +23,10 @@ public class PieceStatistiqueServiceImpl implements PieceStatistiqueService {
     private final PieceHistoriqueRepository pieceHistoriqueRepository;
 
     @Override
-    public List<PieceStatistique> getStatistiques() {
+    public List<PieceStatistique> getStatistiques(List<FilterCombinator> filters) {
         final Map<LocalDate, PieceStatistique> mapStatistiques = new HashMap<>();
 
-        final List<Piece> pieces = this.pieceRepository.findAll();
+        final List<Piece> pieces = this.pieceRepository.searchAll(filters);
 
         for (Piece piece : pieces) {
             final List<PieceHistorique> piecesHistoriques = this.pieceHistoriqueRepository.findAllByIdPiece(piece.getId());
@@ -82,7 +83,13 @@ public class PieceStatistiqueServiceImpl implements PieceStatistiqueService {
                 .map(PieceStatistique::getDate)
                 .orElse(null);
 
-        while (Objects.nonNull(currentDate) && Objects.nonNull(maxDate) && currentDate.isBefore(maxDate)) {
+        LocalDate now = LocalDate.now();
+
+        if (Objects.isNull(maxDate) || maxDate.isBefore(now)) {
+            maxDate = now;
+        }
+
+        while (Objects.nonNull(currentDate) && (currentDate.isBefore(maxDate) || currentDate.isEqual(maxDate))) {
             final LocalDate currentDateFinal = currentDate;
             if (statistiques.stream().noneMatch(statistique -> statistique.getDate().isEqual(currentDateFinal))) {
                 PieceStatistique lastStatistique = statistiques

@@ -1,5 +1,6 @@
 package ch.glauser.gestionstock.piece.controller;
 
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
@@ -35,9 +36,9 @@ public class PieceController {
         return ResponseEntity.ok(this.pieceApplicationService.autocomplete(searchValue));
     }
 
-    @GetMapping(path = "/statistiques")
-    public ResponseEntity<List<PieceStatistique>> statistiques() {
-        return ResponseEntity.ok(this.pieceStatistiqueApplicationService.getStatistiques());
+    @PostMapping(path = "/statistiques")
+    public ResponseEntity<List<PieceStatistique>> statistiques(@RequestBody List<FilterCombinator> filters) {
+        return ResponseEntity.ok(this.pieceStatistiqueApplicationService.getStatistiques(filters));
     }
 
     @PostMapping(path = "/search")

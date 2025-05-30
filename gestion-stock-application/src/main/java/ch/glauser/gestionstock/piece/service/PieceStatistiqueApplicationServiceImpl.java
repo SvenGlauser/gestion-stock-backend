@@ -1,5 +1,6 @@
 package ch.glauser.gestionstock.piece.service;
 
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.piece.statistique.PieceStatistique;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class PieceStatistiqueApplicationServiceImpl implements PieceStatistiqueA
     private final PieceStatistiqueService pieceStatistiqueService;
 
     @Override
-    public List<PieceStatistique> getStatistiques() {
-        return this.pieceStatistiqueService.getStatistiques();
+    public List<PieceStatistique> getStatistiques(List<FilterCombinator> filters) {
+        return this.pieceStatistiqueService.getStatistiques(filters);
     }
 }
