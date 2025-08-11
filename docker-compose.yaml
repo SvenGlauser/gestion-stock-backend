@@ -1,5 +1,5 @@
 services:
-  app:
+  backend:
     image: 'gestion-stock-backend:latest'
     build:
       context: .
@@ -15,8 +15,24 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - "8080:8080"
+    restart: always
+
+  frontend:
+    image: 'gestion-stock-frontend:latest'
+    build:
+      context: ../gestion-stock-frontend
+    container_name: gestion-stock-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    restart: always
+
   database:
-    image: 'postgres:latest'
+    image: 'gestion-stock-postgres:latest'
+    build:
+      context: .
+      dockerfile: Dockerfile.db
     container_name: gestion-stock-database
     environment:
       - POSTGRES_USER=root
@@ -24,4 +40,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - .\postgresl_dump:/backups
+      - .\postgresql_backup:/backups
+      - .\postgresql_scripts:/scripts
+    restart: always
