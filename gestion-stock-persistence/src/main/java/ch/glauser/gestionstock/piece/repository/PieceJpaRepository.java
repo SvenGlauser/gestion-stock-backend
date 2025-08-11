@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * JPA Repository pour la gestion des pieces
@@ -46,5 +47,9 @@ public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, Jp
 
     default Page<PieceEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
+    }
+
+    default List<PieceEntity> searchAll(Collection<FilterCombinator> filters) {
+        return findAll(RepositoryUtils.specificationOf(filters));
     }
 }

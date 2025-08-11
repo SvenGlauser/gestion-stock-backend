@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Getter
@@ -25,8 +25,8 @@ public class PieceHistoriqueEntity extends ModelEntity<PieceHistorique> {
     @Column(name = "DIFFERENCE", nullable = false, updatable = false)
     private Long difference;
 
-    @Column(name = "DATE", nullable = false, updatable = false)
-    private LocalDate date;
+    @Column(name = "HEURE", nullable = false, updatable = false)
+    private LocalDateTime heure;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "TYPE", nullable = false, updatable = false)
@@ -41,7 +41,7 @@ public class PieceHistoriqueEntity extends ModelEntity<PieceHistorique> {
 
         this.piece = Optional.ofNullable(pieceHistorique.getPiece()).map(PieceEntity::new).orElse(null);
         this.difference = pieceHistorique.getDifference();
-        this.date = pieceHistorique.getDate();
+        this.heure = pieceHistorique.getHeure();
         this.type = pieceHistorique.getType();
         this.source = pieceHistorique.getSource();
     }
@@ -51,7 +51,7 @@ public class PieceHistoriqueEntity extends ModelEntity<PieceHistorique> {
         PieceHistorique pieceHistorique = new PieceHistorique();
         pieceHistorique.setPiece(Optional.ofNullable(this.piece).map(PieceEntity::toDomain).orElse(null));
         pieceHistorique.setDifference(this.difference);
-        pieceHistorique.setDate(this.date);
+        pieceHistorique.setHeure(this.heure);
         pieceHistorique.setType(this.type);
         pieceHistorique.setSource(this.source);
         return pieceHistorique;

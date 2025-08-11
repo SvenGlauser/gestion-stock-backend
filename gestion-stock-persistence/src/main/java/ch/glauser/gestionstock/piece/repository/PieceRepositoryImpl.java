@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.piece.repository;
 
 import ch.glauser.gestionstock.common.entity.ModelEntity;
+import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
@@ -37,6 +38,20 @@ public class PieceRepositoryImpl implements PieceRepository {
     public SearchResult<Piece> search(SearchRequest searchRequest) {
         Page<PieceEntity> page = this.pieceJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
         return PageUtils.transform(page);
+    }
+
+    @Override
+    public List<Piece> searchAll(List<FilterCombinator> filters) {
+        return this.pieceJpaRepository
+                .searchAll(filters)
+                .stream()
+                .map(ModelEntity::toDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Piece> findAll() {
+        return this.pieceJpaRepository.findAll().stream().map(ModelEntity::toDomain).toList();
     }
 
     @Override

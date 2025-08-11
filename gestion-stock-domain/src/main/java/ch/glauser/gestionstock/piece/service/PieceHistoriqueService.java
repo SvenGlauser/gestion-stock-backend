@@ -43,6 +43,13 @@ public interface PieceHistoriqueService {
     void createFromPiece(Piece newPiece, Piece oldPiece, PieceHistoriqueSource source);
 
     /**
+     * Supprime une entrée de l'historique
+     *
+     * @param idPieceHistorique Id de l'historique à supprimer
+     */
+    void delete(Long idPieceHistorique);
+
+    /**
      * Supprime tout l'historique d'une pièce
      *
      * @param idPiece Id de la pièce dont il faut supprimer l'historique
