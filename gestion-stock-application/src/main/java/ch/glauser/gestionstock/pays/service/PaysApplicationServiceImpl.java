@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validation;
+import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.pays.dto.PaysDto;
 import ch.glauser.gestionstock.pays.model.Pays;
 import lombok.RequiredArgsConstructor;

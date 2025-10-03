@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.dto;
 
-import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.validation.exception.TechnicalException;
 import ch.glauser.gestionstock.identite.model.Identite;
 import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;

@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.pays.model;
 
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
+import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.gestionstock.validation.notempty.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

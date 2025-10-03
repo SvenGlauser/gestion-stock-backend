@@ -4,7 +4,7 @@ import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
-import ch.glauser.gestionstock.common.validation.common.Validation;
+import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;

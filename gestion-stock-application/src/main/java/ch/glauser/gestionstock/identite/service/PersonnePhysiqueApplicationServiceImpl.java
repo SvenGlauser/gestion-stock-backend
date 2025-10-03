@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.service;
 
-import ch.glauser.gestionstock.common.validation.common.Validation;
+import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.identite.model.PersonnePhysiqueConstantes;

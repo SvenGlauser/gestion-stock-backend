@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.identite.model;
 
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.notnull.NotNull;
+import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.gestionstock.validation.notnull.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

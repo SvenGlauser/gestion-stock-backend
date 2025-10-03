@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.machine.entity;
 
 import ch.glauser.gestionstock.common.entity.ModelEntity;
-import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.validation.exception.TechnicalException;
 import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
 import ch.glauser.gestionstock.identite.entity.PersonneMoraleEntity;
 import ch.glauser.gestionstock.identite.entity.PersonnePhysiqueEntity;

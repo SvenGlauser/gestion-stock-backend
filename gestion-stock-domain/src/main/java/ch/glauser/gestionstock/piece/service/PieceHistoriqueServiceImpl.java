@@ -2,12 +2,12 @@ package ch.glauser.gestionstock.piece.service;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
-import ch.glauser.gestionstock.common.validation.exception.ValidationException;
-import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
-import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
+import ch.glauser.gestionstock.validation.common.Error;
+import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.validation.exception.ValidationException;
+import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.piece.model.*;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;

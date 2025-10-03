@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.piece.service;
 
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.validation.exception.TechnicalException;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;

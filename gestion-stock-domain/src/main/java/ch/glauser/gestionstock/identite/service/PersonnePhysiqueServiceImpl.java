@@ -1,10 +1,10 @@
 package ch.glauser.gestionstock.identite.service;
 
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
-import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
-import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
-import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
+import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.identite.model.PersonnePhysiqueConstantes;
 import ch.glauser.gestionstock.identite.repository.PersonnePhysiqueRepository;
