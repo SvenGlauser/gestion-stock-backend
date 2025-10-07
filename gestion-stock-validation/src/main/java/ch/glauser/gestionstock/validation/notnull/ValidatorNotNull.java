@@ -3,54 +3,44 @@ package ch.glauser.gestionstock.validation.notnull;
 import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.common.ValidationUtils;
 import ch.glauser.gestionstock.validation.common.Validator;
+import lombok.NoArgsConstructor;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-public class ValidatorNotNull extends Validator {
-
-    /**
-     * Construction d'un validateur {@link NotNull}
-     * @param validation Validation à utiliser
-     */
-    public ValidatorNotNull(Validation validation) {
-        super(validation);
-    }
+@NoArgsConstructor
+public class ValidatorNotNull implements Validator<NotNull> {
 
     @Override
-    public void validate(Object object, Field notNullField) {
+    public void validate(Validation validation, Object object, Field notNullField) {
         Object value = ValidationUtils.getValue(object, notNullField);
 
-        this.validate(value, notNullField.getName());
-    }
-
-    @Override
-    protected Class<? extends Annotation> getAnnotationClass() {
-        return NotNull.class;
+        validateNotNull(validation, value, notNullField.getName());
     }
 
     /**
      * Valide que le champ n'est pas null
      *
+     * @param validation Instance de validation
      * @param object Objet à valider
      * @param field Champ à valider
      */
-    public void validate(Object object, String field) {
+    public static void validateNotNull(Validation validation, Object object, String field) {
         if (Objects.isNull(object)) {
-            this.validation.addError("Le champ ne doit pas être vide", field);
+            validation.addError("Le champ ne doit pas être vide", field);
         }
     }
 
     /**
      * Valide que le champ est null
      *
+     * @param validation Instance de validation
      * @param object Objet à valider
      * @param field Champ à valider
      */
-    public void validateIsNull(Object object, String field) {
+    public static void validateIsNull(Validation validation, Object object, String field) {
         if (Objects.nonNull(object)) {
-            this.validation.addError("Le champ doit pas être vide", field);
+            validation.addError("Le champ doit pas être vide", field);
         }
     }
 }

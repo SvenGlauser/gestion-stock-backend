@@ -3,23 +3,17 @@ package ch.glauser.gestionstock.validation.cascade;
 import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.common.ValidationUtils;
 import ch.glauser.gestionstock.validation.common.Validator;
+import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-public class ValidatorCascadeValidation extends Validator {
-
-    /**
-     * Construction d'un validateur {@link CascadeValidation}
-     * @param validation Validation à utiliser
-     */
-    public ValidatorCascadeValidation(Validation validation) {
-        super(validation);
-    }
+@NoArgsConstructor
+public class ValidatorCascadeValidation implements Validator<CascadeValidation> {
 
     @Override
-    public void validate(Object object, Field field) {
+    public void validate(Validation validation, Object object, Field field) {
         Object value = ValidationUtils.getValue(object, field);
 
         // Dans le cas ou l'objet se contient lui-même, on évite un StackOverflowError
@@ -32,15 +26,10 @@ public class ValidatorCascadeValidation extends Validator {
             return;
         }
 
-        this.validation.addErrors(
+        validation.addErrors(
                 Validation
                         .validate(value, value.getClass())
                         .getErrors()
         );
-    }
-
-    @Override
-    protected Class<? extends Annotation> getAnnotationClass() {
-        return CascadeValidation.class;
     }
 }

@@ -4,24 +4,17 @@ import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.common.ValidationUtils;
 import ch.glauser.gestionstock.validation.common.Validator;
 import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-public class ValidatorRegex extends Validator {
-
-    /**
-     * Construction d'un validateur {@link Regex}
-     * @param validation Validation à utiliser
-     */
-    public ValidatorRegex(Validation validation) {
-        super(validation);
-    }
+@NoArgsConstructor
+public class ValidatorRegex implements Validator<Regex> {
 
     @Override
-    public void validate(Object object, Field field) {
+    public void validate(Validation validation, Object object, Field field) {
         if (ValidationUtils.isNotType(field, String.class)) {
             throw new TechnicalException("L'annotation @Regex ne peut pas être utilisé sur un champ de type : " + field.getType() + ", " + field);
         }
@@ -30,23 +23,19 @@ public class ValidatorRegex extends Validator {
         RegexValidationType regexValidationType = field.getAnnotation(Regex.class).value();
 
         if (value instanceof String string) {
-            this.validate(string, regexValidationType, field.getName());
+            this.validate(validation, string, regexValidationType, field.getName());
         }
-    }
-
-    @Override
-    protected Class<? extends Annotation> getAnnotationClass() {
-        return Regex.class;
     }
 
     /**
      * Valide que le champ correspond à une regex
      *
+     * @param validation Instance de validation
      * @param object Objet à valider
      * @param regexValidationType Regex
      * @param field Champ à valider
      */
-    public void validate(String object, RegexValidationType regexValidationType, String field) {
+    private void validate(Validation validation, String object, RegexValidationType regexValidationType, String field) {
         if (StringUtils.isEmpty(object)) {
             return;
         }
@@ -56,7 +45,7 @@ public class ValidatorRegex extends Validator {
         }
 
         if (!regexValidationType.getValidator().test(object)) {
-            this.validation.addError(regexValidationType.getMessage(),  field);
+            validation.addError(regexValidationType.getMessage(),  field);
         }
     }
 }

@@ -1,13 +1,7 @@
 package ch.glauser.gestionstock.validation.common;
 
-import ch.glauser.gestionstock.validation.cascade.ValidatorCascadeValidation;
 import ch.glauser.gestionstock.validation.exception.ValidationException;
-import ch.glauser.gestionstock.validation.maxvalue.ValidatorMaxValue;
-import ch.glauser.gestionstock.validation.minvalue.ValidatorMinValue;
-import ch.glauser.gestionstock.validation.notempty.ValidatorNotEmpty;
 import ch.glauser.gestionstock.validation.notnull.ValidatorNotNull;
-import ch.glauser.gestionstock.validation.regex.ValidatorRegex;
-import ch.glauser.gestionstock.validation.unique.ValidatorUnique;
 import lombok.Getter;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -20,13 +14,7 @@ import java.util.Objects;
  */
 public final class Validation {
 
-    private final ValidatorNotNull validatorNotNull;
-    private final ValidatorNotEmpty validatorNotEmpty;
-    private final ValidatorUnique validatorUnique;
-    private final ValidatorMinValue validatorMinValue;
-    private final ValidatorMaxValue validatorMaxValue;
-    private final ValidatorRegex validatorRegex;
-    private final ValidatorCascadeValidation validatorCascadeValidation;
+    private final ValidationService validationService = new ValidationServiceImpl();
 
     private final Class<?> classe;
 
@@ -43,18 +31,10 @@ public final class Validation {
         }
 
         this.classe = classe;
-
-        this.validatorNotNull = new ValidatorNotNull(this);
-        this.validatorNotEmpty = new ValidatorNotEmpty(this, this.validatorNotNull);
-        this.validatorUnique = new ValidatorUnique(this);
-        this.validatorMinValue = new ValidatorMinValue(this, this.validatorNotNull);
-        this.validatorMaxValue = new ValidatorMaxValue(this, this.validatorNotNull);
-        this.validatorRegex = new ValidatorRegex(this);
-        this.validatorCascadeValidation = new ValidatorCascadeValidation(this);
     }
 
     /**
-     * Récupérer une isntance de validateur
+     * Récupérer une instance de validateur
      *
      * @param classe Classe à valider
      * @return L'instance de validation
@@ -85,13 +65,7 @@ public final class Validation {
             throw new ValidationException(new Error("L'objet à valider ne doit pas être null", "object", classe));
         }
 
-        this.validatorNotNull.validate(object);
-        this.validatorNotEmpty.validate(object);
-        this.validatorUnique.validate(object);
-        this.validatorMinValue.validate(object);
-        this.validatorMaxValue.validate(object);
-        this.validatorRegex.validate(object);
-        this.validatorCascadeValidation.validate(object);
+        this.validationService.validate(this, object);
 
         return this;
     }
@@ -104,7 +78,7 @@ public final class Validation {
      * @return L'instance de validation
      */
     public Validation validateNotNull(Object object, String field) {
-        this.validatorNotNull.validate(object, field);
+        ValidatorNotNull.validateNotNull(this, object, field);
 
         return this;
     }
@@ -117,7 +91,7 @@ public final class Validation {
      * @return L'instance de validation
      */
     public Validation validateIsNull(Object object, String field) {
-        this.validatorNotNull.validateIsNull(object, field);
+        ValidatorNotNull.validateIsNull(this, object, field);
 
         return this;
     }
