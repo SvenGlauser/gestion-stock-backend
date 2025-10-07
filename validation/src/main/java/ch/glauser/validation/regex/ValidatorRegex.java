@@ -1,9 +1,9 @@
 package ch.glauser.validation.regex;
 
+import ch.glauser.utilities.exception.TechnicalException;
 import ch.glauser.validation.common.Validation;
 import ch.glauser.validation.common.ValidationUtils;
 import ch.glauser.validation.common.Validator;
-import ch.glauser.utilities.exception.TechnicalException;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 

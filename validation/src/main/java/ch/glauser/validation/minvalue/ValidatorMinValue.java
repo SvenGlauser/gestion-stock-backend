@@ -1,9 +1,9 @@
 package ch.glauser.validation.minvalue;
 
+import ch.glauser.utilities.exception.TechnicalException;
 import ch.glauser.validation.common.Validation;
 import ch.glauser.validation.common.ValidationUtils;
 import ch.glauser.validation.common.Validator;
-import ch.glauser.utilities.exception.TechnicalException;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Field;

@@ -1,14 +1,10 @@
 package ch.glauser.validation.unique;
 
 import ch.glauser.validation.common.Validation;
-import ch.glauser.validation.regex.Regex;
-import ch.glauser.validation.regex.RegexValidationType;
-import ch.glauser.validation.regex.ValidatorRegex;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

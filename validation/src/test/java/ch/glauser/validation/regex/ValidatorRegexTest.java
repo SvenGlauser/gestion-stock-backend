@@ -1,8 +1,6 @@
 package ch.glauser.validation.regex;
 
 import ch.glauser.validation.common.Validation;
-import ch.glauser.validation.maxvalue.MaxValue;
-import ch.glauser.validation.maxvalue.ValidatorMaxValue;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;

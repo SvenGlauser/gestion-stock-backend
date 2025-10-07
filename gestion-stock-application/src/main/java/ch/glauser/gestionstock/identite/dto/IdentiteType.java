@@ -22,8 +22,8 @@ public enum IdentiteType {
 
     public static IdentiteType getType(Identite identite) {
         return switch (identite) {
-            case PersonnePhysique ignored -> PERSONNE_PHYSIQUE;
-            case PersonneMorale ignored -> PERSONNE_MORALE;
+            case PersonnePhysique _ -> PERSONNE_PHYSIQUE;
+            case PersonneMorale _ -> PERSONNE_MORALE;
             default -> throw new TechnicalException("Impossible de reconnaitre le type d'identité");
         };
     }

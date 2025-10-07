@@ -7,9 +7,9 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.*;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
+import ch.glauser.utilities.exception.TechnicalException;
 import ch.glauser.validation.common.Error;
 import ch.glauser.validation.common.Validation;
-import ch.glauser.utilities.exception.TechnicalException;
 import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 

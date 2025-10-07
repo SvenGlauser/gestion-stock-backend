@@ -1,8 +1,8 @@
 package ch.glauser.validation.common;
 
+import ch.glauser.utilities.exception.TechnicalException;
 import ch.glauser.validation.cascade.CascadeValidation;
 import ch.glauser.validation.cascade.ValidatorCascadeValidation;
-import ch.glauser.utilities.exception.TechnicalException;
 import ch.glauser.validation.maxvalue.MaxValue;
 import ch.glauser.validation.maxvalue.ValidatorMaxValue;
 import ch.glauser.validation.minvalue.MinValue;
