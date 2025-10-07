@@ -1,9 +1,9 @@
 package ch.glauser.gestionstock.identite.service;
 
-import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.identite.dto.PersonneMoraleDto;
 import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.identite.model.PersonneMoraleConstantes;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

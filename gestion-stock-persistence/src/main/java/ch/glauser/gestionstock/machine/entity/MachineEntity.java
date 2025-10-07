@@ -1,7 +1,6 @@
 package ch.glauser.gestionstock.machine.entity;
 
 import ch.glauser.gestionstock.common.entity.ModelEntity;
-import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
 import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
 import ch.glauser.gestionstock.identite.entity.PersonneMoraleEntity;
 import ch.glauser.gestionstock.identite.entity.PersonnePhysiqueEntity;
@@ -9,6 +8,7 @@ import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
+import ch.glauser.utilities.exception.TechnicalException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

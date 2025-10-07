@@ -10,20 +10,24 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>validation</module>
         <module>gestion-stock-persistence</module>
         <module>gestion-stock-domain</module>
         <module>gestion-stock-application</module>
         <module>gestion-stock-batch</module>
+        <module>utilities</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.boot.dependencies.version>3.4.2</spring.boot.dependencies.version>
+        <org.apache.maven.plugins.version>3.14.1</org.apache.maven.plugins.version>
 
-        <org.projectlombok.lombok.version>1.18.36</org.projectlombok.lombok.version>
+        <spring.boot.dependencies.version>3.5.6</spring.boot.dependencies.version>
+
+        <org.projectlombok.lombok.version>1.18.42</org.projectlombok.lombok.version>
 
         <org.apache.commons.io.version>2.19.0</org.apache.commons.io.version>
         <org.apache.commons.csv.version>1.14.0</org.apache.commons.csv.version>
@@ -31,12 +35,24 @@
         <org.apache.commons.collections4.version>4.4</org.apache.commons.collections4.version>
         <org.apache.commons.validator.version>1.9.0</org.apache.commons.validator.version>
 
-        <org.junit.jupiter.version>5.11.4</org.junit.jupiter.version>
-        <org.assertj.core>3.26.0</org.assertj.core>
+        <org.junit.jupiter.version>5.12.2</org.junit.jupiter.version>
+        <org.assertj.core>3.27.6</org.assertj.core>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>utilities</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>validation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>ch.glauser</groupId>
                 <artifactId>gestion-stock-domain</artifactId>
@@ -123,4 +139,26 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${org.apache.maven.plugins.version}</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${org.projectlombok.lombok.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

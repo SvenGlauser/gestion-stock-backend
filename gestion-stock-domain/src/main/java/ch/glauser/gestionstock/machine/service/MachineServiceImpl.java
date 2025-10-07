@@ -1,17 +1,17 @@
 package ch.glauser.gestionstock.machine.service;
 
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
+import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
-import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
-import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
-import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.machine.model.MachineConstantes;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;

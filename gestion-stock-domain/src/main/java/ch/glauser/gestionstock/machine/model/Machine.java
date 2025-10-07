@@ -1,12 +1,12 @@
 package ch.glauser.gestionstock.machine.model;
 
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
-import ch.glauser.gestionstock.common.validation.notnull.NotNull;
-import ch.glauser.gestionstock.common.validation.unique.Unique;
 import ch.glauser.gestionstock.identite.model.Identite;
 import ch.glauser.gestionstock.piece.model.Piece;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.notempty.NotEmpty;
+import ch.glauser.validation.notnull.NotNull;
+import ch.glauser.validation.unique.Unique;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

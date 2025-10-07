@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.configuration;
 
-import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.exception.service.ThrownExceptionService;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.exception.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

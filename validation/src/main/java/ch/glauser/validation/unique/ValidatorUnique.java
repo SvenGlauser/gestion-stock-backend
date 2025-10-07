@@ -1,0 +1,47 @@
+package ch.glauser.validation.unique;
+
+import ch.glauser.utilities.exception.TechnicalException;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.common.ValidationUtils;
+import ch.glauser.validation.common.Validator;
+import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
+
+@NoArgsConstructor
+public class ValidatorUnique implements Validator {
+
+    @Override
+    public void validate(Validation validation, Object object, Field field) {
+        if (ValidationUtils.isNotType(field, Collection.class)) {
+            throw new TechnicalException("L'annotation @Unique ne peut pas être utilisé sur un champ de type : " + field.getType() + ", " + field);
+        }
+
+        Object value = ValidationUtils.getValue(object, field);
+
+        if (value instanceof Collection<?> collection) {
+            ValidatorUnique.validate(validation, collection, field.getName());
+        }
+    }
+
+    /**
+     * Valide que la liste ne contient pas la même valeur 2 fois
+     *
+     * @param validation Instance de validation
+     * @param object Liste à valider
+     * @param field Champ à valider
+     */
+    public static void validate(Validation validation, Collection<?> object, String field) {
+        if (Objects.isNull(object)) {
+            return;
+        }
+
+        if (CollectionUtils.size(object) != CollectionUtils.size(Set.copyOf(CollectionUtils.emptyIfNull(object)))) {
+            validation.addError("La liste doit contenir des valeurs uniques", field);
+        }
+    }
+}

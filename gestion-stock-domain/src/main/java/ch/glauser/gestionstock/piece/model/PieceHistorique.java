@@ -1,9 +1,9 @@
 package ch.glauser.gestionstock.piece.model;
 
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.minvalue.MinValue;
-import ch.glauser.gestionstock.common.validation.notnull.NotNull;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.minvalue.MinValue;
+import ch.glauser.validation.notnull.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,6 +18,7 @@ public class PieceHistorique extends Model {
     @NotNull
     private Piece piece;
 
+    @NotNull
     @MinValue(value = 0)
     private Long difference;
 

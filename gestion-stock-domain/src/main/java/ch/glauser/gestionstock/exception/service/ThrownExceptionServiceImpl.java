@@ -2,10 +2,10 @@ package ch.glauser.gestionstock.exception.service;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Validation;
 import ch.glauser.gestionstock.exception.model.ThrownException;
 import ch.glauser.gestionstock.exception.model.ThrownExceptionConstantes;
 import ch.glauser.gestionstock.exception.repository.ThrownExceptionRepository;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 
 import java.io.PrintWriter;

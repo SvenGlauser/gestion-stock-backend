@@ -6,9 +6,6 @@ import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.exception.TechnicalException;
-import ch.glauser.gestionstock.common.validation.exception.ValidationException;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.gestionstock.fournisseur.model.FournisseurConstantes;
 import ch.glauser.gestionstock.fournisseur.service.FournisseurService;
@@ -16,6 +13,9 @@ import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
 import ch.glauser.gestionstock.piece.service.PieceService;
+import ch.glauser.utilities.exception.TechnicalException;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.csv.CSVFormat;
@@ -79,7 +79,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
                     .setSkipHeaderRecord(true)
                     .get()
                     .parse(new BufferedReader(new InputStreamReader(file.getInputStream())));
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new TechnicalException("Impossible de lire le fichier");
         }
 
@@ -135,19 +135,19 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
         Long quantiteAnneeLong;
         try {
             quantiteAnneeLong = Long.parseLong(quantiteAnnee);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             quantiteAnneeLong = 0L;
         }
 
         try {
             piece.setPrix(Double.parseDouble(prixUnitaire));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new ValidationException(new Error("Le prix n'est pas un nombre valide", PieceConstantes.FIELD_PRIX, Piece.class));
         }
 
         try {
             piece.setQuantite(Long.parseLong(quantite) + quantiteAnneeLong);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new ValidationException(new Error("La quantité n'est pas un nombre valide", PieceConstantes.FIELD_QUANTITE, Piece.class));
         }
 
@@ -218,7 +218,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
         String value;
         try {
             value = csvRecord.get(idColumn);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException _) {
             value = "";
         }
         return StringUtils.trim(value);

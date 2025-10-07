@@ -1,19 +1,19 @@
 package ch.glauser.gestionstock.pays.service;
 
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
+import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
+import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.validation.common.Error;
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.exception.ValidationException;
-import ch.glauser.gestionstock.common.validation.exception.id.DeleteWithInexistingIdException;
-import ch.glauser.gestionstock.common.validation.exception.id.ModifyWithInexistingIdException;
-import ch.glauser.gestionstock.common.validation.exception.id.PerformActionWithInexistingIdFunction;
-import ch.glauser.gestionstock.common.validation.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.gestionstock.pays.model.PaysConstantes;
 import ch.glauser.gestionstock.pays.repository.PaysRepository;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;

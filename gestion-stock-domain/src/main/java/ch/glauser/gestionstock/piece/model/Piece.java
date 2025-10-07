@@ -2,11 +2,11 @@ package ch.glauser.gestionstock.piece.model;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.validation.common.Validation;
-import ch.glauser.gestionstock.common.validation.minvalue.MinValue;
-import ch.glauser.gestionstock.common.validation.notempty.NotEmpty;
-import ch.glauser.gestionstock.common.validation.notnull.NotNull;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.minvalue.MinValue;
+import ch.glauser.validation.notempty.NotEmpty;
+import ch.glauser.validation.notnull.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,8 +29,11 @@ public class Piece extends Model {
     @NotNull
     private Categorie categorie;
 
+    @NotNull
     @MinValue(0)
     private Long quantite;
+
+    @NotNull
     @MinValue(0)
     private Double prix;
 
