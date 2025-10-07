@@ -7,7 +7,6 @@ import ch.glauser.gestionstock.validation.exception.TechnicalException;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Objects;

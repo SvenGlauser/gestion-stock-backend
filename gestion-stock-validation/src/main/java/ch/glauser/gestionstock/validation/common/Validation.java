@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 public final class Validation {
 
-    private final ValidationService validationService = new ValidationServiceImpl();
+    private static final ValidationService validationService = new ValidationServiceImpl();
 
     private final Class<?> classe;
 
@@ -65,7 +65,7 @@ public final class Validation {
             throw new ValidationException(new Error("L'objet à valider ne doit pas être null", "object", classe));
         }
 
-        this.validationService.validate(this, object);
+        Validation.validationService.validate(this, object);
 
         return this;
     }

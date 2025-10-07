@@ -1,5 +1,6 @@
 package ch.glauser.gestionstock.common.validation;
 
+import ch.glauser.gestionstock.utils.TestUtils;
 import ch.glauser.gestionstock.validation.cascade.CascadeValidation;
 import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.exception.TechnicalException;
@@ -8,7 +9,6 @@ import ch.glauser.gestionstock.validation.minvalue.MinValue;
 import ch.glauser.gestionstock.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.validation.notnull.NotNull;
 import ch.glauser.gestionstock.validation.unique.Unique;
-import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;

@@ -5,7 +5,6 @@ import ch.glauser.gestionstock.validation.common.ValidationUtils;
 import ch.glauser.gestionstock.validation.common.Validator;
 import lombok.NoArgsConstructor;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Objects;
 

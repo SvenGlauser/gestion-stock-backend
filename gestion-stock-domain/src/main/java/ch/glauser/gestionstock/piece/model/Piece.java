@@ -2,11 +2,11 @@ package ch.glauser.gestionstock.piece.model;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.common.model.Model;
+import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.minvalue.MinValue;
 import ch.glauser.gestionstock.validation.notempty.NotEmpty;
 import ch.glauser.gestionstock.validation.notnull.NotNull;
-import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

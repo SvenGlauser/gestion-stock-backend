@@ -2,13 +2,13 @@ package ch.glauser.gestionstock.identite.service;
 
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.validation.common.Error;
-import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.exception.ValidationException;
 import ch.glauser.gestionstock.identite.model.Identite;
 import ch.glauser.gestionstock.identite.model.IdentiteConstantes;
 import ch.glauser.gestionstock.identite.repository.IdentiteRepository;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
+import ch.glauser.gestionstock.validation.common.Error;
+import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.gestionstock.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 /**

@@ -1,12 +1,12 @@
 package ch.glauser.gestionstock.identite.controller;
 
 import ch.glauser.gestionstock.GestionStockApplication;
+import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
+import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
-import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.identite.dto.IdentiteLightDto;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
 import ch.glauser.gestionstock.identite.model.Titre;

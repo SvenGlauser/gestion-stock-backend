@@ -4,12 +4,10 @@ import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.common.ValidationUtils;
 import ch.glauser.gestionstock.validation.common.Validator;
 import ch.glauser.gestionstock.validation.exception.TechnicalException;
-import ch.glauser.gestionstock.validation.notnull.ValidatorNotNull;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Objects;
