@@ -23,7 +23,7 @@ public class ValidatorRegex implements Validator {
         RegexValidationType regexValidationType = field.getAnnotation(Regex.class).value();
 
         if (value instanceof String string) {
-            this.validate(validation, string, regexValidationType, field.getName());
+            ValidatorRegex.validate(validation, string, regexValidationType, field.getName());
         }
     }
 
@@ -35,7 +35,7 @@ public class ValidatorRegex implements Validator {
      * @param regexValidationType Regex
      * @param field Champ à valider
      */
-    private void validate(Validation validation, String object, RegexValidationType regexValidationType, String field) {
+    public static void validate(Validation validation, String object, RegexValidationType regexValidationType, String field) {
         if (StringUtils.isEmpty(object)) {
             return;
         }

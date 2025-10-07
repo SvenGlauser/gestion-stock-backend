@@ -21,7 +21,7 @@ public class ValidatorMaxValue implements Validator {
         double maxValue = field.getAnnotation(MaxValue.class).value();
 
         if (value instanceof Number number) {
-            this.validate(validation, number.doubleValue(), maxValue, field.getName());
+            ValidatorMaxValue.validate(validation, number.doubleValue(), maxValue, field.getName());
         }
     }
 
@@ -32,7 +32,7 @@ public class ValidatorMaxValue implements Validator {
      * @param maxValue Valeur minimum
      * @param field Champ à valider
      */
-    public void validate(Validation validation, Double object, Double maxValue, String field) {
+    public static void validate(Validation validation, Double object, Double maxValue, String field) {
         if (object > maxValue) {
             validation.addError("La valeur du champ doit être inférieur à " + maxValue, field);
         }

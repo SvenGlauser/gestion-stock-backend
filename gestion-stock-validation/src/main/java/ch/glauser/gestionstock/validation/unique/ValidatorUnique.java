@@ -24,7 +24,7 @@ public class ValidatorUnique implements Validator {
         Object value = ValidationUtils.getValue(object, field);
 
         if (value instanceof Collection<?> collection) {
-            this.validate(validation, collection, field.getName());
+            ValidatorUnique.validate(validation, collection, field.getName());
         }
     }
 
@@ -35,7 +35,7 @@ public class ValidatorUnique implements Validator {
      * @param object Liste à valider
      * @param field Champ à valider
      */
-    public void validate(Validation validation, Collection<?> object, String field) {
+    public static void validate(Validation validation, Collection<?> object, String field) {
         if (Objects.isNull(object)) {
             return;
         }

@@ -25,9 +25,13 @@ public class ValidatorCascadeValidation implements Validator {
             return;
         }
 
+        ValidatorCascadeValidation.validate(validation, value);
+    }
+
+    public static void validate(Validation validation, Object object) {
         validation.addErrors(
                 Validation
-                        .validate(value, value.getClass())
+                        .validate(object, object.getClass())
                         .getErrors()
         );
     }

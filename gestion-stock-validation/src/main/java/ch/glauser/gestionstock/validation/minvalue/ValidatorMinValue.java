@@ -21,7 +21,7 @@ public class ValidatorMinValue implements Validator {
         double minValue = field.getAnnotation(MinValue.class).value();
 
         if (value instanceof Number number) {
-            this.validate(validation, number.doubleValue(), minValue, field.getName());
+            ValidatorMinValue.validate(validation, number.doubleValue(), minValue, field.getName());
         }
     }
 
@@ -32,7 +32,7 @@ public class ValidatorMinValue implements Validator {
      * @param minValue Valeur minimum
      * @param field Champ à valider
      */
-    public void validate(Validation validation, Double object, Double minValue, String field) {
+    public static void validate(Validation validation, Double object, Double minValue, String field) {
         if (object < minValue) {
             validation.addError("La valeur du champ doit être supérieur à " + minValue, field);
         }

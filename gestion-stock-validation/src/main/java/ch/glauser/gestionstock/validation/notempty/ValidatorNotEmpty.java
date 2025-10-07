@@ -26,8 +26,8 @@ public class ValidatorNotEmpty implements Validator {
 
         if (Objects.nonNull(value)) {
             switch (value) {
-                case String string -> this.validate(validation, string, field.getName());
-                case Collection<?> collection -> this.validate(validation, collection, field.getName());
+                case String string -> ValidatorNotEmpty.validate(validation, string, field.getName());
+                case Collection<?> collection -> ValidatorNotEmpty.validate(validation, collection, field.getName());
                 default ->
                         throw new TechnicalException("L'annotation @NotEmpty ne peut pas être utilisé sur un champ de type : " + field.getType() + ", " + field);
             }
@@ -41,7 +41,7 @@ public class ValidatorNotEmpty implements Validator {
      * @param object Objet à valider
      * @param field Champ à valider
      */
-    public void validate(Validation validation, String object, String field) {
+    public static void validate(Validation validation, String object, String field) {
         if (StringUtils.isBlank(object)) {
             validation.addError("Le champ ne doit pas être vide", field);
         }
@@ -54,7 +54,7 @@ public class ValidatorNotEmpty implements Validator {
      * @param object Objet à valider
      * @param field Champ à valider
      */
-    public void validate(Validation validation, Collection<?> object, String field) {
+    public static void validate(Validation validation, Collection<?> object, String field) {
         if (CollectionUtils.isEmpty(object)) {
             validation.addError("La liste ne doit pas être vide", field);
         }
