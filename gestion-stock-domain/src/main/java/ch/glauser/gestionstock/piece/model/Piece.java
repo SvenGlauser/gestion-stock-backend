@@ -29,8 +29,11 @@ public class Piece extends Model {
     @NotNull
     private Categorie categorie;
 
+    @NotNull
     @MinValue(0)
     private Long quantite;
+
+    @NotNull
     @MinValue(0)
     private Double prix;
 

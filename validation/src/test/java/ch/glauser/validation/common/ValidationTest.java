@@ -1,14 +1,13 @@
-package ch.glauser.gestionstock.common.validation;
+package ch.glauser.validation.common;
 
-import ch.glauser.gestionstock.utils.TestUtils;
-import ch.glauser.validation.cascade.CascadeValidation;
-import ch.glauser.validation.common.Validation;
 import ch.glauser.utilities.exception.TechnicalException;
+import ch.glauser.validation.cascade.CascadeValidation;
 import ch.glauser.validation.maxvalue.MaxValue;
 import ch.glauser.validation.minvalue.MinValue;
 import ch.glauser.validation.notempty.NotEmpty;
 import ch.glauser.validation.notnull.NotNull;
 import ch.glauser.validation.unique.Unique;
+import ch.glauser.validation.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;

@@ -18,6 +18,7 @@ public class PieceHistorique extends Model {
     @NotNull
     private Piece piece;
 
+    @NotNull
     @MinValue(value = 0)
     private Long difference;
 
