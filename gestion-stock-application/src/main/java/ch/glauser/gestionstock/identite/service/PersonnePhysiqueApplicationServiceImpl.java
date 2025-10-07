@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.identite.service;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.identite.model.PersonnePhysiqueConstantes;
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -5,7 +5,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.exception.model.ThrownException;
 import ch.glauser.gestionstock.exception.model.ThrownExceptionConstantes;
 import ch.glauser.gestionstock.exception.repository.ThrownExceptionRepository;
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 
 import java.io.PrintWriter;

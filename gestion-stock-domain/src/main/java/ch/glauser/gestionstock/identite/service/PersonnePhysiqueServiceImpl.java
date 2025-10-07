@@ -7,7 +7,7 @@ import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExcepti
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.identite.model.PersonnePhysiqueConstantes;
 import ch.glauser.gestionstock.identite.repository.PersonnePhysiqueRepository;
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 
 /**

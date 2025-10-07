@@ -6,9 +6,9 @@ import ch.glauser.gestionstock.identite.model.Identite;
 import ch.glauser.gestionstock.identite.model.IdentiteConstantes;
 import ch.glauser.gestionstock.identite.repository.IdentiteRepository;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
-import ch.glauser.gestionstock.validation.common.Error;
-import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.exception.ValidationException;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 /**

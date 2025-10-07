@@ -8,7 +8,7 @@ import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
-import ch.glauser.gestionstock.utilities.exception.TechnicalException;
+import ch.glauser.utilities.exception.TechnicalException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

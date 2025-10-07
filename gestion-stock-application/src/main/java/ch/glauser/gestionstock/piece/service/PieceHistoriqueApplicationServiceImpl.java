@@ -6,7 +6,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.piece.dto.PieceHistoriqueDto;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -2,9 +2,9 @@ package ch.glauser.gestionstock.identite.model;
 
 import ch.glauser.gestionstock.adresse.model.Adresse;
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.validation.cascade.CascadeValidation;
-import ch.glauser.gestionstock.validation.regex.Regex;
-import ch.glauser.gestionstock.validation.regex.RegexValidationType;
+import ch.glauser.validation.cascade.CascadeValidation;
+import ch.glauser.validation.regex.Regex;
+import ch.glauser.validation.regex.RegexValidationType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

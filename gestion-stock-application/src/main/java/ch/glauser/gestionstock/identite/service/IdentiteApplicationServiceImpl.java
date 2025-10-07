@@ -7,7 +7,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.identite.dto.IdentiteLightDto;
 import ch.glauser.gestionstock.identite.model.Identite;
 import ch.glauser.gestionstock.identite.model.PersonnePhysiqueConstantes;
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -11,9 +11,9 @@ import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.gestionstock.pays.model.PaysConstantes;
 import ch.glauser.gestionstock.pays.repository.PaysRepository;
-import ch.glauser.gestionstock.validation.common.Error;
-import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.exception.ValidationException;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;

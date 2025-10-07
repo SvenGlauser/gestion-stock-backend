@@ -2,9 +2,9 @@ package ch.glauser.gestionstock.localite.model;
 
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.pays.model.Pays;
-import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.notempty.NotEmpty;
-import ch.glauser.gestionstock.validation.notnull.NotNull;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.notempty.NotEmpty;
+import ch.glauser.validation.notnull.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

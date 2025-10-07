@@ -11,7 +11,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.machine.model.MachineConstantes;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;

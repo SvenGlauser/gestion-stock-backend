@@ -7,10 +7,10 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.*;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
-import ch.glauser.gestionstock.validation.common.Error;
-import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.utilities.exception.TechnicalException;
-import ch.glauser.gestionstock.validation.exception.ValidationException;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.utilities.exception.TechnicalException;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;

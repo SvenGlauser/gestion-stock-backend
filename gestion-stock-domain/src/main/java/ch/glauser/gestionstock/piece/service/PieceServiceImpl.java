@@ -15,9 +15,9 @@ import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
-import ch.glauser.gestionstock.validation.common.Error;
-import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.exception.ValidationException;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;

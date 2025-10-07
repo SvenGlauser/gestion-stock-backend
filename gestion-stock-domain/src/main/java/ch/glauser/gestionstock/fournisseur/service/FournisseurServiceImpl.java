@@ -11,9 +11,9 @@ import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.gestionstock.fournisseur.model.FournisseurConstantes;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
-import ch.glauser.gestionstock.validation.common.Error;
-import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.exception.ValidationException;
+import ch.glauser.validation.common.Error;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
