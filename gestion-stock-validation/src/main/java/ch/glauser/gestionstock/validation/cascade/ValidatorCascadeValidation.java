@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 @NoArgsConstructor
-public class ValidatorCascadeValidation implements Validator<CascadeValidation> {
+public class ValidatorCascadeValidation implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field field) {

@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 @NoArgsConstructor
-public class ValidatorNotNull implements Validator<NotNull> {
+public class ValidatorNotNull implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field notNullField) {

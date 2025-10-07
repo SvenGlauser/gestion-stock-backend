@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 @NoArgsConstructor
-public class ValidatorRegex implements Validator<Regex> {
+public class ValidatorRegex implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field field) {

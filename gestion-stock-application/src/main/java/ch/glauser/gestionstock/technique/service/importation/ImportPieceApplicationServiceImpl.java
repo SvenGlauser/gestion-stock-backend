@@ -79,7 +79,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
                     .setSkipHeaderRecord(true)
                     .get()
                     .parse(new BufferedReader(new InputStreamReader(file.getInputStream())));
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new TechnicalException("Impossible de lire le fichier");
         }
 
@@ -135,19 +135,19 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
         Long quantiteAnneeLong;
         try {
             quantiteAnneeLong = Long.parseLong(quantiteAnnee);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             quantiteAnneeLong = 0L;
         }
 
         try {
             piece.setPrix(Double.parseDouble(prixUnitaire));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new ValidationException(new Error("Le prix n'est pas un nombre valide", PieceConstantes.FIELD_PRIX, Piece.class));
         }
 
         try {
             piece.setQuantite(Long.parseLong(quantite) + quantiteAnneeLong);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             throw new ValidationException(new Error("La quantité n'est pas un nombre valide", PieceConstantes.FIELD_QUANTITE, Piece.class));
         }
 
@@ -218,7 +218,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
         String value;
         try {
             value = csvRecord.get(idColumn);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException _) {
             value = "";
         }
         return StringUtils.trim(value);

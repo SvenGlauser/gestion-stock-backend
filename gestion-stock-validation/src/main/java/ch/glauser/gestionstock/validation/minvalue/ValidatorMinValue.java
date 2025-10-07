@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.lang.reflect.Field;
 
 @NoArgsConstructor
-public class ValidatorMinValue implements Validator<MinValue> {
+public class ValidatorMinValue implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field field) {

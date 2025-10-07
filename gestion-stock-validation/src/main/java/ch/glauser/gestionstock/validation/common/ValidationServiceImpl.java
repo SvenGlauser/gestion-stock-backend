@@ -24,24 +24,24 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ValidationServiceImpl implements ValidationService {
-    private final Map<Class<? extends Annotation>, SequencedSet<Validator<?>>> validators = new HashMap<>();
+    private final Map<Class<? extends Annotation>, SequencedSet<Validator>> validatorsMap = new HashMap<>();
 
     public ValidationServiceImpl() {
         this.registerValidator(NotNull.class, new ValidatorNotNull());
 
-        SequencedSet<Validator<?>> notEmptyValidators = new LinkedHashSet<>(Set.of(
+        SequencedSet<Validator> notEmptyValidators = new LinkedHashSet<>(Set.of(
                 new ValidatorNotNull(),
                 new ValidatorNotEmpty()));
         this.registerValidator(NotEmpty.class, notEmptyValidators);
 
         this.registerValidator(Unique.class, new ValidatorUnique());
 
-        SequencedSet<Validator<?>> minValueValidators = new LinkedHashSet<>(Set.of(
+        SequencedSet<Validator> minValueValidators = new LinkedHashSet<>(Set.of(
                 new ValidatorNotNull(),
                 new ValidatorMinValue()));
         this.registerValidator(MinValue.class, minValueValidators);
 
-        SequencedSet<Validator<?>> maxValueValidators = new LinkedHashSet<>(Set.of(
+        SequencedSet<Validator> maxValueValidators = new LinkedHashSet<>(Set.of(
                 new ValidatorNotNull(),
                 new ValidatorMaxValue()));
         this.registerValidator(MaxValue.class, maxValueValidators);
@@ -52,7 +52,7 @@ public class ValidationServiceImpl implements ValidationService {
     }
 
     @Override
-    public <T extends Annotation> void registerValidator(Class<T> annotation, Validator<?> validator) throws TechnicalException {
+    public <T extends Annotation> void registerValidator(Class<T> annotation, Validator validator) throws TechnicalException {
         if (Objects.isNull(validator)) {
             throw new TechnicalException("Le validateur est null");
         }
@@ -61,19 +61,19 @@ public class ValidationServiceImpl implements ValidationService {
             throw new TechnicalException("L'annotation à valider est null");
         }
 
-        final LinkedHashSet<Validator<?>> validators = new LinkedHashSet<>();
+        final LinkedHashSet<Validator> validators = new LinkedHashSet<>();
         validators.add(validator);
-        this.validators.put(annotation, validators);
+        this.validatorsMap.put(annotation, validators);
     }
 
     @Override
-    public <T extends Annotation> void registerValidator(Class<T> annotation, SequencedSet<Validator<?>> validators) throws TechnicalException {
-        this.validators.put(annotation, new LinkedHashSet<>(CollectionUtils.emptyIfNull(validators)));
+    public <T extends Annotation> void registerValidator(Class<T> annotation, SequencedSet<Validator> validators) throws TechnicalException {
+        this.validatorsMap.put(annotation, new LinkedHashSet<>(CollectionUtils.emptyIfNull(validators)));
     }
 
     @Override
-    public <T extends Annotation> SequencedSet<Validator<?>> getValidators(Class<T> annotation) {
-        return new LinkedHashSet<>(CollectionUtils.emptyIfNull(validators.get(annotation)));
+    public <T extends Annotation> SequencedSet<Validator> getValidators(Class<T> annotation) {
+        return new LinkedHashSet<>(CollectionUtils.emptyIfNull(validatorsMap.get(annotation)));
     }
 
     @Override
@@ -82,9 +82,9 @@ public class ValidationServiceImpl implements ValidationService {
             final List<Annotation> annotations = List.of(field.getAnnotations());
 
             for (Annotation annotation : annotations) {
-                final SequencedSet<? extends Validator<? extends Annotation>> validators = this.getValidators(annotation.annotationType());
+                final SequencedSet<Validator> validators = this.getValidators(annotation.annotationType());
 
-                for (Validator<?> validator : validators) {
+                for (Validator validator : validators) {
                     validator.validate(validation, object, field);
                 }
             }

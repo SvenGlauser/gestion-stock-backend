@@ -1,12 +1,11 @@
 package ch.glauser.gestionstock.validation.common;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
  * Interface représentant un validateur de données
  */
-public interface Validator<T extends Annotation> {
+public interface Validator {
 
     /**
      * Validation de l'objet grâce au champ

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.lang.reflect.Field;
 
 @NoArgsConstructor
-public class ValidatorMaxValue implements Validator<MaxValue> {
+public class ValidatorMaxValue implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field field) {

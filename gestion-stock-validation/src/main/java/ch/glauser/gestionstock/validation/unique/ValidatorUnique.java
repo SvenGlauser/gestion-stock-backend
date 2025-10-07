@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
-public class ValidatorUnique implements Validator<Unique> {
+public class ValidatorUnique implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field field) {

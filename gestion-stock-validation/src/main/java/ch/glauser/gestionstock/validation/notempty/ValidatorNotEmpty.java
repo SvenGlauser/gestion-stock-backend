@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @NoArgsConstructor
-public class ValidatorNotEmpty implements Validator<NotEmpty> {
+public class ValidatorNotEmpty implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field field) {
