@@ -7,7 +7,7 @@ import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExcepti
 import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.identite.model.PersonneMoraleConstantes;
 import ch.glauser.gestionstock.identite.repository.PersonneMoraleRepository;
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 
 /**

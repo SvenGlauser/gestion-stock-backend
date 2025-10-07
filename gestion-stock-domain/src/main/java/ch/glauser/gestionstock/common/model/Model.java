@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.common.model;
 
-import ch.glauser.gestionstock.validation.common.Validation;
+import ch.glauser.validation.common.Validation;
 import lombok.Data;
 
 import java.time.LocalDateTime;
