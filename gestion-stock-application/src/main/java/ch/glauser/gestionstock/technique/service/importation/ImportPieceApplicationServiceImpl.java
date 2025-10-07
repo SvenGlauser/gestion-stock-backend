@@ -14,7 +14,7 @@ import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
 import ch.glauser.gestionstock.piece.service.PieceService;
 import ch.glauser.gestionstock.validation.common.Error;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import ch.glauser.gestionstock.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;

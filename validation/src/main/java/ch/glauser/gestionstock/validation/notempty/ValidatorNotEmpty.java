@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.validation.notempty;
 import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.common.ValidationUtils;
 import ch.glauser.gestionstock.validation.common.Validator;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

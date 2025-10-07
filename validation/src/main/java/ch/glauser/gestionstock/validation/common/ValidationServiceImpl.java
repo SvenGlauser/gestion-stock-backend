@@ -2,7 +2,7 @@ package ch.glauser.gestionstock.validation.common;
 
 import ch.glauser.gestionstock.validation.cascade.CascadeValidation;
 import ch.glauser.gestionstock.validation.cascade.ValidatorCascadeValidation;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import ch.glauser.gestionstock.validation.maxvalue.MaxValue;
 import ch.glauser.gestionstock.validation.maxvalue.ValidatorMaxValue;
 import ch.glauser.gestionstock.validation.minvalue.MinValue;

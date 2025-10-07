@@ -9,7 +9,7 @@ import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import ch.glauser.gestionstock.validation.common.Error;
 import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import ch.glauser.gestionstock.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 

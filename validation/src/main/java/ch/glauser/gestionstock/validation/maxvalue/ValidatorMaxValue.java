@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.validation.maxvalue;
 import ch.glauser.gestionstock.validation.common.Validation;
 import ch.glauser.gestionstock.validation.common.ValidationUtils;
 import ch.glauser.gestionstock.validation.common.Validator;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Field;

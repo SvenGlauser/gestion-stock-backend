@@ -10,11 +10,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>gestion-stock-validation</module>
+        <module>validation</module>
         <module>gestion-stock-persistence</module>
         <module>gestion-stock-domain</module>
         <module>gestion-stock-application</module>
         <module>gestion-stock-batch</module>
+        <module>utilities</module>
     </modules>
 
     <properties>
@@ -42,7 +43,13 @@
         <dependencies>
             <dependency>
                 <groupId>ch.glauser</groupId>
-                <artifactId>gestion-stock-validation</artifactId>
+                <artifactId>utilities</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>validation</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

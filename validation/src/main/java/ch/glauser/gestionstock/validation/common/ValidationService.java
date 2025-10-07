@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.validation.common;
 
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 
 import java.lang.annotation.Annotation;
 import java.util.SequencedSet;

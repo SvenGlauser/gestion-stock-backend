@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.common.validation;
 import ch.glauser.gestionstock.utils.TestUtils;
 import ch.glauser.gestionstock.validation.cascade.CascadeValidation;
 import ch.glauser.gestionstock.validation.common.Validation;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import ch.glauser.gestionstock.validation.maxvalue.MaxValue;
 import ch.glauser.gestionstock.validation.minvalue.MinValue;
 import ch.glauser.gestionstock.validation.notempty.NotEmpty;

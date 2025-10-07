@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.validation.exception;
+package ch.glauser.gestionstock.utilities.exception;
 
 /**
  * Exception technique

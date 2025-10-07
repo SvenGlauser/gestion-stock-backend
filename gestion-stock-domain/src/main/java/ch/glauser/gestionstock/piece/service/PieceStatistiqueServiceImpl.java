@@ -6,7 +6,7 @@ import ch.glauser.gestionstock.piece.model.PieceHistorique;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import ch.glauser.gestionstock.piece.statistique.PieceStatistique;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;

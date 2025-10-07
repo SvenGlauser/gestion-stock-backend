@@ -20,7 +20,12 @@
     <dependencies>
         <dependency>
             <groupId>ch.glauser</groupId>
-            <artifactId>gestion-stock-validation</artifactId>
+            <artifactId>utilities</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.glauser</groupId>
+            <artifactId>validation</artifactId>
         </dependency>
 
         <dependency>

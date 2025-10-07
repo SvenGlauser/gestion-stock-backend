@@ -3,7 +3,7 @@ package ch.glauser.gestionstock.batch.localite;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.gestionstock.pays.service.PaysService;
-import ch.glauser.gestionstock.validation.exception.TechnicalException;
+import ch.glauser.gestionstock.utilities.exception.TechnicalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.lang.NonNull;
