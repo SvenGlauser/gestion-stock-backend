@@ -13,6 +13,10 @@ public class ValidatorCascadeValidation implements Validator {
 
     @Override
     public void validate(Validation validation, Object object, Field field) {
+        if (object == null) {
+            return;
+        }
+
         Object value = ValidationUtils.getValue(object, field);
 
         // Dans le cas ou l'objet se contient lui-même, on évite un StackOverflowError

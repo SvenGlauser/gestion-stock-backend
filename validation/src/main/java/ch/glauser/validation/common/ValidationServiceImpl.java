@@ -36,15 +36,9 @@ public class ValidationServiceImpl implements ValidationService {
 
         this.registerValidator(Unique.class, new ValidatorUnique());
 
-        SequencedSet<Validator> minValueValidators = new LinkedHashSet<>(Set.of(
-                new ValidatorNotNull(),
-                new ValidatorMinValue()));
-        this.registerValidator(MinValue.class, minValueValidators);
+        this.registerValidator(MinValue.class, new ValidatorMinValue());
 
-        SequencedSet<Validator> maxValueValidators = new LinkedHashSet<>(Set.of(
-                new ValidatorNotNull(),
-                new ValidatorMaxValue()));
-        this.registerValidator(MaxValue.class, maxValueValidators);
+        this.registerValidator(MaxValue.class, new ValidatorMaxValue());
 
         this.registerValidator(Regex.class, new ValidatorRegex());
 
