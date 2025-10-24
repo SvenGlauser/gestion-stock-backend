@@ -36,7 +36,9 @@
         <org.apache.commons.validator.version>1.9.0</org.apache.commons.validator.version>
 
         <org.junit.jupiter.version>5.12.2</org.junit.jupiter.version>
-        <org.assertj.core>3.27.6</org.assertj.core>
+        <org.assertj.core.version>3.27.6</org.assertj.core.version>
+
+        <jacoco.maven.plugin.version>0.8.14</jacoco.maven.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -133,7 +135,7 @@
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>${org.assertj.core}</version>
+                <version>${org.assertj.core.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -161,4 +163,38 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>coverage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.maven.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                                <configuration>
+                                    <formats>
+                                        <format>XML</format>
+                                    </formats>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
