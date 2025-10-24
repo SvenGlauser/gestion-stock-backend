@@ -27,7 +27,7 @@
         <sonar.organization>svenglauser</sonar.organization>
         <sonar.projectName>gestion-stock-backend</sonar.projectName>
         <sonar.coverage.jacoco.xmlReportPaths>report-aggregate/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.java.binaries>*/target/classes</sonar.java.binaries>
+        <sonar.coverage.exclusions>utilities/**,gestion-stock-backend/**,gestion-stock-batch/**</sonar.coverage.exclusions>
 
         <org.apache.maven.plugins.version>3.14.1</org.apache.maven.plugins.version>
 
