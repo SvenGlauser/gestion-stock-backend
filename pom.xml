@@ -27,13 +27,7 @@
         <sonar.organization>svenglauser</sonar.organization>
         <sonar.projectName>gestion-stock-backend</sonar.projectName>
         <sonar.coverage.jacoco.xmlReportPaths>
-            /report-aggregate/target/site/jacoco-aggregate/jacoco.xml,
-            /gestion-stock-application/target/site/jacoco-aggregate/jacoco.xml,
-            /gestion-stock-domain/target/site/jacoco-aggregate/jacoco.xml,
-            /gestion-stock-persistence/target/site/jacoco-aggregate/jacoco.xml
-            /gestion-stock-batch/target/site/jacoco-aggregate/jacoco.xml
-            /validation/target/site/jacoco-aggregate/jacoco.xml
-            /utilities/target/site/jacoco-aggregate/jacoco.xml
+            /report-aggregate/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
