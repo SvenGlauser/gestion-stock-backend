@@ -16,12 +16,12 @@
         <module>gestion-stock-application</module>
         <module>gestion-stock-batch</module>
         <module>utilities</module>
-        <module>report-agregate</module>
+        <module>report-aggregate</module>
     </modules>
 
     <properties>
         <sonar.coverage.jacoco.xmlReportPaths>
-            ${maven.multiModuleProjectDirectory}/report-agregate/target/site/jacoco-aggregate/jacoco.xml
+            ${maven.multiModuleProjectDirectory}/report-aggregate/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
 
         <maven.compiler.source>25</maven.compiler.source>
