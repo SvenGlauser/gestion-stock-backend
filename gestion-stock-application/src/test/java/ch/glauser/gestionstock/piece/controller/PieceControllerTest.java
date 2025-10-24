@@ -11,7 +11,9 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
+import ch.glauser.gestionstock.identite.controller.PersonneMoraleController;
 import ch.glauser.gestionstock.identite.controller.PersonnePhysiqueController;
+import ch.glauser.gestionstock.identite.dto.PersonneMoraleDto;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
 import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.controller.MachineController;
@@ -48,6 +50,9 @@ class PieceControllerTest {
 
     @Autowired
     FournisseurController fournisseurController;
+
+    @Autowired
+    PersonneMoraleController personneMoraleController;
 
     @Test
     void get() {
@@ -348,8 +353,13 @@ class PieceControllerTest {
     }
 
     private FournisseurDto getFournisseur() {
+        PersonneMoraleDto personneMorale = new PersonneMoraleDto();
+        personneMorale.setRaisonSociale("Identité lié au fournisseur");
+        personneMorale = personneMoraleController.create(personneMorale).getBody();
+        assertThat(personneMorale).isNotNull();
+
         FournisseurDto fournisseurDto = new FournisseurDto();
-        fournisseurDto.setNom("Test");
+        fournisseurDto.setIdentite(personneMorale);
         return this.fournisseurController.create(fournisseurDto).getBody();
     }
 }

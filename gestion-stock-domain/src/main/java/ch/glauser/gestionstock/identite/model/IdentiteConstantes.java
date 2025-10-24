@@ -14,4 +14,5 @@ public final class IdentiteConstantes {
     public static final String FIELD_SEARCH_REQUEST = "searchRequest";
 
     public static final String ERROR_SUPPRESSION_IDENTITE_IMPOSSIBLE_EXISTE_MACHINE = "Impossible de supprimer cette identité car il existe une machine liée";
+    public static final String ERROR_SUPPRESSION_IDENTITE_IMPOSSIBLE_EXISTE_FOURNISSEUR = "Impossible de supprimer cette identité car il existe un fournisseur lié";
 }

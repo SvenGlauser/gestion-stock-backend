@@ -5,6 +5,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Repository de gestion des fournisseurs
@@ -17,6 +18,14 @@ public interface FournisseurRepository {
      * @return La fournisseur ou null
      */
     Optional<Fournisseur> get(Long id);
+
+    /**
+     * Récupère un fournisseur
+     *
+     * @param designation Désignation de l'identité liée au fournisseur (Nom prénom ou Raison sociale)
+     * @return La fournisseur ou null
+     */
+    Set<Fournisseur> findAllByIdentiteDesignation(String designation);
 
     /**
      * Récupère les fournisseurs
@@ -50,18 +59,10 @@ public interface FournisseurRepository {
     void delete(Long id);
 
     /**
-     * Vérifie s'il existe un fournisseur avec cette localité
+     * Vérifie s'il existe un fournisseur lié à cette identité
      *
-     * @param id Id de la localité
-     * @return {@code true} s'il en existe un, sinon {@code false}
-     */
-    boolean existByIdLocalite(Long id);
-
-    /**
-     * Vérifie s'il existe un fournisseur avec ce nom
-     *
-     * @param nom Nom du fournisseur
+     * @param id Id de l'identité
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
-    boolean existByNom(String nom);
+    boolean existByIdIdentite(Long id);
 }

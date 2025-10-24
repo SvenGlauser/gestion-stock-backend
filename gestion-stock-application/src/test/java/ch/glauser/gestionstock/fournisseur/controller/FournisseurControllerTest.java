@@ -10,6 +10,8 @@ import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
+import ch.glauser.gestionstock.identite.controller.PersonneMoraleController;
+import ch.glauser.gestionstock.identite.dto.PersonneMoraleDto;
 import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.utils.TestUtils;
@@ -38,10 +40,18 @@ class FournisseurControllerTest {
     @Autowired
     CategorieController categorieController;
 
+    @Autowired
+    PersonneMoraleController personneMoraleController;
+
     @Test
     void get() {
+        PersonneMoraleDto personneMorale = new PersonneMoraleDto();
+        personneMorale.setRaisonSociale("Identité lié au fournisseur");
+        personneMorale = personneMoraleController.create(personneMorale).getBody();
+        assertThat(personneMorale).isNotNull();
+
         FournisseurDto fournisseur = new FournisseurDto();
-        fournisseur.setNom("Fournisseur");
+        fournisseur.setIdentite(personneMorale);
         fournisseur.setDescription("Description");
         fournisseur.setUrl("https://google.com");
 
@@ -51,9 +61,9 @@ class FournisseurControllerTest {
 
         FournisseurDto fournisseurDto = fournisseurController.get(fournisseur.getId()).getBody();
         assertThat(fournisseurDto).isNotNull();
-        assertThat(fournisseurDto.getNom())
+        assertThat(fournisseurDto.getIdentite().getId())
                 .isNotNull()
-                .isEqualTo("Fournisseur");
+                .isEqualTo(personneMorale.getId());
         assertThat(fournisseurDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Description");
@@ -69,17 +79,27 @@ class FournisseurControllerTest {
         TestUtils.testValidation(1, () -> fournisseurController.create(fournisseur));
 
         // Test cas OK
-        fournisseur.setNom("Fournisseur");
+        PersonneMoraleDto personneMorale = new PersonneMoraleDto();
+        personneMorale.setRaisonSociale("Identité lié au fournisseur");
+        personneMorale = personneMoraleController.create(personneMorale).getBody();
+        assertThat(personneMorale).isNotNull();
+
+        fournisseur.setIdentite(personneMorale);
         assertDoesNotThrow(() -> fournisseurController.create(fournisseur));
 
         FournisseurDto fournisseur2 = new FournisseurDto();
-        fournisseur2.setNom("Fournisseur");
+        fournisseur2.setIdentite(personneMorale);
 
         // Test unicité du nom
         TestUtils.testValidation(1, () -> fournisseurController.create(fournisseur2));
 
+        PersonneMoraleDto personneMorale2 = new PersonneMoraleDto();
+        personneMorale2.setRaisonSociale("Identité lié au fournisseur 2");
+        personneMorale2 = personneMoraleController.create(personneMorale2).getBody();
+        assertThat(personneMorale2).isNotNull();
+
         FournisseurDto fournisseur3 = new FournisseurDto();
-        fournisseur3.setNom("Fournisseur 2");
+        fournisseur3.setIdentite(personneMorale2);
 
         // Test unicité du nom
         assertDoesNotThrow(() -> fournisseurController.create(fournisseur3));
@@ -87,18 +107,33 @@ class FournisseurControllerTest {
 
     @Test
     void search() {
+        PersonneMoraleDto personneMorale = new PersonneMoraleDto();
+        personneMorale.setRaisonSociale("Identité lié au fournisseur");
+        personneMorale = personneMoraleController.create(personneMorale).getBody();
+        assertThat(personneMorale).isNotNull();
+
         FournisseurDto fournisseur = new FournisseurDto();
-        fournisseur.setNom("Fournisseur");
+        fournisseur.setIdentite(personneMorale);
         fournisseur.setDescription("Description");
         assertDoesNotThrow(() -> fournisseurController.create(fournisseur));
 
+        PersonneMoraleDto personneMorale2 = new PersonneMoraleDto();
+        personneMorale2.setRaisonSociale("Identité lié au fournisseur 2");
+        personneMorale2 = personneMoraleController.create(personneMorale2).getBody();
+        assertThat(personneMorale2).isNotNull();
+
         FournisseurDto fournisseur2 = new FournisseurDto();
-        fournisseur2.setNom("Fournisseur 2");
+        fournisseur2.setIdentite(personneMorale2);
         fournisseur2.setDescription("Description");
         assertDoesNotThrow(() -> fournisseurController.create(fournisseur2));
 
+        PersonneMoraleDto personneMorale3 = new PersonneMoraleDto();
+        personneMorale3.setRaisonSociale("Identité lié au fournisseur 2");
+        personneMorale3 = personneMoraleController.create(personneMorale3).getBody();
+        assertThat(personneMorale3).isNotNull();
+
         FournisseurDto fournisseur3 = new FournisseurDto();
-        fournisseur3.setNom("Fournisseur 3");
+        fournisseur3.setIdentite(personneMorale3);
         fournisseur3.setDescription("Description 2");
         assertDoesNotThrow(() -> fournisseurController.create(fournisseur3));
 
@@ -125,8 +160,8 @@ class FournisseurControllerTest {
                 .hasSize(1);
 
         Filter nom = new Filter();
-        nom.setValue("Fournisseur");
-        nom.setField("nom");
+        nom.setValue("fournisseur");
+        nom.setField("identite.designation");
         nom.setType(Filter.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
         searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
@@ -140,8 +175,13 @@ class FournisseurControllerTest {
 
     @Test
     void modify() {
+        PersonneMoraleDto personneMorale = new PersonneMoraleDto();
+        personneMorale.setRaisonSociale("Identité lié au fournisseur");
+        personneMorale = personneMoraleController.create(personneMorale).getBody();
+        assertThat(personneMorale).isNotNull();
+
         FournisseurDto fournisseur = new FournisseurDto();
-        fournisseur.setNom("Fournisseur");
+        fournisseur.setIdentite(personneMorale);
         fournisseur.setDescription("Description");
         fournisseur.setUrl("https://google.com");
 
@@ -151,9 +191,9 @@ class FournisseurControllerTest {
 
         FournisseurDto fournisseurDto = fournisseurController.get(fournisseur.getId()).getBody();
         assertThat(fournisseurDto).isNotNull();
-        assertThat(fournisseurDto.getNom())
+        assertThat(fournisseurDto.getIdentite().getId())
                 .isNotNull()
-                .isEqualTo("Fournisseur");
+                .isEqualTo(personneMorale.getId());
         assertThat(fournisseurDto.getDescription())
                 .isNotNull()
                 .isEqualTo("Description");
@@ -161,7 +201,12 @@ class FournisseurControllerTest {
                 .isNotNull()
                 .isEqualTo("https://google.com");
 
-        fournisseur.setNom("Fournisseur 2");
+        PersonneMoraleDto personneMorale2 = new PersonneMoraleDto();
+        personneMorale2.setRaisonSociale("Identité lié au fournisseur 2");
+        personneMorale2 = personneMoraleController.create(personneMorale2).getBody();
+        assertThat(personneMorale2).isNotNull();
+
+        fournisseur.setIdentite(personneMorale2);
         fournisseur.setDescription("Description 2");
         fournisseur.setUrl("https://google.ch");
 
@@ -169,9 +214,9 @@ class FournisseurControllerTest {
 
         FournisseurDto fournisseurDto2 = fournisseurController.get(fournisseur.getId()).getBody();
         assertThat(fournisseurDto2).isNotNull();
-        assertThat(fournisseurDto2.getNom())
+        assertThat(fournisseurDto2.getIdentite().getId())
                 .isNotNull()
-                .isEqualTo("Fournisseur 2");
+                .isEqualTo(personneMorale2.getId());
         assertThat(fournisseurDto2.getDescription())
                 .isNotNull()
                 .isEqualTo("Description 2");
@@ -181,30 +226,14 @@ class FournisseurControllerTest {
     }
 
     @Test
-    void modifyAvecNomUnique() {
-        FournisseurDto fournisseur = new FournisseurDto();
-        fournisseur.setNom("Fournisseur");
-
-        fournisseur = fournisseurController.create(fournisseur).getBody();
-
-        assertThat(fournisseur).isNotNull();
-
-        FournisseurDto fournisseur2 = new FournisseurDto();
-        fournisseur2.setNom("Fournisseur 2");
-
-        fournisseur2 = fournisseurController.create(fournisseur2).getBody();
-
-        assertThat(fournisseur2).isNotNull();
-
-        FournisseurDto fournisseur2SameName = fournisseur2;
-        fournisseur2SameName.setNom("Fournisseur");
-        TestUtils.testValidation(1, () -> fournisseurController.modify(fournisseur2SameName));
-    }
-
-    @Test
     void delete() {
+        PersonneMoraleDto personneMorale = new PersonneMoraleDto();
+        personneMorale.setRaisonSociale("Identité lié au fournisseur 2");
+        personneMorale = personneMoraleController.create(personneMorale).getBody();
+        assertThat(personneMorale).isNotNull();
+
         FournisseurDto fournisseur = new FournisseurDto();
-        fournisseur.setNom("Fournisseur");
+        fournisseur.setIdentite(personneMorale);
 
         fournisseur = fournisseurController.create(fournisseur).getBody();
 
@@ -221,7 +250,7 @@ class FournisseurControllerTest {
                 .isInstanceOf(DeleteWithInexistingIdException.class);
 
         FournisseurDto fournisseur2 = new FournisseurDto();
-        fournisseur2.setNom("Fournisseur 2");
+        fournisseur2.setIdentite(personneMorale);
         fournisseur2 = fournisseurController.create(fournisseur2).getBody();
 
         CategorieDto categorieDto = new CategorieDto();

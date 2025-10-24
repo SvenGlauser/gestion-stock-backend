@@ -39,8 +39,9 @@ public class ServiceBeansGenerator {
 
     @Bean
     public IdentiteService identiteService(IdentiteRepository identiteRepository,
-                                           MachineRepository machineRepository) {
-        return new IdentiteServiceImpl(identiteRepository, machineRepository);
+                                           MachineRepository machineRepository,
+                                           FournisseurRepository fournisseurRepository) {
+        return new IdentiteServiceImpl(identiteRepository, machineRepository, fournisseurRepository);
     }
 
     @Bean

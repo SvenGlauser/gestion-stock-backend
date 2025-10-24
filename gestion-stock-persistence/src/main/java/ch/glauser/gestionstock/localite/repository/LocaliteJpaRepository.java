@@ -24,7 +24,10 @@ public interface LocaliteJpaRepository extends JpaRepository<LocaliteEntity, Lon
      * @param id Id du pays
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    @Query("SELECT COUNT(localite) > 0 FROM Localite localite WHERE localite.pays.id = :id")
+    @Query("""
+            SELECT COUNT(localite) > 0
+            FROM Localite localite
+            WHERE localite.pays.id = :id""")
     boolean existsByIdPays(@Param("id") Long id);
 
     /**
@@ -36,10 +39,10 @@ public interface LocaliteJpaRepository extends JpaRepository<LocaliteEntity, Lon
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
     @Query("""
-            SELECT COUNT(localite) > 0 \
-            FROM Localite localite \
-            WHERE localite.pays.id = :id \
-            AND localite.nom = :nom \
+            SELECT COUNT(localite) > 0
+            FROM Localite localite
+            WHERE localite.pays.id = :id
+            AND localite.nom = :nom
             AND localite.npa = :npa""")
     boolean existsByNpaAndNomAndIdPays(@Param("npa") String npa, @Param("nom") String nom, @Param("id") Long id);
 

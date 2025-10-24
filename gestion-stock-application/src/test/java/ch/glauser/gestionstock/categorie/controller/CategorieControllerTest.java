@@ -10,6 +10,9 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
+import ch.glauser.gestionstock.identite.controller.PersonneMoraleController;
+import ch.glauser.gestionstock.identite.dto.PersonneMoraleDto;
+import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.utils.TestUtils;
@@ -37,6 +40,9 @@ class CategorieControllerTest {
 
     @Autowired
     FournisseurController fournisseurController;
+
+    @Autowired
+    PersonneMoraleController personneMoraleController;
 
     @Test
     void get() {
@@ -224,8 +230,12 @@ class CategorieControllerTest {
         categorie2.setActif(true);
         categorie2 = categorieController.create(categorie2).getBody();
 
+        PersonneMoraleDto personneMorale = new PersonneMoraleDto();
+        personneMorale.setRaisonSociale("Personne Morale - Test Delete - 2");
+        personneMorale = this.personneMoraleController.create(personneMorale).getBody();
+
         FournisseurDto fournisseur = new FournisseurDto();
-        fournisseur.setNom("Test");
+        fournisseur.setIdentite(personneMorale);
         fournisseur = this.fournisseurController.create(fournisseur).getBody();
 
         PieceDto piece = new PieceDto();

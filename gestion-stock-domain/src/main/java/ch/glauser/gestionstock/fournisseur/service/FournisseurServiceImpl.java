@@ -5,6 +5,7 @@ import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdExcepti
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
+import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
@@ -15,8 +16,10 @@ import ch.glauser.validation.common.Error;
 import ch.glauser.validation.common.Validation;
 import ch.glauser.validation.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 
-import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Implémentation du service de gestion des fournisseurs
@@ -40,6 +43,15 @@ public class FournisseurServiceImpl implements FournisseurService {
     }
 
     @Override
+    public Set<Fournisseur> findAllByIdentiteDesignation(String designation) {
+        Validation.of(FournisseurServiceImpl.class)
+                .validateNotNull(designation, FournisseurConstantes.FIELD_DESIGNATION)
+                .execute();
+
+        return this.fournisseurRepository.findAllByIdentiteDesignation(designation);
+    }
+
+    @Override
     public SearchResult<Fournisseur> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FournisseurConstantes.FIELD_SEARCH_REQUEST)
@@ -56,8 +68,9 @@ public class FournisseurServiceImpl implements FournisseurService {
 
         Validation validation = fournisseur.validateCreate();
 
-        if (this.fournisseurRepository.existByNom(fournisseur.getNom())) {
-            validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
+        Long idIdentite = Optional.ofNullable(fournisseur.getIdentite()).map(Model::getId).orElse(null);
+        if (this.fournisseurRepository.existByIdIdentite(idIdentite)) {
+            validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_IDENTITE_UNIQUE, FournisseurConstantes.FIELD_IDENTITE);
         }
 
         validation.execute();
@@ -77,11 +90,13 @@ public class FournisseurServiceImpl implements FournisseurService {
 
         Validation validation = fournisseur.validateModify();
 
-        if (!Objects.equals(oldFournisseur.getNom(), fournisseur.getNom()) &&
-            this.fournisseurRepository.existByNom(fournisseur.getNom())) {
+        final Long oldIdentiteId = Optional.ofNullable(oldFournisseur).map(Model::getId).orElse(null);
+        final Long newIdentiteId = Optional.ofNullable(oldFournisseur).map(Model::getId).orElse(null);
+        if (ObjectUtils.notEqual(oldIdentiteId, newIdentiteId)
+            && this.fournisseurRepository.existByIdIdentite(fournisseur.getId())) {
 
             // Valide le cas dans lequel la catégorie a changé de nom
-            validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_NOM_UNIQUE, FournisseurConstantes.FIELD_NOM);
+            validation.addError(FournisseurConstantes.ERROR_FOURNISSEUR_IDENTITE_UNIQUE, FournisseurConstantes.FIELD_IDENTITE);
         }
 
         validation.execute();

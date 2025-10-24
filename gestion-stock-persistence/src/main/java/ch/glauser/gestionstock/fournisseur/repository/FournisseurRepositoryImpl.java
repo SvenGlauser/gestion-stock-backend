@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implémentation du repository de gestion des fournisseurs
@@ -26,6 +28,15 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
     @Override
     public Optional<Fournisseur> get(Long id) {
         return this.fournisseurJpaRepository.findById(id).map(ModelEntity::toDomain);
+    }
+
+    @Override
+    public Set<Fournisseur> findAllByIdentiteDesignation(String designation) {
+        return this.fournisseurJpaRepository
+                .findAllByIdentiteDesignation(designation)
+                .stream()
+                .map(ModelEntity::toDomain)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -50,12 +61,7 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
     }
 
     @Override
-    public boolean existByIdLocalite(Long id) {
-        return this.fournisseurJpaRepository.existsByIdLocalite(id);
-    }
-
-    @Override
-    public boolean existByNom(String nom) {
-        return this.fournisseurJpaRepository.existsByNom(nom);
+    public boolean existByIdIdentite(Long id) {
+        return this.fournisseurJpaRepository.existsByIdIdentite(id);
     }
 }

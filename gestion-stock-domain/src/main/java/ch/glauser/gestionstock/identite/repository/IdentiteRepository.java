@@ -4,10 +4,20 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.model.Identite;
 
+import java.util.Set;
+
 /**
  * Repository de gestion des identités
  */
 public interface IdentiteRepository {
+
+    /**
+     * Récupère les identités par leur désignation
+     *
+     * @param designation Désignation
+     * @return Une liste d'identités
+     */
+    Set<Identite> findAllByDesignation(String designation);
 
     /**
      * Récupère les identités
