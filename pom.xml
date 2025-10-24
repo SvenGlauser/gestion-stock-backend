@@ -24,7 +24,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <sonar.organization>svenglauser</sonar.organization>
-        <sonar.projectName>SvenGlauser_gestion-stock-backend</sonar.projectName>
+        <sonar.projectName>gestion-stock-backend</sonar.projectName>
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
         <org.apache.maven.plugins.version>3.14.1</org.apache.maven.plugins.version>
