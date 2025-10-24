@@ -35,7 +35,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze with SonarQube
         run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-              -Dsonar.projectKey=svenglauser \
+              -Dsonar.organization=svenglauser \
               -Dsonar.projectKey=SvenGlauser_gestion-stock-backend \
               -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
               -Dsonar.coverage.jacoco.xmlReportPaths="target/site/jacoco-aggregate/jacoco.xml"
