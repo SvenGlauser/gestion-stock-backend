@@ -16,9 +16,14 @@
         <module>gestion-stock-application</module>
         <module>gestion-stock-batch</module>
         <module>utilities</module>
+        <module>report-agregate-module</module>
     </modules>
 
     <properties>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${maven.multiModuleProjectDirectory}/report-aggregate/target/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
