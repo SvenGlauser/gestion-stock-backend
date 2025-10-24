@@ -12,12 +12,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * JPA Repository pour la gestion des identités
  */
 @Repository
 public interface IdentiteJpaRepository extends JpaRepository<IdentiteEntity, Long>, JpaSpecificationExecutor<IdentiteEntity> {
+
+    @Query("""
+        SELECT identite
+        FROM Identite identite
+        WHERE LOWER(identite.designation) = LOWER(:designation)
+        """)
+    Set<IdentiteEntity> findAllByDesignation(@Param("designation") String designation);
 
     /**
      * Vérifie s'il existe une identité avec cette localité

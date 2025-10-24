@@ -16,13 +16,13 @@
             <column name="MODIFICATION_DATE" type="DATETIME"/>
             <column name="MODIFICATION_USER" type="VARCHAR(255)"/>
 
-            <column name="NUMERO" type="VARCHAR(255)"/>
-            <column name="RUE" type="VARCHAR(255)"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="NOM" type="VARCHAR(255)">
+            <column name="IDENTITE_ID" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
+
             <column name="URL" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+
             <column name="LOCALITE_ID" type="BIGINT"/>
         </createTable>
 
@@ -31,5 +31,11 @@
                                  constraintName="FK_FOURNISSEUR_LOCALITE_ID"
                                  referencedColumnNames="ID"
                                  referencedTableName="LOCALITE"/>
+
+        <addForeignKeyConstraint baseColumnNames="IDENTITE_ID"
+                                 baseTableName="FOURNISSEUR"
+                                 constraintName="FK_FOURNISSEUR_IDENTITE_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="IDENTITE"/>
     </changeSet>
 </databaseChangeLog>

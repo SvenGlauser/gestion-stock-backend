@@ -2,13 +2,12 @@ package ch.glauser.gestionstock.technique.service.importation;
 
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.categorie.service.CategorieService;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
-import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
-import ch.glauser.gestionstock.fournisseur.model.FournisseurConstantes;
 import ch.glauser.gestionstock.fournisseur.service.FournisseurService;
+import ch.glauser.gestionstock.identite.model.Identite;
+import ch.glauser.gestionstock.identite.model.PersonneMorale;
+import ch.glauser.gestionstock.identite.service.IdentiteService;
+import ch.glauser.gestionstock.identite.service.PersonneMoraleService;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
@@ -34,6 +33,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implémentation du service d'importation des pièces
@@ -56,6 +56,8 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
     private final PieceService pieceService;
     private final CategorieService categorieService;
     private final FournisseurService fournisseurService;
+    private final IdentiteService identiteService;
+    private final PersonneMoraleService personneMoraleService;
 
     @Override
     @Transactional
@@ -170,48 +172,56 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
     }
 
     private Fournisseur getFournisseur(String fournisseurNom, Fournisseur fournisseurParDefaut) {
-        Fournisseur fournisseur;
+        Fournisseur fournisseur = this.findByDesignationOrElseCreateNewIdentity(fournisseurNom);
 
-        if (StringUtils.isNotBlank(fournisseurNom)) {
-            SearchResult<Fournisseur> fournisseurs = this.searchFournisseurs(fournisseurNom);
-
-            if (CollectionUtils.isNotEmpty(fournisseurs.getElements())) {
-                fournisseur = fournisseurs.getElements().getFirst();
-            } else {
-                fournisseur = new Fournisseur();
-                fournisseur.setNom(fournisseurNom);
-                fournisseur = this.fournisseurService.create(fournisseur);
-            }
-        } else {
+        if (fournisseur == null) {
             fournisseur = fournisseurParDefaut;
         }
+
         return fournisseur;
     }
 
     private Fournisseur getDefaultFournisseur() {
-        Fournisseur fournisseurParDefaut;
-
-        SearchResult<Fournisseur> fournisseursIconnus = this.searchFournisseurs("Inconnu");
-
-        if (CollectionUtils.isNotEmpty(fournisseursIconnus.getElements())) {
-            fournisseurParDefaut = fournisseursIconnus.getElements().getFirst();
-        } else {
-            fournisseurParDefaut = new Fournisseur();
-            fournisseurParDefaut.setNom("Inconnu");
-            fournisseurParDefaut = this.fournisseurService.create(fournisseurParDefaut);
-        }
-        return fournisseurParDefaut;
+        return this.findByDesignationOrElseCreateNewIdentity("Inconnu");
     }
 
-    private SearchResult<Fournisseur> searchFournisseurs(String nom) {
-        Filter nameFilter = new Filter();
-        nameFilter.setField(FournisseurConstantes.FIELD_NOM);
-        nameFilter.setType(Filter.Type.EQUAL);
-        nameFilter.setValue(nom);
+    private Fournisseur findByDesignationOrElseCreateNewIdentity(String fournisseurNom) {
+        Fournisseur fournisseur = null;
 
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.setCombinators(List.of(FilterCombinator.and(List.of(nameFilter))));
-        return this.fournisseurService.search(searchRequest);
+        if (StringUtils.isNotBlank(fournisseurNom)) {
+            Optional<Fournisseur> fournisseurOptional = this.fournisseurService
+                    .findAllByIdentiteDesignation(fournisseurNom)
+                    .stream()
+                    .findFirst();
+
+            if (fournisseurOptional.isPresent()) {
+                fournisseur = fournisseurOptional.get();
+            } else {
+                Optional<Identite> identiteOptional = this.identiteService
+                        .findAllByDesignation(fournisseurNom)
+                        .stream()
+                        .findFirst();
+
+                Identite identite;
+                if (identiteOptional.isPresent()) {
+                    identite = identiteOptional.get();
+                } else {
+                    PersonneMorale personneMorale = new PersonneMorale();
+                    personneMorale.setRaisonSociale(fournisseurNom);
+
+                    String date = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+                    personneMorale.setRemarques("Création automatique lors de l'importation de pièces le " + date);
+
+                    identite = this.personneMoraleService.create(personneMorale);
+                }
+
+                fournisseur = new Fournisseur();
+                fournisseur.setIdentite(identite);
+                fournisseur = this.fournisseurService.create(fournisseur);
+            }
+        }
+
+        return fournisseur;
     }
 
     private static String getString(CSVRecord csvRecord, String idColumn) {

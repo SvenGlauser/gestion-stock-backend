@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * JPA Repository pour la gestion des fournisseurs
@@ -19,21 +20,28 @@ import java.util.Collection;
 @Repository
 public interface FournisseurJpaRepository extends JpaRepository<FournisseurEntity, Long>, JpaSpecificationExecutor<FournisseurEntity> {
     /**
-     * Vérifie s'il existe un fournisseur avec cette localité
+     * Récupère un fournisseur
      *
-     * @param id Id de la localité
-     * @return {@code true} s'il en existe un, sinon {@code false}
+     * @param designation Désignation de l'identité liée au fournisseur (Nom prénom ou Raison sociale)
+     * @return La fournisseur ou null
      */
-    @Query("SELECT COUNT(fournisseur) > 0 FROM Fournisseur fournisseur WHERE fournisseur.adresse.localite.id = :id")
-    boolean existsByIdLocalite(@Param("id") Long id);
+    @Query("""
+            SELECT fournisseur
+            FROM Fournisseur fournisseur
+            WHERE LOWER(fournisseur.identite.designation) = LOWER(:designation)""")
+    Set<FournisseurEntity> findAllByIdentiteDesignation(@Param("designation") String designation);
 
     /**
-     * Vérifie s'il existe un fournisseur avec ce nom
+     * Vérifie s'il existe un fournisseur avec cette identité
      *
-     * @param nom Nom du fournisseur
+     * @param id Id de l'identité
      * @return {@code true} s'il en existe une, sinon {@code false}
      */
-    boolean existsByNom(String nom);
+    @Query("""
+            SELECT COUNT(fournisseur) > 0
+            FROM Fournisseur fournisseur
+            WHERE fournisseur.identite.id = :id""")
+    boolean existsByIdIdentite(@Param("id") Long id);
 
     default Page<FournisseurEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);

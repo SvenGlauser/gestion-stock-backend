@@ -25,7 +25,10 @@ public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>
      * @param idProprietaire Id de l'identité
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    @Query("SELECT COUNT(machine) > 0 FROM Machine machine WHERE machine.proprietaire.id = :id")
+    @Query("""
+            SELECT COUNT(machine) > 0
+            FROM Machine machine
+            WHERE machine.proprietaire.id = :id""")
     boolean existsByIdProprietaire(@Param("id") Long idProprietaire);
 
     /**
@@ -34,7 +37,11 @@ public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>
      * @param id Id de la pièce
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
-    @Query("SELECT COUNT(machine) > 0 FROM Machine machine JOIN machine.pieces piece WHERE piece.id = :id")
+    @Query("""
+            SELECT COUNT(machine) > 0
+            FROM Machine machine
+            JOIN machine.pieces piece
+            WHERE piece.id = :id""")
     boolean existsByIdPiece(@Param("id") Long id);
 
     /**
@@ -45,9 +52,9 @@ public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>
      * @return {@code true} s'il en existe un, sinon {@code false}
      */
     @Query("""
-            SELECT COUNT(machine) > 0 \
-            FROM Machine machine \
-            WHERE machine.proprietaire.id = :idProprietaire \
+            SELECT COUNT(machine) > 0
+            FROM Machine machine
+            WHERE machine.proprietaire.id = :idProprietaire
             AND machine.nom = :nom""")
     boolean existsByNomAndIdProprietaire(@Param("nom") String nom, @Param("idProprietaire") Long idProprietaire);
 

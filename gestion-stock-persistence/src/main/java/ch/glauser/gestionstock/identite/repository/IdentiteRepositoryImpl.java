@@ -8,6 +8,9 @@ import ch.glauser.gestionstock.identite.model.Identite;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Implémentation du repository de gestion des identités
  */
@@ -18,6 +21,15 @@ public class IdentiteRepositoryImpl implements IdentiteRepository {
 
     public IdentiteRepositoryImpl(IdentiteJpaRepository identiteJpaRepository) {
         this.identiteJpaRepository = identiteJpaRepository;
+    }
+
+    @Override
+    public Set<Identite> findAllByDesignation(String designation) {
+        return this.identiteJpaRepository
+                .findAllByDesignation(designation)
+                .stream()
+                .map(IdentiteEntity::toDomain)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -32,7 +44,6 @@ public class IdentiteRepositoryImpl implements IdentiteRepository {
         searchResult.setElements(page
                 .stream()
                 .map(IdentiteEntity::toDomain)
-                .map(Identite.class::cast)
                 .toList());
 
         return searchResult;

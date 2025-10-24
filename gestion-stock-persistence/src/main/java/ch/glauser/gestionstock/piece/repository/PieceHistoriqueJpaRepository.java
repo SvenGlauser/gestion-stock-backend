@@ -22,7 +22,12 @@ import java.util.Optional;
 @Repository
 public interface PieceHistoriqueJpaRepository extends JpaRepository<PieceHistoriqueEntity, Long>, JpaSpecificationExecutor<PieceHistoriqueEntity> {
 
-    @Query("SELECT historique FROM PieceHistorique historique WHERE historique.piece.id = :idPiece ORDER BY historique.heure DESC LIMIT 1")
+    @Query("""
+            SELECT historique
+            FROM PieceHistorique historique
+            WHERE historique.piece.id = :idPiece
+            ORDER BY historique.heure DESC
+            LIMIT 1""")
     Optional<PieceHistoriqueEntity> getLastHistoriqueFromPieceId(@Param("idPiece") Long idPiece);
 
     /**
@@ -30,7 +35,10 @@ public interface PieceHistoriqueJpaRepository extends JpaRepository<PieceHistori
      * @param idPiece Id de la pièce
      * @return Une liste d'historique
      */
-    @Query("SELECT historique FROM PieceHistorique historique WHERE historique.piece.id = :idPiece")
+    @Query("""
+            SELECT historique
+            FROM PieceHistorique historique
+            WHERE historique.piece.id = :idPiece""")
     List<PieceHistoriqueEntity> findAllByIdPiece(@Param("idPiece") Long idPiece);
 
     /**
@@ -38,7 +46,10 @@ public interface PieceHistoriqueJpaRepository extends JpaRepository<PieceHistori
      * @param idPiece Id de la pièce
      */
     @Modifying
-    @Query("DELETE FROM PieceHistorique pieceHistorique WHERE pieceHistorique.piece.id = :idPiece")
+    @Query("""
+            DELETE
+            FROM PieceHistorique pieceHistorique
+            WHERE pieceHistorique.piece.id = :idPiece""")
     void deleteAllByPieceId(@Param("idPiece") Long idPiece);
 
     default Page<PieceHistoriqueEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {

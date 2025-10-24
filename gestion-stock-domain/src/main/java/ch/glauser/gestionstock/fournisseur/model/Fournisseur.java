@@ -1,10 +1,9 @@
 package ch.glauser.gestionstock.fournisseur.model;
 
-import ch.glauser.gestionstock.adresse.model.Adresse;
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.validation.cascade.CascadeValidation;
+import ch.glauser.gestionstock.identite.model.Identite;
 import ch.glauser.validation.common.Validation;
-import ch.glauser.validation.notempty.NotEmpty;
+import ch.glauser.validation.notnull.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,14 +13,11 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Fournisseur extends Model {
-    @NotEmpty
-    private String nom;
+    @NotNull
+    private Identite identite;
+
     private String description;
-
     private String url;
-
-    @CascadeValidation
-    private Adresse adresse;
 
     @Override
     public Validation validateChild() {

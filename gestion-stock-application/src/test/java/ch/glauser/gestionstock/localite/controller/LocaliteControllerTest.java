@@ -8,8 +8,6 @@ import ch.glauser.gestionstock.common.pagination.Filter;
 import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
-import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.identite.controller.PersonnePhysiqueController;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
 import ch.glauser.gestionstock.identite.model.Titre;
@@ -39,8 +37,6 @@ class LocaliteControllerTest {
     PaysController paysController;
     @Autowired
     PersonnePhysiqueController personnePhysiqueController;
-    @Autowired
-    FournisseurController fournisseurController;
 
     @Test
     void get() {
@@ -271,14 +267,6 @@ class LocaliteControllerTest {
         assertThat(identiteDto).isNotNull();
 
         personnePhysiqueController.delete(identiteDto.getId());
-
-        FournisseurDto fournisseurDto = new FournisseurDto();
-        fournisseurDto.setNom("Nom");
-        fournisseurDto.setAdresse(adresse);
-        fournisseurDto = fournisseurController.create(fournisseurDto).getBody();
-        assertThat(fournisseurDto).isNotNull();
-
-        fournisseurController.delete(fournisseurDto.getId());
 
         LocaliteDto localite2Final = localite2;
         assertThat(localite2Final).isNotNull();

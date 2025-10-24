@@ -1,5 +1,6 @@
 package ch.glauser.gestionstock.fournisseur.model;
 
+import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class FournisseurTest {
     @Test
     void validateWithValue() {
         Fournisseur fournisseur = new Fournisseur();
-        fournisseur.setNom("Test");
+        fournisseur.setIdentite(new PersonnePhysique());
 
         assertDoesNotThrow(fournisseur::validateCreate);
     }

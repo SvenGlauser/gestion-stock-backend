@@ -107,7 +107,6 @@ public class LocaliteServiceImpl implements LocaliteService {
 
         this.validateExist(id, DeleteWithInexistingIdException::new);
         this.validatePasUtiliseParIdentite(id);
-        this.validatePasUtiliseParFournisseur(id);
 
         this.localiteRepository.delete(id);
     }
@@ -131,19 +130,6 @@ public class LocaliteServiceImpl implements LocaliteService {
         if (this.identiteRepository.existByIdLocalite(id)) {
             throw new ValidationException(new Error(
                     LocaliteConstantes.ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_IDENTITE,
-                    LocaliteConstantes.FIELD_LOCALITE,
-                    LocaliteServiceImpl.class));
-        }
-    }
-
-    /**
-     * Valide que la localité n'est pas utilisé par un fournisseur
-     * @param id Id de la localité à supprimer
-     */
-    private void validatePasUtiliseParFournisseur(Long id) {
-        if (this.fournisseurRepository.existByIdLocalite(id)) {
-            throw new ValidationException(new Error(
-                    LocaliteConstantes.ERROR_SUPPRESSION_LOCALITE_IMPOSSIBLE_EXISTE_FOURNISSEUR,
                     LocaliteConstantes.FIELD_LOCALITE,
                     LocaliteServiceImpl.class));
         }
