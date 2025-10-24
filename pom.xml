@@ -26,7 +26,7 @@
 
         <sonar.organization>svenglauser</sonar.organization>
         <sonar.projectName>gestion-stock-backend</sonar.projectName>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../report-aggregate/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>report-aggregate/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 
