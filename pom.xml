@@ -21,7 +21,7 @@
 
     <properties>
         <sonar.coverage.jacoco.xmlReportPaths>
-            ${maven.multiModuleProjectDirectory}/report-agregate/target/site/jacoco-aggregate/jacoco.xml
+            /report-agregate/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
 
         <maven.compiler.source>25</maven.compiler.source>
