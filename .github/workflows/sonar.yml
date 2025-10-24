@@ -36,7 +36,4 @@ jobs:
       - name: Build and analyze with SonarQube
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-              -Dsonar.organization=svenglauser \
-              -Dsonar.projectKey=SvenGlauser_gestion-stock-backend \
-              -Dsonar.coverage.jacoco.xmlReportPaths="target/site/jacoco-aggregate/jacoco.xml"
+        run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=svenglauser
