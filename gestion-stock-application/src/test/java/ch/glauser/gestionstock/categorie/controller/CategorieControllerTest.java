@@ -12,7 +12,6 @@ import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.identite.controller.PersonneMoraleController;
 import ch.glauser.gestionstock.identite.dto.PersonneMoraleDto;
-import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.utils.TestUtils;

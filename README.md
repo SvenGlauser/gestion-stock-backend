@@ -32,12 +32,22 @@
 - `postgresql_scripts/` : sauvegarde / restauration PostgreSQL
 
 ## Build & tests
-- Compiler et packager tout le projet :  
-  `mvn -DskipTests=false clean package`
-- Compiler sans tests (CI rapide) :  
-  `mvn -DskipTests=true clean package`
-- Lancer les tests :  
-  `mvn test`
+- Run un conteneur PostgreSQL pour le développement local :  
+  ```bash
+  docker run --name gestion-stock-db-local -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=root -p 5432:5432 -d postgres
+  ```
+- Compiler et packager tout le projet :
+  ```bash
+  mvn -DskipTests=false clean package
+  ```
+- Compiler sans tests (CI rapide) :
+  ```bash
+  mvn -DskipTests=true clean package
+  ```
+- Lancer les tests :
+  ```bash
+  mvn test
+  ```
 
 ## Exécution
 - Exécuter le jar de l'application :  
