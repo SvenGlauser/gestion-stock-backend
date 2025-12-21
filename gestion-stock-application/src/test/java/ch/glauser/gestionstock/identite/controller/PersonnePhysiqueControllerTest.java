@@ -1,6 +1,5 @@
 package ch.glauser.gestionstock.identite.controller;
 
-import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.pagination.Filter;
@@ -10,10 +9,12 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.dto.IdentiteLightDto;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
 import ch.glauser.gestionstock.identite.model.Titre;
+import ch.glauser.gestionstock.utils.SecurityConfigurationTest;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
@@ -22,8 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest(classes = GestionStockApplication.class)
+@SpringBootTest(classes = SecurityConfigurationTest.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@WithUserDetails(SecurityConfigurationTest.TEST_ADMIN_USERNAME)
 class PersonnePhysiqueControllerTest {
 
     @Autowired

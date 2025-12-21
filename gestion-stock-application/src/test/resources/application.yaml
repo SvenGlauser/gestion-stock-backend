@@ -4,20 +4,29 @@ spring:
     username: root
     password:
     driverClassName: org.h2.Driver
+
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     hibernate:
       ddl-auto: none
+
   batch:
     job:
       enabled: false
+
   liquibase:
     enabled: true
     change-log: 'classpath:db/changelog-master.xml'
     contexts:
       - test
     drop-first: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://unknown/realm
 
 gestion-stock:
   batch:
