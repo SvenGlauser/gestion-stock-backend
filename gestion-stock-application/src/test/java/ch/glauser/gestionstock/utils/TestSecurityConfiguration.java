@@ -13,7 +13,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import java.util.Arrays;
 
 @TestConfiguration
-public class SecurityConfigurationTest {
+public class TestSecurityConfiguration {
 
     public static final String TEST_ADMIN_USERNAME = "test-admin";
     public static final String TEST_ADMIN_PASSWORD = "test-password";
@@ -22,8 +22,8 @@ public class SecurityConfigurationTest {
     @Primary
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails admin = User.builder()
-                .username(SecurityConfigurationTest.TEST_ADMIN_USERNAME)
-                .password(passwordEncoder.encode(SecurityConfigurationTest.TEST_ADMIN_PASSWORD))
+                .username(TestSecurityConfiguration.TEST_ADMIN_USERNAME)
+                .password(passwordEncoder.encode(TestSecurityConfiguration.TEST_ADMIN_PASSWORD))
                 .authorities(Arrays
                         .stream(SecurityRoles.values())
                         .map(Enum::name)

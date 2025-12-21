@@ -18,7 +18,7 @@ import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.controller.MachineController;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
-import ch.glauser.gestionstock.utils.SecurityConfigurationTest;
+import ch.glauser.gestionstock.utils.TestSecurityConfiguration;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,9 +33,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest(classes = SecurityConfigurationTest.class)
+@SpringBootTest(classes = TestSecurityConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@WithUserDetails(SecurityConfigurationTest.TEST_ADMIN_USERNAME)
+@WithUserDetails(TestSecurityConfiguration.TEST_ADMIN_USERNAME)
 class PieceControllerTest {
 
     @Autowired
