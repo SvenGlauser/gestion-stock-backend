@@ -8,6 +8,7 @@ import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
     private final LocaliteService localiteService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).LOCALITE_LECTEUR.name())")
     public LocaliteDto get(Long id) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
@@ -39,6 +41,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).LOCALITE_LECTEUR.name())")
     public SearchResult<LocaliteDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
@@ -51,6 +54,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).LOCALITE_EDITEUR.name())")
     public LocaliteDto create(LocaliteDto localite) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
@@ -65,6 +69,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).LOCALITE_EDITEUR.name())")
     public LocaliteDto modify(LocaliteDto localite) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(localite, FIELD_LOCALITE)
@@ -79,6 +84,7 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).LOCALITE_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(LocaliteApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

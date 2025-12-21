@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.configuration;
+package ch.glauser.gestionstock.security;
 
 import lombok.Getter;
 import lombok.Setter;

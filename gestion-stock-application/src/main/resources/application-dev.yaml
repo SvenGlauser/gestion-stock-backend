@@ -5,6 +5,12 @@ spring:
     password: admin
     driverClassName: org.postgresql.Driver
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/gestion-stock
+
 gestion-stock:
   security:
     allowed-origins:

@@ -5,6 +5,7 @@ import ch.glauser.gestionstock.identite.model.PersonneMorale;
 import ch.glauser.gestionstock.identite.model.PersonneMoraleConstantes;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class PersonneMoraleApplicationServiceImpl implements PersonneMoraleAppli
     private final PersonneMoraleService personneMoraleService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_LECTEUR.name())")
     public PersonneMoraleDto get(Long id) {
         Validation.of(PersonneMoraleApplicationServiceImpl.class)
                 .validateNotNull(id, PersonneMoraleConstantes.FIELD_ID)
@@ -33,6 +35,7 @@ public class PersonneMoraleApplicationServiceImpl implements PersonneMoraleAppli
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_EDITEUR.name())")
     public PersonneMoraleDto create(PersonneMoraleDto personneMorale) {
         Validation.of(PersonneMoraleApplicationServiceImpl.class)
                 .validateNotNull(personneMorale,  PersonneMoraleConstantes.FIELD_PERSONNE_MORALE)
@@ -47,6 +50,7 @@ public class PersonneMoraleApplicationServiceImpl implements PersonneMoraleAppli
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_EDITEUR.name())")
     public PersonneMoraleDto modify(PersonneMoraleDto personneMorale) {
         Validation.of(PersonneMoraleApplicationServiceImpl.class)
                 .validateNotNull(personneMorale, PersonneMoraleConstantes.FIELD_PERSONNE_MORALE)
@@ -61,6 +65,7 @@ public class PersonneMoraleApplicationServiceImpl implements PersonneMoraleAppli
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(PersonneMoraleApplicationServiceImpl.class)
                 .validateNotNull(id, PersonneMoraleConstantes.FIELD_ID)

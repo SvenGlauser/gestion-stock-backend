@@ -8,6 +8,7 @@ import ch.glauser.gestionstock.pays.dto.PaysDto;
 import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
     private final PaysService paysService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PAYS_LECTEUR.name())")
     public PaysDto get(Long id) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
@@ -39,6 +41,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PAYS_LECTEUR.name())")
     public SearchResult<PaysDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
@@ -51,6 +54,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PAYS_EDITEUR.name())")
     public PaysDto create(PaysDto pays) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
@@ -65,6 +69,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PAYS_EDITEUR.name())")
     public PaysDto modify(PaysDto pays) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(pays, FIELD_PAYS)
@@ -79,6 +84,7 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PAYS_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(PaysApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

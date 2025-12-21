@@ -8,6 +8,7 @@ import ch.glauser.gestionstock.exception.model.ThrownException;
 import ch.glauser.gestionstock.exception.model.ThrownExceptionConstantes;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,6 +21,7 @@ public class ThrownExceptionApplicationServiceImpl implements ThrownExceptionApp
     private final ThrownExceptionService thrownExceptionService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).EXCEPTION_LECTEUR.name())")
     public SearchResult<ThrownExceptionDto> search(SearchRequest searchRequest) {
         Validation.of(ThrownExceptionApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
@@ -31,6 +33,7 @@ public class ThrownExceptionApplicationServiceImpl implements ThrownExceptionApp
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).EXCEPTION_EDITEUR.name())")
     public void changeStatus(Long id, Boolean actif) {
         Validation.of(ThrownExceptionApplicationServiceImpl.class)
                 .validateNotNull(id, ThrownExceptionConstantes.FIELD_ID)

@@ -5,6 +5,7 @@ import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.identite.model.PersonnePhysiqueConstantes;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class PersonnePhysiqueApplicationServiceImpl implements PersonnePhysiqueA
     private final PersonnePhysiqueService personnePhysiqueService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_LECTEUR.name())")
     public PersonnePhysiqueDto get(Long id) {
         Validation.of(PersonnePhysiqueApplicationServiceImpl.class)
                 .validateNotNull(id, PersonnePhysiqueConstantes.FIELD_ID)
@@ -47,6 +49,7 @@ public class PersonnePhysiqueApplicationServiceImpl implements PersonnePhysiqueA
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_EDITEUR.name())")
     public PersonnePhysiqueDto modify(PersonnePhysiqueDto personnePhysique) {
         Validation.of(PersonnePhysiqueApplicationServiceImpl.class)
                 .validateNotNull(personnePhysique, PersonnePhysiqueConstantes.FIELD_PERSONNE_PHYSIQUE)
@@ -61,6 +64,7 @@ public class PersonnePhysiqueApplicationServiceImpl implements PersonnePhysiqueA
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(PersonnePhysiqueApplicationServiceImpl.class)
                 .validateNotNull(id, PersonnePhysiqueConstantes.FIELD_ID)

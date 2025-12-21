@@ -8,6 +8,7 @@ import ch.glauser.gestionstock.piece.model.PieceHistorique;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApp
     private final PieceHistoriqueService pieceHistoriqueService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_HISTORIQUE_LECTEUR.name())")
     public PieceHistoriqueDto get(Long id) {
         Validation.of(PieceHistoriqueApplicationServiceImpl.class)
                 .validateNotNull(id, PieceHistoriqueConstantes.FIELD_ID)
@@ -35,6 +37,7 @@ public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApp
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_HISTORIQUE_LECTEUR.name())")
     public SearchResult<PieceHistoriqueDto> search(SearchRequest searchRequest) {
         Validation.of(PieceHistoriqueApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
@@ -47,6 +50,7 @@ public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApp
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_HISTORIQUE_EDITEUR.name())")
     public void delete(Long idPieceHistorique) {
         Validation.of(PieceHistoriqueApplicationServiceImpl.class)
                 .validateNotNull(idPieceHistorique, PieceHistoriqueConstantes.FIELD_ID)
