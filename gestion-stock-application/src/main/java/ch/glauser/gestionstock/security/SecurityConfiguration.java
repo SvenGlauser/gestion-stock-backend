@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -100,8 +99,7 @@ public class SecurityConfiguration {
     }
 
     private static class GrantedAuthoritiesExtractor implements Converter<Jwt, Collection<GrantedAuthority>> {
-
-        @Nullable
+        @Override
         public Collection<GrantedAuthority> convert(Jwt jwt) {
             if (jwt.getClaim("realm_access") instanceof Map<?, ?> realmAccess &&
                 realmAccess.get("roles") instanceof Collection<?> roles) {
