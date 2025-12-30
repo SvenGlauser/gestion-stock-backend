@@ -29,7 +29,7 @@
   "oauth2DevicePollingInterval": 5,
   "enabled": true,
   "sslRequired": "none",
-  "registrationAllowed": false,
+  "registrationAllowed": true,
   "registrationEmailAsUsername": false,
   "rememberMe": false,
   "verifyEmail": false,
@@ -47,6 +47,28 @@
   "quickLoginCheckMilliSeconds": 1000,
   "maxDeltaTimeSeconds": 43200,
   "failureFactor": 30,
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "Administrator",
+      "email": "admin@gestionstock.ch",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin"
+        }
+      ],
+      "groups":[
+        "Administrateurs"
+      ],
+      "realmRoles": [
+        "default-roles-gestion-stock"
+      ]
+    }
+  ],
   "roles": {
     "realm": [
       {
@@ -709,28 +731,6 @@
       "clientRoles": {}
     }
   ],
-  "users": [
-    {
-      "username": "admin",
-      "enabled": true,
-      "emailVerified": true,
-      "firstName": "Admin",
-      "lastName": "Administrator",
-      "email": "admin@gestionstock.ch",
-      "credentials": [
-        {
-          "type": "password",
-          "value": "admin"
-        }
-      ],
-      "groups":[
-        "Administrateurs"
-      ],
-      "realmRoles": [
-        "default-roles-gestion-stock"
-      ]
-    }
-  ],
   "defaultRole": {
     "id": "d4a64a59-1294-4dfe-9f51-5b5a1e7d7a1e",
     "name": "default-roles-gestion-stock",
@@ -739,6 +739,9 @@
     "clientRole": false,
     "containerId": "c72ce2d1-5907-435f-85de-9cd71c2028b2"
   },
+  "defaultGroups": [
+    "/Administrateurs"
+  ],
   "requiredCredentials": [
     "password"
   ],
@@ -1491,12 +1494,13 @@
           "protocolMapper": "oidc-organization-membership-mapper",
           "consentRequired": false,
           "config": {
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "organization",
-            "jsonType.label": "String",
-            "multivalued": "true"
+            "jsonType.label": "String"
           }
         }
       ]
@@ -1565,6 +1569,7 @@
           "config": {
             "introspection.token.claim": "true",
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -1632,8 +1637,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientHost",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
@@ -1647,8 +1653,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "client_id",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "client_id",
             "jsonType.label": "String"
@@ -1662,8 +1669,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "clientAddress",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientAddress",
             "jsonType.label": "String"
@@ -1709,7 +1717,8 @@
           "config": {
             "id.token.claim": "true",
             "introspection.token.claim": "true",
-            "access.token.claim": "true"
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
           }
         }
       ]
@@ -1820,8 +1829,9 @@
           "consentRequired": false,
           "config": {
             "user.session.note": "AUTH_TIME",
-            "id.token.claim": "true",
             "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "auth_time",
             "jsonType.label": "long"
@@ -2019,14 +2029,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
-            "saml-user-property-mapper",
-            "oidc-usermodel-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-address-mapper",
             "oidc-full-name-mapper",
-            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "saml-user-property-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper"
           ]
         }
       },
@@ -2050,13 +2060,13 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
             "oidc-usermodel-attribute-mapper",
-            "saml-role-list-mapper",
             "oidc-full-name-mapper",
             "saml-user-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
+            "oidc-address-mapper",
             "oidc-usermodel-property-mapper"
           ]
         }
@@ -2115,7 +2125,11 @@
       }
     ]
   },
-  "internationalizationEnabled": false,
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "fr"
+  ],
+  "defaultLocale": "fr",
   "authenticationFlows": [
     {
       "id": "905f4c0c-6222-4433-9ca9-1f318de6ed91",
@@ -2940,8 +2954,8 @@
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
     "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DevicePollingInterval": "5",
     "clientOfflineSessionMaxLifespan": "0",
+    "oauth2DevicePollingInterval": "5",
     "clientSessionIdleTimeout": "0",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
