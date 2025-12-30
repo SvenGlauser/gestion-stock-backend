@@ -69,17 +69,7 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
             parser = CSVFormat.Builder
                     .create()
                     .setDelimiter(",")
-                    .setHeader(
-                            ID_COLUMN,
-                            NUMERO_COLUMN,
-                            NOM_COLUMN,
-                            QUANTITE_COLUMN,
-                            PRIX_UNITAIRE_COLUMN,
-                            PRIX_TOTAL_COLUMN,
-                            DESCRIPTION_COLUMN,
-                            QUANTITE_ANNEE_COLUMN,
-                            FOURNISSEUR_COLUMN
-                    )
+                    .setHeader()
                     .setSkipHeaderRecord(true)
                     .get()
                     .parse(new BufferedReader(new InputStreamReader(file.getInputStream())));
