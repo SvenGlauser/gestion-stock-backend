@@ -686,20 +686,6 @@
       "clientRoles": {}
     },
     {
-      "id": "bbdeaa9c-4c1d-45b7-949f-d59b26f51f8b",
-      "name": "Users-limited",
-      "description": "",
-      "path": "/Users-limited",
-      "subGroups": [],
-      "attributes": {},
-      "realmRoles": [
-        "R_IDENTITE_LECTEUR",
-        "R_CATEGORIE_EDITEUR",
-        "R_FOURNISSEUR_EDITEUR"
-      ],
-      "clientRoles": {}
-    },
-    {
       "id": "55188f92-b01e-4d53-bc49-957dd0d981f8",
       "name": "Utilisateurs",
       "description": "Groupe contenant tous les utilisateurs",
@@ -721,6 +707,28 @@
         "R_MACHINE_EDITEUR"
       ],
       "clientRoles": {}
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "Administrator",
+      "email": "admin@gestionstock.ch",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin"
+        }
+      ],
+      "groups":[
+        "Administrateurs"
+      ],
+      "realmRoles": [
+        "default-roles-gestion-stock"
+      ]
     }
   ],
   "defaultRole": {

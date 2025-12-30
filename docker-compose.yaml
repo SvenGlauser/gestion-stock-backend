@@ -1,6 +1,6 @@
 services:
   backend:
-    image: 'gestion-stock-backend:latest'
+    image: 'gestion-stock-backend:1.0-SNAPSHOT'
     build:
       context: .
       args:
@@ -22,7 +22,7 @@ services:
     restart: always
 
   frontend:
-    image: 'gestion-stock-frontend:latest'
+    image: 'gestion-stock-frontend:1.0-SNAPSHOT'
     build:
       context: ../gestion-stock-frontend
     container_name: gestion-stock-frontend
@@ -38,7 +38,7 @@ services:
     restart: always
 
   database:
-    image: 'gestion-stock-postgres:latest'
+    image: 'gestion-stock-postgres:1.0-SNAPSHOT'
     build:
       context: .
       dockerfile: Dockerfile.db

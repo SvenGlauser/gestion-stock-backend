@@ -9,7 +9,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/gestion-stock
+          issuer-uri: http://localhost:8095/realms/gestion-stock
+          jwk-set-uri: http://localhost:8095/realms/gestion-stock/protocol/openid-connect/certs
 
 gestion-stock:
   security:
