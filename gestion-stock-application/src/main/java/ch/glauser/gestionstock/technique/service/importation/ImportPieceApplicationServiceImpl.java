@@ -49,7 +49,6 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
     private static final String NOM_COLUMN = "NOM";
     private static final String QUANTITE_COLUMN = "QUANTITE";
     private static final String PRIX_UNITAIRE_COLUMN = "PRIX_UNITAIRE";
-    private static final String PRIX_TOTAL_COLUMN = "PRIX_TOTAL";
     private static final String DESCRIPTION_COLUMN = "DESCRIPTION";
     private static final String QUANTITE_ANNEE_COLUMN = "QUANTITE_ANNEE";
     private static final String FOURNISSEUR_COLUMN = "NUMERO_FOURNISSEUR";
