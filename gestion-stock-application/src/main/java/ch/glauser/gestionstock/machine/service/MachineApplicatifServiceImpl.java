@@ -8,6 +8,7 @@ import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     private final MachineService machineService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_LECTEUR.name())")
     public MachineDto get(Long id) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
@@ -39,6 +41,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_LECTEUR.name())")
     public SearchResult<MachineDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
@@ -51,6 +54,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_EDITEUR.name())")
     public MachineDto create(MachineDto machine) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
@@ -65,6 +69,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_EDITEUR.name())")
     public MachineDto modify(MachineDto machine) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
@@ -79,6 +84,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(MachineApplicatifServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

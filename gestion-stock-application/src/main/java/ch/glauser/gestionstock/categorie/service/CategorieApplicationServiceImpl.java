@@ -7,6 +7,7 @@ import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     private final CategorieService categorieService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).CATEGORIE_LECTEUR.name())")
     public CategorieDto get(Long id) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
@@ -38,6 +40,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).CATEGORIE_LECTEUR.name())")
     public SearchResult<CategorieDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
@@ -50,6 +53,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).CATEGORIE_EDITEUR.name())")
     public CategorieDto create(CategorieDto categorie) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
@@ -64,6 +68,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).CATEGORIE_EDITEUR.name())")
     public CategorieDto modify(CategorieDto categorie) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(categorie, FIELD_CATEGORIE)
@@ -78,6 +83,7 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).CATEGORIE_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(CategorieApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

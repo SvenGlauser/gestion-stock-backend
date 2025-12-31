@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.identite.model.Identite;
 import ch.glauser.gestionstock.identite.model.PersonnePhysiqueConstantes;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class IdentiteApplicationServiceImpl implements IdentiteApplicationServic
     private final IdentiteService identiteService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_LECTEUR.name())")
     public SearchResult<IdentiteLightDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, PersonnePhysiqueConstantes.FIELD_SEARCH_REQUEST)

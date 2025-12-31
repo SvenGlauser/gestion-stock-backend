@@ -1,6 +1,5 @@
 package ch.glauser.gestionstock.fournisseur.controller;
 
-import ch.glauser.gestionstock.GestionStockApplication;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
@@ -14,11 +13,13 @@ import ch.glauser.gestionstock.identite.controller.PersonneMoraleController;
 import ch.glauser.gestionstock.identite.dto.PersonneMoraleDto;
 import ch.glauser.gestionstock.piece.controller.PieceController;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
+import ch.glauser.gestionstock.utils.TestSecurityConfiguration;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
@@ -27,8 +28,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest(classes = GestionStockApplication.class)
+@SpringBootTest(classes = TestSecurityConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@WithUserDetails(TestSecurityConfiguration.TEST_ADMIN_USERNAME)
 class FournisseurControllerTest {
 
     @Autowired

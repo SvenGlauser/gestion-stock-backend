@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -43,5 +44,11 @@ public class RestExceptionHandler  {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<List<Error>> handleConflict(ValidationException e) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getErrors());
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<String> handleConflict(AuthorizationDeniedException e) {
+        this.thrownExceptionService.createException(e);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 }

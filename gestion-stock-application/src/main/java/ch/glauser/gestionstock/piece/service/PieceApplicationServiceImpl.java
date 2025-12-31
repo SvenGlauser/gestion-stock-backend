@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     private final PieceService pieceService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_LECTEUR.name())")
     public PieceDto get(Long id) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)
@@ -36,6 +38,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_LECTEUR.name())")
     public SearchResult<PieceDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
@@ -47,6 +50,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_LECTEUR.name())")
     public SearchResult<PieceDto> autocomplete(String searchValue) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchValue, PieceConstantes.FIELD_SEARCH_VALUE)
@@ -59,6 +63,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_EDITEUR.name())")
     public PieceDto create(PieceDto piece) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
@@ -73,6 +78,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_EDITEUR.name())")
     public PieceDto modify(PieceDto piece) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(piece, PieceConstantes.FIELD_PIECE)
@@ -87,6 +93,7 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(PieceApplicationServiceImpl.class)
                 .validateNotNull(id, PieceConstantes.FIELD_ID)

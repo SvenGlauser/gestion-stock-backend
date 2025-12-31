@@ -8,6 +8,7 @@ import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     private final FournisseurService fournisseurService;
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).FOURNISSEUR_LECTEUR.name())")
     public FournisseurDto get(Long id) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
@@ -39,6 +41,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
     }
 
     @Override
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).FOURNISSEUR_LECTEUR.name())")
     public SearchResult<FournisseurDto> search(SearchRequest searchRequest) {
         Validation.of(CategorieServiceImpl.class)
                 .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
@@ -51,6 +54,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).FOURNISSEUR_EDITEUR.name())")
     public FournisseurDto create(FournisseurDto fournisseur) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
@@ -65,6 +69,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).FOURNISSEUR_EDITEUR.name())")
     public FournisseurDto modify(FournisseurDto fournisseur) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(fournisseur, FIELD_FOURNISSEUR)
@@ -79,6 +84,7 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).FOURNISSEUR_EDITEUR.name())")
     public void delete(Long id) {
         Validation.of(FournisseurApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)

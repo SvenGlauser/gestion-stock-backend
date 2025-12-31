@@ -21,6 +21,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +49,6 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
     private static final String NOM_COLUMN = "NOM";
     private static final String QUANTITE_COLUMN = "QUANTITE";
     private static final String PRIX_UNITAIRE_COLUMN = "PRIX_UNITAIRE";
-    private static final String PRIX_TOTAL_COLUMN = "PRIX_TOTAL";
     private static final String DESCRIPTION_COLUMN = "DESCRIPTION";
     private static final String QUANTITE_ANNEE_COLUMN = "QUANTITE_ANNEE";
     private static final String FOURNISSEUR_COLUMN = "NUMERO_FOURNISSEUR";
@@ -61,23 +61,14 @@ public class ImportPieceApplicationServiceImpl implements ImportPieceApplication
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).TECHNIQUE_EDITEUR.name())")
     public void importPieceFromCSV(MultipartFile file) {
         CSVParser parser;
         try {
             parser = CSVFormat.Builder
                     .create()
                     .setDelimiter(",")
-                    .setHeader(
-                            ID_COLUMN,
-                            NUMERO_COLUMN,
-                            NOM_COLUMN,
-                            QUANTITE_COLUMN,
-                            PRIX_UNITAIRE_COLUMN,
-                            PRIX_TOTAL_COLUMN,
-                            DESCRIPTION_COLUMN,
-                            QUANTITE_ANNEE_COLUMN,
-                            FOURNISSEUR_COLUMN
-                    )
+                    .setHeader()
                     .setSkipHeaderRecord(true)
                     .get()
                     .parse(new BufferedReader(new InputStreamReader(file.getInputStream())));
