@@ -41,7 +41,7 @@ services:
     image: 'gestion-stock-postgres:1.0-SNAPSHOT'
     build:
       context: .
-      dockerfile: Dockerfile.db
+      dockerfile: db.Dockerfile
     container_name: gestion-stock-database
     environment:
       - POSTGRES_USER=root
