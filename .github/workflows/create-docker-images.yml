@@ -32,4 +32,4 @@ jobs:
   create-docker-images:
     uses:  ./.github/workflows/parts/create-push-docker-images.yml
     with:
-      version: ${{ steps.get-version.outputs.version }}
+      version: ${{ jobs.get-version.steps.get-version.outputs.version }}
