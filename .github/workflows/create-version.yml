@@ -37,7 +37,7 @@ jobs:
           git push origin master
 
       - name: Create and push Docker images
-        uses: ./.github/workflows/parts/create-push-docker-images.yml
+        uses: ./.github/workflows/create-push-docker-images.yml
         with:
           version: ${{ github.event.inputs.current-version }}
 

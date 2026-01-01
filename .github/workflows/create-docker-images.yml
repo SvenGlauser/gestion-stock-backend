@@ -31,6 +31,6 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
   create-docker-images:
     needs: get-version
-    uses:  ./.github/workflows/parts/create-push-docker-images.yml
+    uses:  ./.github/workflows/create-push-docker-images.yml
     with:
       version: ${{ needs.get-version.steps.get-version.outputs.version }}
