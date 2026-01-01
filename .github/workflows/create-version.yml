@@ -1,4 +1,4 @@
-name: Create Version
+name: Create version
 
 on:
   workflow_dispatch:
@@ -26,26 +26,6 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email "github-actions[bot]}@users.noreply.github.com"
 
-      - name: Set up QEMU (for multi-arch build)
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to GitHub Container Registry (GHCR)
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Normalize repo owner to lowercase
-        id: owner
-        run: |
-          # GITHUB_REPOSITORY_OWNER est défini par GitHub Actions; on le met en minuscules
-          owner_username=$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
-          echo "owner_username=$owner_username" >> $GITHUB_OUTPUT
-
       - name: Maven update current-version
         run: mvn versions:set -DnewVersion="${{ github.event.inputs.current-version }}" -DgenerateBackupPoms=false
 
@@ -53,41 +33,18 @@ jobs:
         run: |
           git tag "v${{ github.event.inputs.current-version }}"
           git push origin --tags
-          git commit -a -m "Version v${{ github.event.inputs.current-version }}"
+          git commit -a -m "Release v${{ github.event.inputs.current-version }}"
           git push origin master
 
-      - name: Build and push image (gestion-stock-backend)
-        uses: docker/build-push-action@v5
+      - name: Create and push Docker images
+        uses: ./.github/workflows/parts/create-push-docker-images.yml
         with:
-          context: .
-          file: Dockerfile
-          push: true
-          platforms: "linux/amd64"
-          build-args: |
-            VERSION=${{ github.event.inputs.current-version }}
-          tags: |
-            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-backend:${{ github.event.inputs.current-version }}
-            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-backend:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push image (gestion-stock-database)
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: db.Dockerfile
-          push: true
-          platforms: "linux/amd64"
-          tags: |
-            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-database:${{ github.event.inputs.current-version }}
-            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-database:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          version: ${{ github.event.inputs.current-version }}
 
       - name: Maven prepare next-version
         run: mvn versions:set -DnewVersion="${{ github.event.inputs.next-version }}" -DgenerateBackupPoms=false
 
       - name: Push next version
         run: |
-          git commit -a -m "Setup for version v${{ github.event.inputs.next-version }}"
+          git commit -a -m "Setup v${{ github.event.inputs.next-version }}"
           git push origin master

@@ -1,8 +1,7 @@
-name: Build and Push container to GHCR
+name: Create Docker images
 
 on:
-  - workflow_dispatch
-  - workflow_call
+  workflow_dispatch
 
 permissions:
   contents: read
@@ -31,67 +30,7 @@ jobs:
             VERSION="latest"
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Normalize repo owner to lowercase
-        id: owner
-        run: |
-          # GITHUB_REPOSITORY_OWNER est défini par GitHub Actions; on le met en minuscules
-          owner_lower=$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
-          echo "owner_lower=$owner_lower" >> $GITHUB_OUTPUT
-
-      - name: Set up QEMU (for multi-arch build)
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to GitHub Container Registry (GHCR)
-        uses: docker/login-action@v2
+      - name: Create and push Docker images
+        uses: ./.github/workflows/parts/create-push-docker-images.yml
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push image (gestion-stock-backend)
-        id: build_backend
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          platforms: "linux/amd64"
-          build-args: |
-            VERSION=${{ steps.get-version.outputs.version }}
-          tags: |
-            ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-backend:${{ steps.get-version.outputs.version }}
-            ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-backend:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Show pushed image info (gestion-stock-backend)
-        run: |
-          echo "Image pushed:"
-          echo "  ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-backend:${{ steps.get-version.outputs.version }}"
-          echo "  ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-backend:latest"
-          echo "Build digest: ${{ steps.build_backend.outputs.digest }}"
-
-      - name: Build and push image (gestion-stock-postgres)
-        id: build_db
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: db.Dockerfile
-          push: true
-          platforms: "linux/amd64"
-          tags: |
-            ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-postgres:${{ steps.get-version.outputs.version }}
-            ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-postgres:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Show pushed image info (gestion-stock-postgres)
-        run: |
-          echo "Image pushed:"
-          echo "  ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-postgres:${{ steps.get-version.outputs.version }}"
-          echo "  ghcr.io/${{ steps.owner.outputs.owner_lower }}/gestion-stock-postgres:latest"
-          echo "Build digest: ${{ steps.build_db.outputs.digest }}"
+          version: ${{ steps.get-version.outputs.version }}
