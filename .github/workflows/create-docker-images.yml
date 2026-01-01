@@ -8,7 +8,7 @@ permissions:
   packages: write
 
 jobs:
-  build-and-push:
+  create-docker-images:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

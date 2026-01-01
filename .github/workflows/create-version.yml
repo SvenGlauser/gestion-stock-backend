@@ -1,0 +1,35 @@
+name: Build and Push container to GHCR
+
+on:
+  workflow_dispatch:
+    inputs:
+      current-version:
+        description: 'Current version. Format (1.0)'
+        required: true
+      new-version:
+        description: 'Nouvelle version. Format (1.0-SNAPSHOT)'
+        required: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  tag-current-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Maven update version
+        run: mvn versions:set -DnewVersion="${{ github.event.inputs.current-version }}" -DgenerateBackupPoms=false
+      - name: Add git tag and push
+        run: |
+          git config user.name ${{ github.actor }}
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git tag "v${{ github.event.inputs.current-version }}"
+          git commit -a -m "Version v${{ github.event.inputs.current-version }}"
+          git push origin master
+#  create-docker-images:
+#    needs:
+#      - tag-current-version
+#    uses: ./.github/workflows/create-docker-images.yml
