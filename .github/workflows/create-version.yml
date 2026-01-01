@@ -20,33 +20,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Maven update version
-        run: mvn versions:set -DnewVersion="${{ github.event.inputs.current-version }}" -DgenerateBackupPoms=false
-      - name: Add git tag and push
+
+      - name: Configure Git
         run: |
           git config user.name github-actions[bot]
           git config user.email "github-actions[bot]}@users.noreply.github.com"
+
+      - name: Maven update current-version
+        run: mvn versions:set -DnewVersion="${{ github.event.inputs.current-version }}" -DgenerateBackupPoms=false
+
+      - name: Add git tag and push
+        run: |
           git tag "v${{ github.event.inputs.current-version }}"
           git push origin --tags
           git commit -a -m "Version v${{ github.event.inputs.current-version }}"
           git push origin master
-  create-docker-images:
-    needs:
-      - tag-current-version
-    uses: ./.github/workflows/create-docker-images.yml
-  prepare-next-version:
-    needs:
-      - tag-current-version
-      - create-docker-images
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Maven update version
+
+      - name: create-docker-images
+        uses: ./.github/workflows/create-docker-images.yml
+
+      - name: Maven prepare next-version
         run: mvn versions:set -DnewVersion="${{ github.event.inputs.next-version }}" -DgenerateBackupPoms=false
-      - name: Add git tag and push
+
+      - name: Push next version
         run: |
-          git config user.name github-actions[bot]
-          git config user.email "github-actions[bot]}@users.noreply.github.com"
           git commit -a -m "Setup for version v${{ github.event.inputs.next-version }}"
           git push origin master
