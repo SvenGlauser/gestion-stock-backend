@@ -1,4 +1,4 @@
-name: Build and Push container to GHCR
+name: Create Version
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
         required: true
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -24,8 +24,8 @@ jobs:
         run: mvn versions:set -DnewVersion="${{ github.event.inputs.current-version }}" -DgenerateBackupPoms=false
       - name: Add git tag and push
         run: |
-          git config user.name ${{ github.actor }}
-          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git config user.name github-actions[bot]
+          git config user.email "github-actions[bot]}@users.noreply.github.com"
           git tag "v${{ github.event.inputs.current-version }}"
           git commit -a -m "Version v${{ github.event.inputs.current-version }}"
           git push origin master
