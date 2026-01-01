@@ -1,7 +1,8 @@
 name: Build and Push container to GHCR
 
 on:
-  workflow_dispatch
+  - workflow_dispatch
+  - workflow_call
 
 permissions:
   contents: read
