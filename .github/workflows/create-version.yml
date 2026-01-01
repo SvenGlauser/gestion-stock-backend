@@ -6,8 +6,8 @@ on:
       current-version:
         description: 'Current version. Format (1.0)'
         required: true
-      new-version:
-        description: 'Nouvelle version. Format (1.0-SNAPSHOT)'
+      next-version:
+        description: 'Prochaine version. Format (1.0-SNAPSHOT)'
         required: true
 
 permissions:
@@ -30,7 +30,23 @@ jobs:
           git push origin --tags
           git commit -a -m "Version v${{ github.event.inputs.current-version }}"
           git push origin master
-#  create-docker-images:
-#    needs:
-#      - tag-current-version
-#    uses: ./.github/workflows/create-docker-images.yml
+  create-docker-images:
+    needs:
+      - tag-current-version
+    uses: ./.github/workflows/create-docker-images.yml
+  prepare-next-version:
+    needs:
+      - tag-current-version
+      - create-docker-images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Maven update version
+        run: mvn versions:set -DnewVersion="${{ github.event.inputs.next-version }}" -DgenerateBackupPoms=false
+      - name: Add git tag and push
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email "github-actions[bot]}@users.noreply.github.com"
+          git commit -a -m "Setup for version v${{ github.event.inputs.next-version }}"
+          git push origin master
