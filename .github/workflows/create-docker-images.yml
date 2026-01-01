@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  create-docker-images:
+  get-version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -29,7 +29,7 @@ jobs:
             VERSION="latest"
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Create and push Docker images
-        uses: ./.github/workflows/parts/create-push-docker-images.yml
-        with:
-          version: ${{ steps.get-version.outputs.version }}
+  create-docker-images:
+    uses:  ./.github/workflows/parts/create-push-docker-images.yml
+    with:
+      version: ${{ steps.get-version.outputs.version }}
