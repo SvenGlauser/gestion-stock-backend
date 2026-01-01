@@ -36,6 +36,22 @@ jobs:
           git commit -a -m "Release v${{ github.event.inputs.current-version }}"
           git push origin master
 
+  sync-repo:
+    needs: tag-current-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch latest changes
+        id: sync
+        run: |
+          git fetch origin
+          git checkout master
+          git pull origin master
+          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
   create-push-docker-images:
     needs: tag-current-version
     uses: ./.github/workflows/create-push-docker-images.yml
