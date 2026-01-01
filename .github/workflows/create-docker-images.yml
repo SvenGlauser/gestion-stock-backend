@@ -10,6 +10,8 @@ permissions:
 jobs:
   get-version:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -34,4 +36,4 @@ jobs:
     needs: get-version
     uses:  ./.github/workflows/create-push-docker-images.yml
     with:
-      version: ${{ needs.get-version.steps.get-version.outputs.version }}
+      version: ${{ needs.get-version.outputs.version }}
