@@ -36,11 +36,16 @@ jobs:
           git commit -a -m "Release v${{ github.event.inputs.current-version }}"
           git push origin master
 
-      - name: Create and push Docker images
-        uses: ./.github/workflows/create-push-docker-images.yml
-        with:
-          version: ${{ github.event.inputs.current-version }}
+  create-push-docker-images:
+    needs: tag-current-version
+    uses: ./.github/workflows/create-push-docker-images.yml
+    with:
+      version: ${{ github.event.inputs.current-version }}
 
+  prepare-next-version:
+    needs: create-push-docker-images
+    runs-on: ubuntu-latest
+    steps:
       - name: Maven prepare next-version
         run: mvn versions:set -DnewVersion="${{ github.event.inputs.next-version }}" -DgenerateBackupPoms=false
 
