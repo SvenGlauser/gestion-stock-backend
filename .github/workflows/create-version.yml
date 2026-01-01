@@ -43,8 +43,8 @@ jobs:
         id: owner
         run: |
           # GITHUB_REPOSITORY_OWNER est défini par GitHub Actions; on le met en minuscules
-          owner-username=$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
-          echo "owner-username=$owner-username" >> $GITHUB_OUTPUT
+          owner_username=$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')
+          echo "owner_username=$owner_username" >> $GITHUB_OUTPUT
 
       - name: Maven update current-version
         run: mvn versions:set -DnewVersion="${{ github.event.inputs.current-version }}" -DgenerateBackupPoms=false
@@ -66,8 +66,8 @@ jobs:
           build-args: |
             VERSION=${{ steps.get-version.outputs.version }}
           tags: |
-            ghcr.io/${{ steps.owner.outputs.owner-username }}/gestion-stock-backend:${{ github.event.inputs.current-version }}
-            ghcr.io/${{ steps.owner.outputs.owner-username }}/gestion-stock-backend:latest
+            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-backend:${{ github.event.inputs.current-version }}
+            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -79,8 +79,8 @@ jobs:
           push: true
           platforms: "linux/amd64"
           tags: |
-            ghcr.io/${{ steps.owner.outputs.owner-username }}/gestion-stock-database:${{ github.event.inputs.current-version }}
-            ghcr.io/${{ steps.owner.outputs.owner-username }}/gestion-stock-database:latest
+            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-database:${{ github.event.inputs.current-version }}
+            ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-database:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
