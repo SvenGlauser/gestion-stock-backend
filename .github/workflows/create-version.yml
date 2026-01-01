@@ -64,7 +64,7 @@ jobs:
           push: true
           platforms: "linux/amd64"
           build-args: |
-            VERSION=${{ steps.get-version.outputs.version }}
+            VERSION=${{ github.event.inputs.current-version }}
           tags: |
             ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-backend:${{ github.event.inputs.current-version }}
             ghcr.io/${{ steps.owner.outputs.owner_username }}/gestion-stock-backend:latest
