@@ -1,0 +1,40 @@
+name: Create Docker images
+
+on:
+  workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  get-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get Maven project version
+        id: get-version
+        run: |
+          if command -v mvn >/dev/null 2>&1; then
+            VERSION=$(mvn -q -DforceStdout help:evaluate -Dexpression=project.version)
+          elif [ -x "./mvnw" ]; then
+            VERSION=$(./mvnw -q -DforceStdout help:evaluate -Dexpression=project.version)
+          elif [ -f gestion-stock-application/pom.xml ]; then
+            VERSION=$(sed -n 's:.*<version>\(.*\)</version>.*:\1:p' gestion-stock-application/pom.xml | head -n1)
+          else
+            VERSION=$(sed -n 's:.*<version>\(.*\)</version>.*:\1:p' pom.xml | head -n1)
+          fi
+          if [ -z "$VERSION" ]; then
+            VERSION="latest"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+  create-docker-images:
+    needs: get-version
+    permissions:
+      packages: write
+    uses:  ./.github/workflows/create-push-docker-images.yml
+    with:
+      version: ${{ needs.get-version.outputs.version }}
