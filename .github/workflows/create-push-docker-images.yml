@@ -7,6 +7,11 @@ on:
         description: 'Version tag for the Docker images'
         required: true
         type: string
+      sha:
+        required: false
+        type: string
+        default: ${{ github.sha }}
+
 
 permissions:
   contents: read
@@ -18,6 +23,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.sha }}
 
       - name: Set up QEMU (for multi-arch build)
         uses: docker/setup-qemu-action@v2

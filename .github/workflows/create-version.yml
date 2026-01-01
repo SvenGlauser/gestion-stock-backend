@@ -39,6 +39,8 @@ jobs:
   sync-repo:
     needs: tag-current-version
     runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.sync.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -57,6 +59,7 @@ jobs:
     uses: ./.github/workflows/create-push-docker-images.yml
     with:
       version: ${{ github.event.inputs.current-version }}
+      sha: ${{ needs.sync-repo.outputs.sha }}
 
   prepare-next-version:
     needs: sync-repo
@@ -64,6 +67,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.sync-repo.outputs.sha }}
 
       - name: Configure Git
         run: |
