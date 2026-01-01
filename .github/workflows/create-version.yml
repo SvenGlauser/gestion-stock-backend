@@ -7,7 +7,7 @@ on:
         description: 'Current version. Format (1.0)'
         required: true
       next-version:
-        description: 'Prochaine version. Format (1.0-SNAPSHOT)'
+        description: 'Prochaine version. Format (1.1-SNAPSHOT)'
         required: true
 
 permissions:
@@ -53,13 +53,13 @@ jobs:
           echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
   create-push-docker-images:
-    needs: tag-current-version
+    needs: sync-repo
     uses: ./.github/workflows/create-push-docker-images.yml
     with:
       version: ${{ github.event.inputs.current-version }}
 
   prepare-next-version:
-    needs: create-push-docker-images
+    needs: sync-repo
     runs-on: ubuntu-latest
     steps:
       - name: Maven prepare next-version
