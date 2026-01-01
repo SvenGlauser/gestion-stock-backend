@@ -11,11 +11,12 @@ on:
         required: true
 
 permissions:
-  contents: write
-  packages: write
+  contents: read
 
 jobs:
   tag-current-version:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -56,6 +57,8 @@ jobs:
 
   create-push-docker-images:
     needs: sync-repo
+    permissions:
+      packages: write
     uses: ./.github/workflows/create-push-docker-images.yml
     with:
       version: ${{ github.event.inputs.current-version }}
@@ -63,6 +66,8 @@ jobs:
 
   prepare-next-version:
     needs: sync-repo
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
