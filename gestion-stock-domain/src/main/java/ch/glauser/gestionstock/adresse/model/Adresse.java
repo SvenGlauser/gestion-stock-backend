@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.adresse.model;
 
 import ch.glauser.gestionstock.localite.model.Localite;
+import ch.glauser.validation.maxlength.MaxLength;
 import lombok.Data;
 
 /**
@@ -8,7 +9,9 @@ import lombok.Data;
  */
 @Data
 public class Adresse {
+    @MaxLength(255)
     private String rue;
+    @MaxLength(255)
     private String numero;
     private Localite localite;
 }

@@ -4,6 +4,7 @@ import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.maxlength.MaxLength;
 import ch.glauser.validation.minvalue.MinValue;
 import ch.glauser.validation.notempty.NotEmpty;
 import ch.glauser.validation.notnull.NotNull;
@@ -17,10 +18,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Piece extends Model {
     @NotEmpty
+    @MaxLength(255)
     private String numeroInventaire;
 
     @NotEmpty
+    @MaxLength(255)
     private String nom;
+    @MaxLength(4096)
     private String description;
 
     @NotNull

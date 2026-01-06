@@ -5,17 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <include file="1.0/pays-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/localite-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/categorie-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/exception-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/identite-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/personne-physique-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/personne-morale-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/fournisseur-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/machine-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/piece-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/piece-historique-create-table.xml" relativeToChangelogFile="true"/>
-    <include file="1.0/machine-piece-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="1.0/changelog-1.0.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
