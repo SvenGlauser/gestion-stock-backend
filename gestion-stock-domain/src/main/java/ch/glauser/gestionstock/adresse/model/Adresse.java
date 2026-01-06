@@ -13,6 +13,5 @@ public class Adresse {
     private String rue;
     @MaxLength(255)
     private String numero;
-    @MaxLength(255)
     private Localite localite;
 }
