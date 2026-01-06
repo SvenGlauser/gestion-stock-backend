@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.exception.model;
 
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.maxlength.MaxLength;
 import ch.glauser.validation.notempty.NotEmpty;
 import ch.glauser.validation.notnull.NotNull;
 import lombok.Data;
@@ -21,7 +22,9 @@ public class ThrownException extends Model {
     @NotEmpty
     private String stacktrace;
     @NotEmpty
+    @MaxLength(255)
     private String className;
+    @MaxLength(255)
     private String message;
     @NotNull
     private LocalDateTime timestamp;

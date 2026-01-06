@@ -3,8 +3,12 @@ package ch.glauser.validation.common;
 import ch.glauser.utilities.exception.TechnicalException;
 import ch.glauser.validation.cascade.CascadeValidation;
 import ch.glauser.validation.cascade.ValidatorCascadeValidation;
+import ch.glauser.validation.maxlength.MaxLength;
+import ch.glauser.validation.maxlength.ValidatorMaxLength;
 import ch.glauser.validation.maxvalue.MaxValue;
 import ch.glauser.validation.maxvalue.ValidatorMaxValue;
+import ch.glauser.validation.minlength.MinLength;
+import ch.glauser.validation.minlength.ValidatorMinLength;
 import ch.glauser.validation.minvalue.MinValue;
 import ch.glauser.validation.minvalue.ValidatorMinValue;
 import ch.glauser.validation.notempty.NotEmpty;
@@ -37,8 +41,10 @@ public class ValidationServiceImpl implements ValidationService {
         this.registerValidator(Unique.class, new ValidatorUnique());
 
         this.registerValidator(MinValue.class, new ValidatorMinValue());
-
         this.registerValidator(MaxValue.class, new ValidatorMaxValue());
+
+        this.registerValidator(MinLength.class, new ValidatorMinLength());
+        this.registerValidator(MaxLength.class, new ValidatorMaxLength());
 
         this.registerValidator(Regex.class, new ValidatorRegex());
 

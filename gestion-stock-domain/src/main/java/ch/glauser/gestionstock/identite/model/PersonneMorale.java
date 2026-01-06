@@ -1,7 +1,8 @@
 package ch.glauser.gestionstock.identite.model;
 
 import ch.glauser.validation.common.Validation;
-import ch.glauser.validation.notnull.NotNull;
+import ch.glauser.validation.maxlength.MaxLength;
+import ch.glauser.validation.notempty.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,7 +12,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class PersonneMorale extends Identite {
-    @NotNull
+    @NotEmpty
+    @MaxLength(255)
     private String raisonSociale;
 
     // TODO Implémenter des contacts

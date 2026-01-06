@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <include file="init/pays-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/localite-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/categorie-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/exception-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/identite-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/personne-physique-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/personne-morale-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/fournisseur-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/machine-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/piece-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/piece-historique-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="init/machine-piece-create-table.xml" relativeToChangelogFile="true"/>
+
+    <include file="fix/bigger-varchar-for-columns.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.categorie.model;
 
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.maxlength.MaxLength;
 import ch.glauser.validation.notempty.NotEmpty;
 import ch.glauser.validation.notnull.NotNull;
 import lombok.Data;
@@ -14,7 +15,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Categorie extends Model {
     @NotEmpty
+    @MaxLength(255)
     private String nom;
+    @MaxLength(4096)
     private String description;
 
     @NotNull
