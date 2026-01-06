@@ -7,7 +7,8 @@ services:
         VERSION: 1.0-SNAPSHOT
     container_name: gestion-stock-backend
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/postgres
       - SPRING_DATASOURCE_USERNAME=root
@@ -43,12 +44,18 @@ services:
       context: .
       dockerfile: db.Dockerfile
     container_name: gestion-stock-database
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=admin
     volumes:
-      - .\postgresql_backup:/backups
-      - .\postgresql_scripts:/scripts
+      - .\postgresql\backup:/backups
+      - .\postgresql\scripts:/scripts
+      - .\postgresql\data:/var/lib/postgresql
     networks:
       gestion-stock-network:
         aliases:
