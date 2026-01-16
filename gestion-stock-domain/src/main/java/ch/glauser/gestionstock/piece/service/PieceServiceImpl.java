@@ -14,6 +14,7 @@ import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
+import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import ch.glauser.validation.common.Error;
 import ch.glauser.validation.common.Validation;
@@ -52,6 +53,15 @@ public class PieceServiceImpl implements PieceService {
                 .execute();
 
         return this.pieceRepository.search(searchRequest);
+    }
+
+    @Override
+    public SearchResult<PieceWithHistoriquePojo> searchWithHistorique(SearchRequest searchRequest) {
+        Validation.of(PieceServiceImpl.class)
+                .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
+                .execute();
+
+        return this.pieceRepository.searchWithHistorique(searchRequest);
     }
 
     @Override

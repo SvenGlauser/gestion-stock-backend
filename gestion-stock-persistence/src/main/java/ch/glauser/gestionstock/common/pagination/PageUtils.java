@@ -21,6 +21,20 @@ public final class PageUtils {
     public static final int DEFAULT_PAGE_NUMBER = 0;
     public static final int DEFAULT_PAGE_SIZE = 10;
 
+    public static <T> SearchResult<T> of(List<T> elements,
+                                         int currentPage,
+                                         int pageSize,
+                                         long totalElements) {
+        SearchResult<T> searchResult = new SearchResult<>();
+        searchResult.setCurrentPage(currentPage);
+        searchResult.setTotalPages((int) (totalElements/pageSize));
+        searchResult.setPageSize(pageSize);
+        searchResult.setTotalElements(totalElements);
+        searchResult.setElements(elements);
+
+        return searchResult;
+    }
+
     public static <T extends ModelEntity<R>, R extends Model> SearchResult<R> transform(Page<T> page) {
         SearchResult<R> searchResult = new SearchResult<>();
         searchResult.setCurrentPage(page.getNumber());

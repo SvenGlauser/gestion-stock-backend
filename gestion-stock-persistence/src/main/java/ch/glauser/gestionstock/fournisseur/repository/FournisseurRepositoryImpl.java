@@ -6,6 +6,7 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.entity.FournisseurEntity;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +18,10 @@ import java.util.stream.Collectors;
  * Implémentation du repository de gestion des fournisseurs
  */
 @Repository
+@RequiredArgsConstructor
 public class FournisseurRepositoryImpl implements FournisseurRepository {
 
     private final FournisseurJpaRepository fournisseurJpaRepository;
-
-    public FournisseurRepositoryImpl(FournisseurJpaRepository fournisseurJpaRepository) {
-        this.fournisseurJpaRepository = fournisseurJpaRepository;
-    }
 
     @Override
     public Optional<Fournisseur> get(Long id) {

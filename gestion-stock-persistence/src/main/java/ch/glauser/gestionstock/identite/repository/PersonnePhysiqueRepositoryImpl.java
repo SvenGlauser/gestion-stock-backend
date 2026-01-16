@@ -2,6 +2,7 @@ package ch.glauser.gestionstock.identite.repository;
 
 import ch.glauser.gestionstock.identite.entity.PersonnePhysiqueEntity;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,13 +11,10 @@ import java.util.Optional;
  * Implémentation du repository de gestion des personnes physiques
  */
 @Repository
+@RequiredArgsConstructor
 public class PersonnePhysiqueRepositoryImpl implements PersonnePhysiqueRepository {
 
     private final PersonnePhysiqueJpaRepository personnePhysiqueJpaRepository;
-
-    public PersonnePhysiqueRepositoryImpl(PersonnePhysiqueJpaRepository personnePhysiqueJpaRepository) {
-        this.personnePhysiqueJpaRepository = personnePhysiqueJpaRepository;
-    }
 
     @Override
     public Optional<PersonnePhysique> get(Long id) {

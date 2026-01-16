@@ -4,6 +4,7 @@ import ch.glauser.gestionstock.common.pagination.FilterCombinator;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
+import ch.glauser.gestionstock.piece.dto.PieceWithHistoriqueDto;
 import ch.glauser.gestionstock.piece.service.PieceApplicationService;
 import ch.glauser.gestionstock.piece.service.PieceStatistiqueApplicationService;
 import ch.glauser.gestionstock.piece.statistique.PieceStatistique;
@@ -44,6 +45,11 @@ public class PieceController {
     @PostMapping(path = "/search")
     public ResponseEntity<SearchResult<PieceDto>> search(@RequestBody SearchRequest searchRequest) {
         return ResponseEntity.ok(this.pieceApplicationService.search(searchRequest));
+    }
+
+    @PostMapping(path = "/search/historique")
+    public ResponseEntity<SearchResult<PieceWithHistoriqueDto>> searchWithHistorique(@RequestBody SearchRequest searchRequest) {
+        return ResponseEntity.ok(this.pieceApplicationService.searchWithHistorique(searchRequest));
     }
 
     @PutMapping

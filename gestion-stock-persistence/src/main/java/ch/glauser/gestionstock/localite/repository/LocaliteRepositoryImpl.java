@@ -6,6 +6,7 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.entity.LocaliteEntity;
 import ch.glauser.gestionstock.localite.model.Localite;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +16,10 @@ import java.util.Optional;
  * Implémentation du repository de gestion des localités
  */
 @Repository
+@RequiredArgsConstructor
 public class LocaliteRepositoryImpl implements LocaliteRepository {
 
     private final LocaliteJpaRepository localiteJpaRepository;
-
-    public LocaliteRepositoryImpl(LocaliteJpaRepository localiteJpaRepository) {
-        this.localiteJpaRepository = localiteJpaRepository;
-    }
 
     @Override
     public Optional<Localite> get(Long id) {

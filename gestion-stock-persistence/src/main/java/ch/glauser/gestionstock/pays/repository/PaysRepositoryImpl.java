@@ -6,6 +6,7 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.pays.entity.PaysEntity;
 import ch.glauser.gestionstock.pays.model.Pays;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +16,10 @@ import java.util.Optional;
  * Implémentation du repository de gestion des pays
  */
 @Repository
+@RequiredArgsConstructor
 public class PaysRepositoryImpl implements PaysRepository {
 
     private final PaysJpaRepository paysJpaRepository;
-
-    public PaysRepositoryImpl(PaysJpaRepository paysJpaRepository) {
-        this.paysJpaRepository = paysJpaRepository;
-    }
 
     @Override
     public Optional<Pays> get(Long id) {

@@ -6,6 +6,7 @@ import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
 import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +16,10 @@ import java.util.Optional;
  * Implémentation du repository de gestion des catégories
  */
 @Repository
+@RequiredArgsConstructor
 public class CategorieRepositoryImpl implements CategorieRepository {
 
     private final CategorieJpaRepository categorieJpaRepository;
-
-    public CategorieRepositoryImpl(CategorieJpaRepository categorieJpaRepository) {
-        this.categorieJpaRepository = categorieJpaRepository;
-    }
 
     @Override
     public Optional<Categorie> get(Long id) {

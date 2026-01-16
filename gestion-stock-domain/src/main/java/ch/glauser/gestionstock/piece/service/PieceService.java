@@ -4,6 +4,7 @@ import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
+import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
 
 /**
  * Service métier de gestion des pièces
@@ -24,6 +25,14 @@ public interface PieceService {
      * @return Une liste de pièces paginée
      */
     SearchResult<Piece> search(SearchRequest searchRequest);
+
+    /**
+     * Récupère les pièces avec les donnees d'historique sur une période données
+     *
+     * @param searchRequest Paramètres de recherche des pièces
+     * @return Une liste de pièces paginée
+     */
+    SearchResult<PieceWithHistoriquePojo> searchWithHistorique(SearchRequest searchRequest);
 
     /**
      * Récupère les pièces pour l'autocomplétion
