@@ -11,7 +11,9 @@ import ch.glauser.gestionstock.piece.entity.PieceHistoriqueEntity;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
+import ch.glauser.gestionstock.piece.model.PieceHistoriqueType;
 import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
+import ch.glauser.gestionstock.piece.view.PieceWithHistoriqueView;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.*;
@@ -52,7 +54,6 @@ public class PieceRepositoryImpl implements PieceRepository {
 
         Pageable pageable = PageUtils.paginate(searchRequest);
 
-        // FIXME SVG Add metamodel
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
         prepareQuery(
@@ -64,7 +65,8 @@ public class PieceRepositoryImpl implements PieceRepository {
                         pieceRoot,
                         criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE)),
                         criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE))
-                ));
+                ),
+                false);
 
         List<Tuple> result = entityManager
                 .createQuery(query)
@@ -80,7 +82,8 @@ public class PieceRepositoryImpl implements PieceRepository {
                 criteriaBuilder,
                 (pieceRoot, _, _) -> List.of(
                         criteriaBuilder.countDistinct(pieceRoot)
-                ));
+                ),
+                true);
 
         Long totalElements = entityManager
                 .createQuery(countQuery)
@@ -89,7 +92,7 @@ public class PieceRepositoryImpl implements PieceRepository {
         List<PieceWithHistoriquePojo> pieces = result
                 .stream()
                 .map(tuple -> new PieceWithHistoriquePojo(
-                        (Piece) tuple.get(0),
+                        ((PieceWithHistoriqueView) tuple.get(0)).toDomain(),
                         (Long) tuple.get(1),
                         (Long) tuple.get(2)
                 ))
@@ -102,11 +105,26 @@ public class PieceRepositoryImpl implements PieceRepository {
                                          Pageable pageable,
                                          CriteriaQuery<T> query,
                                          CriteriaBuilder criteriaBuilder,
-                                         PieceSelectionFunction selectionFunction) {
+                                         PieceSelectionFunction selectionFunction,
+                                         boolean isCountQuery) {
 
-        Root<PieceHistoriqueEntity> pieceHistoriqueEntreeRoot = query.from(PieceHistoriqueEntity.class);
-        Root<PieceHistoriqueEntity> pieceHistoriqueSortieRoot = query.from(PieceHistoriqueEntity.class);
-        Root<PieceEntity> pieceRoot = query.from(PieceEntity.class);
+        Root<PieceWithHistoriqueView> pieceRoot = query.from(PieceWithHistoriqueView.class);
+        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot = pieceRoot.join("historique", JoinType.LEFT);
+        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueSortieRoot = pieceRoot.join("historique", JoinType.LEFT);
+
+        pieceHistoriqueEntreeRoot.on(
+                criteriaBuilder.equal(
+                        pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
+                        PieceHistoriqueType.ENTREE
+                )
+        );
+
+        pieceHistoriqueSortieRoot.on(
+                criteriaBuilder.equal(
+                        pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
+                        PieceHistoriqueType.SORTIE
+                )
+        );
 
         query.multiselect(selectionFunction.getSelections(
                 pieceRoot,
@@ -119,12 +137,6 @@ public class PieceRepositoryImpl implements PieceRepository {
         );
 
         query.where(
-                criteriaBuilder.equal(
-                        pieceRoot,
-                        pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_PIECE)),
-                criteriaBuilder.equal(
-                        pieceRoot,
-                        pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_PIECE)),
                 RepositoryUtils.toPredicates(
                         PageUtils.getFiltersCombinators(searchRequest),
                         pieceRoot,
@@ -133,38 +145,42 @@ public class PieceRepositoryImpl implements PieceRepository {
                 )
         );
 
-        query.orderBy(pageable
-                .getSort()
-                .stream()
-                .map(jpaOrder -> {
-                    final String property = jpaOrder.getProperty();
+        // FIXME SVG Les recherches sur les totaux doivent se faire via le HAVING et non le WHERE
 
-                    final Pair<String, Path<?>> fieldNameAndPath = RepositoryUtils.getFieldNameAndPath(
-                            property,
-                            pieceRoot,
-                            mapOfPaths
-                    );
+        if (!isCountQuery) {
+            query.orderBy(pageable
+                    .getSort()
+                    .stream()
+                    .map(jpaOrder -> {
+                        final String property = jpaOrder.getProperty();
 
-                    final Path<Object> expression = fieldNameAndPath
-                            .getValue()
-                            .get(fieldNameAndPath.getKey());
+                        final Pair<String, Path<?>> fieldNameAndPath = RepositoryUtils.getFieldNameAndPath(
+                                property,
+                                pieceRoot,
+                                mapOfPaths
+                        );
 
-                    if (jpaOrder.isAscending()) {
-                        return criteriaBuilder.asc(expression);
-                    } else {
-                        return criteriaBuilder.desc(expression);
-                    }
-                })
-                .toList());
+                        final Path<Object> expression = fieldNameAndPath
+                                .getValue()
+                                .get(fieldNameAndPath.getKey());
 
-        query.groupBy(pieceRoot);
+                        if (jpaOrder.isAscending()) {
+                            return criteriaBuilder.asc(expression);
+                        } else {
+                            return criteriaBuilder.desc(expression);
+                        }
+                    })
+                    .toList());
+
+            query.groupBy(pieceRoot);
+        }
     }
 
     @FunctionalInterface
     private interface PieceSelectionFunction {
-        List<Selection<?>> getSelections(Root<PieceEntity> pieceRoot,
-                                              Root<PieceHistoriqueEntity> pieceHistoriqueEntreeRoot,
-                                              Root<PieceHistoriqueEntity> pieceHistoriqueSortieRoot);
+        List<Selection<?>> getSelections(Root<PieceWithHistoriqueView> pieceRoot,
+                                         Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot,
+                                         Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueSortieRoot);
     }
 
     @Override

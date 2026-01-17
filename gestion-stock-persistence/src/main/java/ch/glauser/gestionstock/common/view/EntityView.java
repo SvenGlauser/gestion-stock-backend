@@ -1,5 +1,6 @@
 package ch.glauser.gestionstock.common.view;
 
+import ch.glauser.gestionstock.common.model.Model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
@@ -10,13 +11,13 @@ import org.hibernate.annotations.Immutable;
 import java.time.LocalDateTime;
 
 /**
- * Common entity
+ * View non mutable de base
  */
 @Getter
 @NoArgsConstructor
 @Immutable
 @MappedSuperclass
-public abstract class View {
+public abstract class EntityView<T extends Model> {
     @Id
     @Column(name = "ID",
             nullable = false,
@@ -35,4 +36,25 @@ public abstract class View {
 
     @Column(name = "MODIFICATION_DATE", updatable = false)
     private LocalDateTime modificationDate;
+
+    /**
+     * Transforme l'entité dans le model correspondant
+     *
+     * @return Un model de type {@link T}
+     */
+    public T toDomain() {
+        T model = this.toDomainChild();
+        model.setId(this.id);
+        model.setCreationUser(this.creationUser);
+        model.setCreationDate(this.creationDate);
+        model.setModificationUser(this.modificationUser);
+        model.setModificationDate(this.modificationDate);
+        return model;
+    }
+
+    /**
+     * Transforme la vue en model
+     * @return Le model
+     */
+    protected abstract T toDomainChild();
 }

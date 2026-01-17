@@ -131,7 +131,7 @@ public final class RepositoryUtils {
 
         Path<?> jpaPath = null;
 
-        for (String field : fields) {
+        for (String field : fields.stream().filter(StringUtils::isNoneBlank).toList()) {
             if (Objects.nonNull(jpaPath)) {
                 jpaPath = jpaPath.get(field);
             } else {
