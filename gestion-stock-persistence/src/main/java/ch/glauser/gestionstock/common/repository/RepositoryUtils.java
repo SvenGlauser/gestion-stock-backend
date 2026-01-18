@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.common.repository;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
+import ch.glauser.filters.automatic.AutomaticField;
+import ch.glauser.filters.automatic.AutomaticFieldCombinator;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
@@ -29,21 +29,21 @@ public final class RepositoryUtils {
      * @param combinators Filtres à appliquer
      * @return Une instance de Specification
      */
-    public static <T> Specification<T> specificationOf(Collection<FilterCombinator> combinators) {
+    public static <T> Specification<T> specificationOf(Collection<AutomaticFieldCombinator> combinators) {
         return (root, query, criteriaBuilder) -> toPredicates(combinators, root, null, criteriaBuilder);
     }
 
-    public static <T> Predicate toPredicates(Collection<FilterCombinator> combinators, Path<T> principalPath, List<MultiplePath<?>> multiplePaths, CriteriaBuilder criteriaBuilder) {
+    public static <T> Predicate toPredicates(Collection<AutomaticFieldCombinator> combinators, Path<T> principalPath, List<MultiplePath<?>> multiplePaths, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
 
-        for (FilterCombinator combinator : combinators) {
+        for (AutomaticFieldCombinator combinator : combinators) {
             if (Objects.isNull(combinator.getType())) {
-                combinator.setType(FilterCombinator.Type.AND);
+                combinator.setType(AutomaticFieldCombinator.Type.AND);
             }
 
-            if (Objects.requireNonNull(combinator.getType()) == FilterCombinator.Type.OR) {
+            if (Objects.requireNonNull(combinator.getType()) == AutomaticFieldCombinator.Type.OR) {
                 predicates.add(criteriaBuilder.or(RepositoryUtils.getPredicates(combinator.getFilters(), principalPath, multiplePaths, criteriaBuilder)));
-            } else if (combinator.getType() == FilterCombinator.Type.AND) {
+            } else if (combinator.getType() == AutomaticFieldCombinator.Type.AND) {
                 predicates.add(criteriaBuilder.and(RepositoryUtils.getPredicates(combinator.getFilters(), principalPath, multiplePaths, criteriaBuilder)));
             }
         }
@@ -51,20 +51,20 @@ public final class RepositoryUtils {
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 
-    private static <T> Predicate[] getPredicates(List<Filter> filtres, Path<T> principalPath, List<MultiplePath<?>> multiplePaths, CriteriaBuilder criteriaBuilder) {
+    private static <T> Predicate[] getPredicates(List<AutomaticField<?>> filtres, Path<T> principalPath, List<MultiplePath<?>> multiplePaths, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicatesOfCombinator = new ArrayList<>();
 
-        for (Filter filter : filtres) {
+        for (AutomaticField<?> filter : filtres) {
             if (Objects.nonNull(filter.getValue())) {
                 Path<?> jpaPath = getPath(principalPath, multiplePaths, filter);
 
                 if (Objects.isNull(filter.getType())) {
-                    filter.setType(Filter.Type.EQUAL);
+                    filter.setType(AutomaticField.Type.EQUAL);
                 }
 
-                if (Objects.requireNonNull(filter.getType()) == Filter.Type.EQUAL) {
+                if (Objects.requireNonNull(filter.getType()) == AutomaticField.Type.EQUAL) {
                     predicatesOfCombinator.add(RepositoryUtils.equalCondition(criteriaBuilder, filter, jpaPath));
-                } else if (filter.getType() == Filter.Type.STRING_LIKE) {
+                } else if (filter.getType() == AutomaticField.Type.STRING_LIKE) {
                     predicatesOfCombinator.add(RepositoryUtils.likeCondition(criteriaBuilder, filter, (Path<String>) jpaPath));
                 }
             }
@@ -73,11 +73,11 @@ public final class RepositoryUtils {
         return predicatesOfCombinator.toArray(new Predicate[0]);
     }
 
-    private static Predicate equalCondition(CriteriaBuilder criteriaBuilder, Filter filter, Path<?> jpaPath) {
+    private static Predicate equalCondition(CriteriaBuilder criteriaBuilder, AutomaticField filter, Path<?> jpaPath) {
         return criteriaBuilder.equal(jpaPath, filter.getValue());
     }
 
-    private static Predicate likeCondition(CriteriaBuilder criteriaBuilder, Filter filter, Path<String> jpaPath) {
+    private static Predicate likeCondition(CriteriaBuilder criteriaBuilder, AutomaticField filter, Path<String> jpaPath) {
         return criteriaBuilder.like(
                 criteriaBuilder.lower(jpaPath),
                 "%" + filter.getValue().toString().toLowerCase() + "%");
@@ -119,7 +119,7 @@ public final class RepositoryUtils {
      * @return Le chemin JPA
      * @param <T> Le type de l'entité recherchée
      */
-    private static <T> Path<?> getPath(Path<T> principalPath, List<MultiplePath<?>> multiplePaths, Filter filter) {
+    private static <T> Path<?> getPath(Path<T> principalPath, List<MultiplePath<?>> multiplePaths, AutomaticField filter) {
         List<String> fields = new ArrayList<>(List.of(filter.getField().split("\\.")));
 
         if (fields.isEmpty()) {

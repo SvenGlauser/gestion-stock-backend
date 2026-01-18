@@ -1,5 +1,6 @@
-package ch.glauser.gestionstock.common.pagination;
+package ch.glauser.filters.automatic;
 
+import ch.glauser.filters.api.field.Field;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,16 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Filter {
+public class AutomaticField<T> extends Field<T> {
     private String field;
-    private Object value;
     private Type type;
-    private Order order;
-
-    public enum Order {
-        ASC,
-        DESC
-    }
 
     public enum Type {
         EQUAL,

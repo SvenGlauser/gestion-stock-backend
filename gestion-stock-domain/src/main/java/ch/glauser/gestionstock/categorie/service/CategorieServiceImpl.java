@@ -1,5 +1,6 @@
 package ch.glauser.gestionstock.categorie.service;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.categorie.model.CategorieConstantes;
 import ch.glauser.gestionstock.categorie.repository.CategorieRepository;
@@ -7,7 +8,6 @@ import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdExcepti
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
 import ch.glauser.validation.common.Error;

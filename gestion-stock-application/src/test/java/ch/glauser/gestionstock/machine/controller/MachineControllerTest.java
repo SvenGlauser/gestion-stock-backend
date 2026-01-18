@@ -1,10 +1,10 @@
 package ch.glauser.gestionstock.machine.controller;
 
+import ch.glauser.filters.automatic.AutomaticField;
+import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.controller.PersonnePhysiqueController;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
@@ -121,11 +121,11 @@ class MachineControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        Filter contactFilter = new Filter();
+        AutomaticField contactFilter = new AutomaticField();
         contactFilter.setValue(contact.getId());
         contactFilter.setField("proprietaire.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(contactFilter))));
+        searchRequest1.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(contactFilter))));
         SearchResult<MachineDto> result1 = machineController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -133,11 +133,11 @@ class MachineControllerTest {
                 .isNotEmpty()
                 .hasSize(2);
 
-        Filter nom = new Filter();
+        AutomaticField nom = new AutomaticField();
         nom.setValue("Machine");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
+        searchRequest2.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(nom))));
         SearchResult<MachineDto> result2 = machineController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

@@ -6,7 +6,6 @@ import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdExcepti
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
@@ -16,6 +15,8 @@ import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueSource;
 import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
 import ch.glauser.gestionstock.piece.repository.PieceRepository;
+import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
+import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
 import ch.glauser.validation.common.Error;
 import ch.glauser.validation.common.Validation;
 import ch.glauser.validation.exception.ValidationException;
@@ -47,21 +48,21 @@ public class PieceServiceImpl implements PieceService {
     }
 
     @Override
-    public SearchResult<Piece> search(SearchRequest searchRequest) {
+    public SearchResult<Piece> search(PieceSearchQuery searchQuery) {
         Validation.of(PieceServiceImpl.class)
-                .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchQuery, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.pieceRepository.search(searchRequest);
+        return this.pieceRepository.search(searchQuery);
     }
 
     @Override
-    public SearchResult<PieceWithHistoriquePojo> searchWithHistorique(SearchRequest searchRequest) {
+    public SearchResult<PieceWithHistoriquePojo> searchWithHistorique(PieceWithHistoriqueSearchQuery searchQuery) {
         Validation.of(PieceServiceImpl.class)
-                .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchQuery, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.pieceRepository.searchWithHistorique(searchRequest);
+        return this.pieceRepository.searchWithHistorique(searchQuery);
     }
 
     @Override

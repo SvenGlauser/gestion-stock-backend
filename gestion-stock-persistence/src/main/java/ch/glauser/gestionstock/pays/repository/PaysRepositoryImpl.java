@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.pays.repository;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.pays.entity.PaysEntity;
 import ch.glauser.gestionstock.pays.model.Pays;

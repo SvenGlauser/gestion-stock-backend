@@ -1,11 +1,11 @@
 package ch.glauser.gestionstock.categorie.controller;
 
+import ch.glauser.filters.automatic.AutomaticField;
+import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
@@ -119,11 +119,11 @@ class CategorieControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        Filter actif = new Filter();
+        AutomaticField actif = new AutomaticField();
         actif.setValue(false);
         actif.setField("actif");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(actif))));
+        searchRequest1.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(actif))));
         SearchResult<CategorieDto> result1 = categorieController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -131,11 +131,11 @@ class CategorieControllerTest {
                 .isNotEmpty()
                 .hasSize(2);
 
-        Filter nom = new Filter();
+        AutomaticField nom = new AutomaticField();
         nom.setValue("Categorie - Test Search - 3");
         nom.setField("nom");
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
+        searchRequest2.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(nom))));
         SearchResult<CategorieDto> result2 = categorieController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

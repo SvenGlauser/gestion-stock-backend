@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.categorie.controller;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.categorie.service.CategorieApplicationService;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

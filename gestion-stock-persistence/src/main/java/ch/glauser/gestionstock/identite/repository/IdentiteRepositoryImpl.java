@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.identite.repository;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
 import ch.glauser.gestionstock.identite.model.Identite;

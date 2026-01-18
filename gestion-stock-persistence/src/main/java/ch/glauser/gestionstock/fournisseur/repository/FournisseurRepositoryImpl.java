@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.fournisseur.repository;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.entity.FournisseurEntity;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;

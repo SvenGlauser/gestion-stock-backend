@@ -1,16 +1,13 @@
-package ch.glauser.gestionstock.common.pagination;
+package ch.glauser.filters.api.search;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class SearchRequest {
+public abstract class SearchQuery {
     private Integer page;
     private Integer pageSize;
-    private List<FilterCombinator> combinators;
 }

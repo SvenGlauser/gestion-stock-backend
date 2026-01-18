@@ -119,6 +119,8 @@ public final class Validation {
 
     /**
      * Valide la classe
+     *
+     * @throws ValidationException Si des erreurs de validation sont présentes
      */
     public void execute() {
         if (CollectionUtils.isNotEmpty(errors)) {

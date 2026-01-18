@@ -1,10 +1,10 @@
 package ch.glauser.gestionstock.categorie.repository;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.categorie.entity.CategorieEntity;
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

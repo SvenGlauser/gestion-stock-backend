@@ -1,11 +1,11 @@
 package ch.glauser.gestionstock.localite.controller;
 
+import ch.glauser.filters.automatic.AutomaticField;
+import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.adresse.dto.AdresseDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.controller.PersonnePhysiqueController;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
@@ -133,11 +133,11 @@ class LocaliteControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        Filter paysFilter = new Filter();
+        AutomaticField paysFilter = new AutomaticField();
         paysFilter.setValue(pays.getId());
         paysFilter.setField("pays.id");
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(paysFilter))));
+        searchRequest1.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(paysFilter))));
         SearchResult<LocaliteDto> result1 = localiteController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -145,15 +145,15 @@ class LocaliteControllerTest {
                 .isNotEmpty()
                 .hasSize(2);
 
-        Filter nom = new Filter();
+        AutomaticField nom = new AutomaticField();
         nom.setValue("Localite");
         nom.setField("nom");
-        Filter npa = new Filter();
+        AutomaticField npa = new AutomaticField();
         npa.setValue("1234");
         npa.setField("npa");
-        npa.setType(Filter.Type.STRING_LIKE);
+        npa.setType(AutomaticField.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(npa, nom))));
+        searchRequest2.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(npa, nom))));
         SearchResult<LocaliteDto> result2 = localiteController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

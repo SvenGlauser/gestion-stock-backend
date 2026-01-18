@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.controller;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceHistoriqueDto;
 import ch.glauser.gestionstock.piece.service.PieceHistoriqueApplicationService;

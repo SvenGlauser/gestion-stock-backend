@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.categorie.repository;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.categorie.model.Categorie;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 
 import java.util.Optional;

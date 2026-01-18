@@ -1,18 +1,27 @@
 package ch.glauser.gestionstock.piece.repository;
 
+import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.filter.charsequence.FilterLike;
+import ch.glauser.filters.filter.object.FilterEquals;
+import ch.glauser.filters.utils.SearchQueryMapper;
+import ch.glauser.filters.utils.SearchQueryMapperBuilder;
+import ch.glauser.filters.utils.SearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
+import ch.glauser.gestionstock.common.entity.ModelEntity_;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
+import ch.glauser.gestionstock.piece.entity.PieceEntity_;
 import ch.glauser.gestionstock.piece.entity.PieceHistoriqueEntity;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueConstantes;
 import ch.glauser.gestionstock.piece.model.PieceHistoriqueType;
 import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
+import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
+import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
 import ch.glauser.gestionstock.piece.view.PieceWithHistoriqueView;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -35,6 +44,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PieceRepositoryImpl implements PieceRepository {
 
+    private static final List<SearchQueryMapper<PieceSearchQuery, ?>> PIECE_SQ_MAPPER = SearchQueryMapperBuilder
+            .<PieceSearchQuery>of()
+            .add(
+                    PieceSearchQuery::getNumeroInventaire,
+                    FilterLike::new,
+                    PieceEntity_.NUMERO_INVENTAIRE)
+            .add(
+                    PieceSearchQuery::getNom,
+                    FilterLike::new,
+                    PieceEntity_.NOM)
+            .add(
+                    PieceSearchQuery::getCategorieId,
+                    FilterEquals::new,
+                    PieceEntity_.CATEGORIE, ModelEntity_.ID)
+            .add(
+                    PieceSearchQuery::getPrix,
+                    FilterEquals::new,
+                    PieceEntity_.PRIX)
+            .add(
+                    PieceSearchQuery::getQuantite,
+                    FilterEquals::new,
+                    PieceEntity_.QUANTITE)
+            .build();
+
     private final PieceJpaRepository pieceJpaRepository;
     private final EntityManager entityManager;
 
@@ -44,20 +77,23 @@ public class PieceRepositoryImpl implements PieceRepository {
     }
 
     @Override
-    public SearchResult<Piece> search(SearchRequest searchRequest) {
-        Page<PieceEntity> page = this.pieceJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+    public SearchResult<Piece> search(PieceSearchQuery searchQuery) {
+        Page<PieceEntity> page = this.pieceJpaRepository.search(
+                SearchQueryUtils.filterCombinaison(searchQuery, PIECE_SQ_MAPPER),
+                SearchQueryUtils.paginate(searchQuery, PIECE_SQ_MAPPER));
+
         return PageUtils.transform(page);
     }
 
     @Override
-    public SearchResult<PieceWithHistoriquePojo> searchWithHistorique(SearchRequest searchRequest) {
+    public SearchResult<PieceWithHistoriquePojo> searchWithHistorique(PieceWithHistoriqueSearchQuery searchQuery) {
 
-        Pageable pageable = PageUtils.paginate(searchRequest);
+        Pageable pageable = PageUtils.paginate(searchQuery);
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
         prepareQuery(
-                searchRequest,
+                searchQuery,
                 pageable,
                 query,
                 criteriaBuilder,
@@ -76,7 +112,7 @@ public class PieceRepositoryImpl implements PieceRepository {
 
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         prepareQuery(
-                searchRequest,
+                searchQuery,
                 pageable,
                 countQuery,
                 criteriaBuilder,
@@ -184,7 +220,7 @@ public class PieceRepositoryImpl implements PieceRepository {
     }
 
     @Override
-    public List<Piece> searchAll(List<FilterCombinator> filters) {
+    public List<Piece> searchAll(List<AutomaticFieldCombinator> filters) {
         return this.pieceJpaRepository
                 .searchAll(filters)
                 .stream()

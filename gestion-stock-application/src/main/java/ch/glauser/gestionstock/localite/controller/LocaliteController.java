@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.localite.controller;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import ch.glauser.gestionstock.localite.service.LocaliteApplicationService;

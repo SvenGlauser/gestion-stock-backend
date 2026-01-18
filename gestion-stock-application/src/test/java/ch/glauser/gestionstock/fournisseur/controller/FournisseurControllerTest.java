@@ -1,12 +1,12 @@
 package ch.glauser.gestionstock.fournisseur.controller;
 
+import ch.glauser.filters.automatic.AutomaticField;
+import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.identite.controller.PersonneMoraleController;
@@ -148,12 +148,12 @@ class FournisseurControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        Filter description = new Filter();
+        AutomaticField description = new AutomaticField();
         description.setValue("Description 2");
         description.setField("description");
-        description.setType(Filter.Type.STRING_LIKE);
+        description.setType(AutomaticField.Type.STRING_LIKE);
         SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(description))));
+        searchRequest1.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(description))));
         SearchResult<FournisseurDto> result1 = fournisseurController.search(searchRequest1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
@@ -161,12 +161,12 @@ class FournisseurControllerTest {
                 .isNotEmpty()
                 .hasSize(1);
 
-        Filter nom = new Filter();
+        AutomaticField nom = new AutomaticField();
         nom.setValue("fournisseur");
         nom.setField("identite.designation");
-        nom.setType(Filter.Type.STRING_LIKE);
+        nom.setType(AutomaticField.Type.STRING_LIKE);
         SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
+        searchRequest2.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(nom))));
         SearchResult<FournisseurDto> result2 = fournisseurController.search(searchRequest2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())

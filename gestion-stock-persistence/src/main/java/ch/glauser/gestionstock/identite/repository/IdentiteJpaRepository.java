@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.repository;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
+import ch.glauser.filters.automatic.AutomaticFieldCombinator;
 import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
 import org.springframework.data.domain.Page;
@@ -36,7 +36,7 @@ public interface IdentiteJpaRepository extends JpaRepository<IdentiteEntity, Lon
     @Query("SELECT COUNT(identite) > 0 FROM Identite identite WHERE identite.adresse.localite.id = :id")
     boolean existsByIdLocalite(@Param("id") Long id);
 
-    default Page<IdentiteEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
+    default Page<IdentiteEntity> search(Collection<AutomaticFieldCombinator> filters, Pageable pageable) {
         return findAll(RepositoryUtils.specificationOf(filters), pageable);
     }
 }

@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.exception.controller;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.exception.dto.ThrownExceptionDto;
 import ch.glauser.gestionstock.exception.service.ThrownExceptionApplicationService;

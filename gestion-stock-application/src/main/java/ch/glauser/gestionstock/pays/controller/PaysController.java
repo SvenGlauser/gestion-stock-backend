@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.pays.controller;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.pays.dto.PaysDto;
 import ch.glauser.gestionstock.pays.service.PaysApplicationService;

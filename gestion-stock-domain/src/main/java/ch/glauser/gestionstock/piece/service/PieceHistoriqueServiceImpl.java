@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.piece.service;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.*;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;

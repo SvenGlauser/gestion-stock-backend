@@ -1,13 +1,13 @@
 package ch.glauser.gestionstock.common.utils;
 
-import ch.glauser.gestionstock.common.pagination.Filter;
+import ch.glauser.filters.automatic.AutomaticField;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 
 @Configuration
-public class StringToEnumConverter implements Converter<String, Filter.Type> {
+public class StringToEnumConverter implements Converter<String, AutomaticField.Type> {
     @Override
-    public Filter.Type convert(String source) {
-        return Filter.Type.valueOf(source.toUpperCase());
+    public AutomaticField.Type convert(String source) {
+        return AutomaticField.Type.valueOf(source.toUpperCase());
     }
 }

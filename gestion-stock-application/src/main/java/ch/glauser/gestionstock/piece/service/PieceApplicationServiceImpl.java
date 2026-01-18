@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.piece.service;
 
+import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
@@ -9,6 +9,7 @@ import ch.glauser.gestionstock.piece.dto.PieceWithHistoriqueDto;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceConstantes;
 import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
+import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
 import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,12 +42,12 @@ public class PieceApplicationServiceImpl implements PieceApplicationService {
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_LECTEUR.name())")
-    public SearchResult<PieceDto> search(SearchRequest searchRequest) {
+    public SearchResult<PieceDto> search(PieceSearchQuery searchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, PieceConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(searchQuery, PieceConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Piece> searchResult = this.pieceService.search(searchRequest);
+        SearchResult<Piece> searchResult = this.pieceService.search(searchQuery);
 
         return SearchResultUtils.transformDto(searchResult, PieceDto::new);
     }
