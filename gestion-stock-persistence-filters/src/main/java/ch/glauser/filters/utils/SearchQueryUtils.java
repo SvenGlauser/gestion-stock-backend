@@ -26,11 +26,8 @@ public class SearchQueryUtils {
 
     public static <T extends SearchQuery> Pageable paginate(T searchQuery,
                                                             List<SearchQueryMapper<T, ?>> mappers) {
-        List<org.springframework.data.domain.Sort.Order> orders = mappers
+        List<org.springframework.data.domain.Sort.Order> orders = getSorts(searchQuery, mappers)
                 .stream()
-                .filter(Objects::nonNull)
-                .map(mapper -> getSort(searchQuery, mapper))
-                .filter(Objects::nonNull)
                 .map(Sort::getOrder)
                 .toList();
 
@@ -39,6 +36,15 @@ public class SearchQueryUtils {
                 Optional.ofNullable(searchQuery.getPageSize()).orElse(DEFAULT_PAGE_SIZE),
                 org.springframework.data.domain.Sort.by(orders)
         );
+    }
+
+    public static <T extends SearchQuery> List<Sort> getSorts(T searchQuery, List<SearchQueryMapper<T, ?>> mappers) {
+        return mappers
+                .stream()
+                .filter(Objects::nonNull)
+                .map(mapper -> getSort(searchQuery, mapper))
+                .filter(Objects::nonNull)
+                .toList();
     }
 
     private static <T extends SearchQuery> Sort getSort(T searchQuery, SearchQueryMapper<T, ?> mapper) {
@@ -59,14 +65,18 @@ public class SearchQueryUtils {
 
     public static <T extends SearchQuery> List<FilterCombinaison> filterCombinaison(T searchQuery,
                                                                               List<SearchQueryMapper<T, ?>> mappers) {
-        List<Filter<?>> combinaison = mappers
+        List<Filter<?>> combinaison = getFilters(searchQuery, mappers);
+
+        return List.of(FilterCombinaison.and(combinaison));
+    }
+
+    public static <T extends SearchQuery> List<Filter<?>> getFilters(T searchQuery, List<SearchQueryMapper<T, ?>> mappers) {
+        return mappers
                 .stream()
                 .filter(Objects::nonNull)
                 .map(mapper -> getFilter(searchQuery, mapper))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(LinkedList::new));
-
-        return List.of(FilterCombinaison.and(combinaison));
     }
 
     private static <T extends SearchQuery, R> Filter<R> getFilter(T searchQuery, SearchQueryMapper<T, R> mapper) {
@@ -96,7 +106,7 @@ public class SearchQueryUtils {
         return (root, query, criteriaBuilder) -> toPredicates(combinaisons, root, criteriaBuilder);
     }
 
-    private static <T> Predicate toPredicates(Collection<FilterCombinaison> combinaisons, Path<T> root, CriteriaBuilder criteriaBuilder) {
+    public static <T> Predicate toPredicates(Collection<FilterCombinaison> combinaisons, Path<T> root, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
 
         for (FilterCombinaison combinaison : combinaisons) {
@@ -104,7 +114,7 @@ public class SearchQueryUtils {
                 combinaison.setType(FilterCombinaison.Type.AND);
             }
 
-            final Predicate[] combinaisonPredicates = getPredicates(combinaison.getFilters(), root, criteriaBuilder);
+            final Predicate[] combinaisonPredicates = getPredicatesOfCombinaison(combinaison.getFilters(), root, criteriaBuilder);
 
             switch (combinaison.getType()) {
                 case AND -> predicates.add(criteriaBuilder.and(combinaisonPredicates));
@@ -115,7 +125,7 @@ public class SearchQueryUtils {
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 
-    private static <T> Predicate[] getPredicates(List<Filter<?>> filters, Path<T> root, CriteriaBuilder criteriaBuilder) {
+    public static <T> Predicate[] getPredicatesOfCombinaison(List<Filter<?>> filters, Path<T> root, CriteriaBuilder criteriaBuilder) {
         return filters
                 .stream()
                 .filter(Objects::nonNull)

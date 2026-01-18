@@ -2,7 +2,11 @@ package ch.glauser.filters.sort.api;
 
 import ch.glauser.filters.api.field.Field;
 import ch.glauser.filters.automatic.AutomaticField;
+import ch.glauser.filters.utils.JpaUtils;
 import ch.glauser.validation.common.Validation;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Path;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +34,25 @@ public class Sort {
         return switch (this.getDirection()) {
             case ASC -> org.springframework.data.domain.Sort.Order.asc(this.getField());
             case DESC -> org.springframework.data.domain.Sort.Order.desc(this.getField());
+        };
+    }
+
+    /**
+     * Génère l'ordre pour les CriteriaBuilder
+     * @return La condition order by
+     */
+    public Order getOrder(Path<?> path, CriteriaBuilder criteriaBuilder) {
+        Validation
+                .of(this.getClass())
+                .validateNotNull(this.getField(), "field")
+                .validateNotNull(this.getDirection(), "direction")
+                .execute();
+
+        final Path<?> fieldPath = JpaUtils.getPath(path, this.field);
+
+        return switch (this.getDirection()) {
+            case ASC -> criteriaBuilder.asc(fieldPath);
+            case DESC -> criteriaBuilder.desc(fieldPath);
         };
     }
 

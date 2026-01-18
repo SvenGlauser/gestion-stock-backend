@@ -1,8 +1,10 @@
 package ch.glauser.gestionstock.piece.repository;
 
+import ch.glauser.filters.api.field.Field;
 import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.filters.filter.charsequence.FilterLike;
+import ch.glauser.filters.filter.number.FilterGreaterThanOrEquals;
+import ch.glauser.filters.filter.number.FilterLessThanOrEquals;
 import ch.glauser.filters.filter.object.FilterEquals;
 import ch.glauser.filters.utils.SearchQueryMapper;
 import ch.glauser.filters.utils.SearchQueryMapperBuilder;
@@ -11,7 +13,6 @@ import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.entity.ModelEntity_;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
 import ch.glauser.gestionstock.piece.entity.PieceEntity_;
 import ch.glauser.gestionstock.piece.entity.PieceHistoriqueEntity;
@@ -22,20 +23,23 @@ import ch.glauser.gestionstock.piece.model.PieceHistoriqueType;
 import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
 import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
 import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
+import ch.glauser.gestionstock.piece.view.PieceHistoriqueView_;
 import ch.glauser.gestionstock.piece.view.PieceWithHistoriqueView;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Implémentation du repository de gestion des pieces
@@ -88,61 +92,147 @@ public class PieceRepositoryImpl implements PieceRepository {
     @Override
     public SearchResult<PieceWithHistoriquePojo> searchWithHistorique(PieceWithHistoriqueSearchQuery searchQuery) {
 
-        Pageable pageable = PageUtils.paginate(searchQuery);
+        final List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> pieceSQMapper = SearchQueryMapperBuilder
+                .<PieceWithHistoriqueSearchQuery>of()
+                .add(
+                        PieceWithHistoriqueSearchQuery::getNumeroInventaire,
+                        FilterLike::new,
+                        PieceEntity_.NUMERO_INVENTAIRE)
+                .add(
+                        PieceWithHistoriqueSearchQuery::getNom,
+                        FilterLike::new,
+                        PieceEntity_.NOM)
+                .add(
+                        PieceWithHistoriqueSearchQuery::getCategorieId,
+                        FilterEquals::new,
+                        PieceEntity_.CATEGORIE, ModelEntity_.ID)
+                .add(
+                        PieceWithHistoriqueSearchQuery::getPrix,
+                        FilterEquals::new,
+                        PieceEntity_.PRIX)
+                .add(
+                        PieceWithHistoriqueSearchQuery::getQuantite,
+                        FilterEquals::new,
+                        PieceEntity_.QUANTITE)
+                .build();
+
+        final List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> historiqueSQMapper = SearchQueryMapperBuilder
+                .<PieceWithHistoriqueSearchQuery>of()
+                .add(
+                        innerSearchQuery -> Optional
+                                .ofNullable(innerSearchQuery.getDateDebut())
+                                .<Field<ChronoLocalDateTime<?>>>map(dateDebut -> dateDebut.cast(date -> LocalDateTime.of(date, LocalDateTime.MIN.toLocalTime())))
+                                .orElse(null),
+                        FilterGreaterThanOrEquals::new,
+                        PieceHistoriqueView_.HEURE)
+                .add(
+                        innerSearchQuery -> Optional
+                                .ofNullable(innerSearchQuery.getDateFin())
+                                .<Field<ChronoLocalDateTime<?>>>map(dateFin -> dateFin.cast(date -> LocalDateTime.of(date, LocalDateTime.MAX.toLocalTime())))
+                                .orElse(null),
+                        FilterLessThanOrEquals::new,
+                        PieceHistoriqueView_.HEURE)
+                .build();
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
-        prepareQuery(
-                searchQuery,
-                pageable,
-                query,
-                criteriaBuilder,
-                (pieceRoot, pieceHistoriqueEntreeRoot, pieceHistoriqueSortieRoot) -> List.of(
-                        pieceRoot,
-                        criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE)),
-                        criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE))
-                ),
-                false);
+        List<PieceWithHistoriquePojo> result = searchQuery(searchQuery, criteriaBuilder, pieceSQMapper, historiqueSQMapper);
+        Long totalElements = countQuery(searchQuery, criteriaBuilder, pieceSQMapper, historiqueSQMapper);
 
-        List<Tuple> result = entityManager
-                .createQuery(query)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
-
-        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-        prepareQuery(
-                searchQuery,
-                pageable,
-                countQuery,
-                criteriaBuilder,
-                (pieceRoot, _, _) -> List.of(
-                        criteriaBuilder.countDistinct(pieceRoot)
-                ),
-                true);
-
-        Long totalElements = entityManager
-                .createQuery(countQuery)
-                .getSingleResult();
-
-        List<PieceWithHistoriquePojo> pieces = result
-                .stream()
-                .map(tuple -> new PieceWithHistoriquePojo(
-                        ((PieceWithHistoriqueView) tuple.get(0)).toDomain(),
-                        (Long) tuple.get(1),
-                        (Long) tuple.get(2)
-                ))
-                .toList();
-
-        return PageUtils.of(pieces, pageable.getPageNumber(), pageable.getPageSize(), totalElements);
+        return PageUtils.of(result, searchQuery.getPage(), searchQuery.getPageSize(), totalElements);
     }
 
-    private static <T> void prepareQuery(SearchRequest searchRequest,
-                                         Pageable pageable,
-                                         CriteriaQuery<T> query,
-                                         CriteriaBuilder criteriaBuilder,
-                                         PieceSelectionFunction selectionFunction,
-                                         boolean isCountQuery) {
+    private Long countQuery(PieceWithHistoriqueSearchQuery searchQuery,
+                            CriteriaBuilder criteriaBuilder,
+                            List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> pieceSQMapper,
+                            List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> historiqueSQMapper) {
+        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
+        Root<PieceWithHistoriqueView> pieceMainRoot = countQuery.from(PieceWithHistoriqueView.class);
+
+        Subquery<PieceWithHistoriqueView> subQuery = countQuery.subquery(PieceWithHistoriqueView.class);
+
+        Root<PieceWithHistoriqueView> pieceRoot = subQuery.from(PieceWithHistoriqueView.class);
+        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot = pieceRoot.join("historique", JoinType.LEFT);
+        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueSortieRoot = pieceRoot.join("historique", JoinType.LEFT);
+
+        pieceHistoriqueEntreeRoot.on(
+                criteriaBuilder.equal(
+                        pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
+                        PieceHistoriqueType.ENTREE
+                ),
+                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
+                        SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
+                        pieceHistoriqueEntreeRoot,
+                        criteriaBuilder
+                ))
+        );
+
+        pieceHistoriqueSortieRoot.on(
+                criteriaBuilder.equal(
+                        pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
+                        PieceHistoriqueType.SORTIE
+                ),
+                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
+                        SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
+                        pieceHistoriqueSortieRoot,
+                        criteriaBuilder
+                ))
+        );
+
+        subQuery.select(pieceRoot);
+
+        subQuery.where(
+            criteriaBuilder.and(
+                SearchQueryUtils.getPredicatesOfCombinaison(
+                        SearchQueryUtils.getFilters(searchQuery, pieceSQMapper),
+                        pieceRoot,
+                        criteriaBuilder
+                )
+            ),
+            criteriaBuilder.equal(pieceRoot, pieceMainRoot)
+        );
+
+        Expression<Number> sumEntrees = criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
+        Expression<Number> sumSorties = criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
+
+        List<Predicate> having = new ArrayList<>();
+
+        if (Objects.nonNull(searchQuery.getQuantiteEntree())) {
+            if (Objects.nonNull(searchQuery.getQuantiteEntree().getValue())) {
+                having.add(criteriaBuilder.equal(
+                        sumEntrees,
+                        searchQuery.getQuantiteEntree().getValue()
+                ));
+            }
+        }
+
+        if (Objects.nonNull(searchQuery.getQuantiteSortie())) {
+            if (Objects.nonNull(searchQuery.getQuantiteSortie().getValue())) {
+                having.add(criteriaBuilder.equal(
+                        sumSorties,
+                        searchQuery.getQuantiteSortie().getValue()
+                ));
+            }
+        }
+
+        if (CollectionUtils.isNotEmpty(having)) {
+            subQuery.having(having.toArray(new Predicate[0]));
+        }
+
+        subQuery.groupBy(pieceRoot);
+
+        countQuery.select(criteriaBuilder.count(pieceMainRoot));
+        countQuery.where(criteriaBuilder.exists(subQuery));
+
+        return entityManager
+                .createQuery(countQuery)
+                .getSingleResult();
+    }
+
+    private List<PieceWithHistoriquePojo> searchQuery(PieceWithHistoriqueSearchQuery searchQuery,
+                                                      CriteriaBuilder criteriaBuilder,
+                                                      List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> pieceSQMapper,
+                                                      List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> historiqueSQMapper) {
+        CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
 
         Root<PieceWithHistoriqueView> pieceRoot = query.from(PieceWithHistoriqueView.class);
         Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot = pieceRoot.join("historique", JoinType.LEFT);
@@ -152,71 +242,124 @@ public class PieceRepositoryImpl implements PieceRepository {
                 criteriaBuilder.equal(
                         pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
                         PieceHistoriqueType.ENTREE
-                )
+                ),
+                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
+                        SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
+                        pieceHistoriqueEntreeRoot,
+                        criteriaBuilder
+                ))
         );
 
         pieceHistoriqueSortieRoot.on(
                 criteriaBuilder.equal(
                         pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
                         PieceHistoriqueType.SORTIE
-                )
+                ),
+                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
+                        SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
+                        pieceHistoriqueSortieRoot,
+                        criteriaBuilder
+                ))
         );
 
-        query.multiselect(selectionFunction.getSelections(
+        Expression<Number> sumEntrees = criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
+        Expression<Number> sumSorties = criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
+
+        query.multiselect(
                 pieceRoot,
-                pieceHistoriqueEntreeRoot,
-                pieceHistoriqueSortieRoot));
-
-        final List<RepositoryUtils.MultiplePath<?>> mapOfPaths = List.of(
-                new RepositoryUtils.MultiplePath<>("entree", pieceHistoriqueEntreeRoot),
-                new RepositoryUtils.MultiplePath<>("sortie", pieceHistoriqueSortieRoot)
-        );
+                sumEntrees,
+                sumSorties);
 
         query.where(
-                RepositoryUtils.toPredicates(
-                        PageUtils.getFiltersCombinators(searchRequest),
-                        pieceRoot,
-                        mapOfPaths,
-                        criteriaBuilder
+                criteriaBuilder.and(
+                        SearchQueryUtils.getPredicatesOfCombinaison(
+                                SearchQueryUtils.getFilters(searchQuery, pieceSQMapper),
+                                pieceRoot,
+                                criteriaBuilder
+                        )
                 )
         );
 
-        // FIXME SVG Les recherches sur les totaux doivent se faire via le HAVING et non le WHERE
+        List<Predicate> having = new ArrayList<>();
+        List<Order> havingOrders = new ArrayList<>();
 
-        if (!isCountQuery) {
-            query.orderBy(pageable
-                    .getSort()
-                    .stream()
-                    .map(jpaOrder -> {
-                        final String property = jpaOrder.getProperty();
+        if (Objects.nonNull(searchQuery.getQuantiteEntree())) {
+            if (Objects.nonNull(searchQuery.getQuantiteEntree().getValue())) {
+                having.add(criteriaBuilder.equal(
+                        sumEntrees,
+                        searchQuery.getQuantiteEntree().getValue()
+                ));
+            }
 
-                        final Pair<String, Path<?>> fieldNameAndPath = RepositoryUtils.getFieldNameAndPath(
-                                property,
-                                pieceRoot,
-                                mapOfPaths
-                        );
-
-                        final Path<Object> expression = fieldNameAndPath
-                                .getValue()
-                                .get(fieldNameAndPath.getKey());
-
-                        if (jpaOrder.isAscending()) {
-                            return criteriaBuilder.asc(expression);
-                        } else {
-                            return criteriaBuilder.desc(expression);
-                        }
-                    })
-                    .toList());
-
-            query.groupBy(pieceRoot);
+            if (Objects.nonNull(searchQuery.getQuantiteEntree().getOrder())) {
+                switch (searchQuery.getQuantiteEntree().getOrder()) {
+                    case ASC -> havingOrders.add(criteriaBuilder.asc(sumEntrees));
+                    case DESC -> havingOrders.add(criteriaBuilder.desc(sumEntrees));
+                }
+            }
         }
+
+        if (Objects.nonNull(searchQuery.getQuantiteSortie())) {
+            if (Objects.nonNull(searchQuery.getQuantiteSortie().getValue())) {
+                having.add(criteriaBuilder.equal(
+                        sumSorties,
+                        searchQuery.getQuantiteSortie().getValue()
+                ));
+            }
+
+            if (Objects.nonNull(searchQuery.getQuantiteSortie().getOrder())) {
+                switch (searchQuery.getQuantiteSortie().getOrder()) {
+                    case ASC -> havingOrders.add(criteriaBuilder.asc(sumSorties));
+                    case DESC -> havingOrders.add(criteriaBuilder.desc(sumSorties));
+                }
+            }
+        }
+
+        if (CollectionUtils.isNotEmpty(having)) {
+            query.having(having.toArray(new Predicate[0]));
+        }
+
+        query.orderBy(Stream
+                .of(
+                        SearchQueryUtils
+                                .getSorts(searchQuery, pieceSQMapper)
+                                .stream()
+                                .map(sort -> sort.getOrder(pieceRoot, criteriaBuilder))
+                                .toList(),
+                        SearchQueryUtils
+                                .getSorts(searchQuery, historiqueSQMapper)
+                                .stream()
+                                .map(sort -> sort.getOrder(pieceHistoriqueEntreeRoot, criteriaBuilder))
+                                .toList(),
+                        SearchQueryUtils
+                                .getSorts(searchQuery, historiqueSQMapper)
+                                .stream()
+                                .map(sort -> sort.getOrder(pieceHistoriqueSortieRoot, criteriaBuilder))
+                                .toList(),
+                        havingOrders
+                )
+                .flatMap(Collection::stream)
+                .toList());
+
+        query.groupBy(pieceRoot);
+
+        return entityManager
+                .createQuery(query)
+                .setFirstResult(searchQuery.getPage())
+                .setMaxResults(searchQuery.getPageSize())
+                .getResultList()
+                .stream()
+                .map(tuple -> new PieceWithHistoriquePojo(
+                        ((PieceWithHistoriqueView) tuple.get(0)).toDomain(),
+                        Optional.ofNullable((Long) tuple.get(1)).orElse(0L),
+                        Optional.ofNullable((Long) tuple.get(2)).orElse(0L)
+                ))
+                .toList();
     }
 
-    @FunctionalInterface
-    private interface PieceSelectionFunction {
-        List<Selection<?>> getSelections(Root<PieceWithHistoriqueView> pieceRoot,
-                                         Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot,
-                                         Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueSortieRoot);
+    private JoinedContext applyJoinsAndAggregations(AbstractQuery<?> query,
+                                                    CriteriaBuilder criteriaBuilder) {
+
     }
 
     @Override
@@ -281,4 +424,20 @@ public class PieceRepositoryImpl implements PieceRepository {
     public boolean existByNumeroInventaire(String numeroInventaire) {
         return this.pieceJpaRepository.existsByNumeroInventaire(numeroInventaire);
     }
+
+    /**
+     * Contexte des jointures pour la requête avec historique
+     * @param root Chemin racine
+     * @param entreeJoin Join des entrées
+     * @param sortieJoin Join des sorties
+     * @param sumEntrees Somme des entrées
+     * @param sumSorties Somme des sorties
+     */
+    private record JoinedContext(
+            Root<PieceWithHistoriqueView> root,
+            Join<?, ?> entreeJoin,
+            Join<?, ?> sortieJoin,
+            Expression<Long> sumEntrees,
+            Expression<Long> sumSorties
+    ) {}
 }

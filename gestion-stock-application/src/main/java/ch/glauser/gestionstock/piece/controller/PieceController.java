@@ -1,11 +1,11 @@
 package ch.glauser.gestionstock.piece.controller;
 
 import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.filters.automatic.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.piece.dto.PieceWithHistoriqueDto;
 import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
+import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
 import ch.glauser.gestionstock.piece.service.PieceApplicationService;
 import ch.glauser.gestionstock.piece.service.PieceStatistiqueApplicationService;
 import ch.glauser.gestionstock.piece.statistique.PieceStatistique;
@@ -49,8 +49,8 @@ public class PieceController {
     }
 
     @PostMapping(path = "/search/historique")
-    public ResponseEntity<SearchResult<PieceWithHistoriqueDto>> searchWithHistorique(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.pieceApplicationService.searchWithHistorique(searchRequest));
+    public ResponseEntity<SearchResult<PieceWithHistoriqueDto>> searchWithHistorique(@RequestBody PieceWithHistoriqueSearchQuery searchQuery) {
+        return ResponseEntity.ok(this.pieceApplicationService.searchWithHistorique(searchQuery));
     }
 
     @PutMapping
