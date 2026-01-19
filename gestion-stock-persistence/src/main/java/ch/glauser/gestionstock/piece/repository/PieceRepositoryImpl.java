@@ -135,6 +135,7 @@ public class PieceRepositoryImpl implements PieceRepository {
                 .build();
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
         List<PieceWithHistoriquePojo> result = searchQuery(searchQuery, criteriaBuilder, pieceSQMapper, historiqueSQMapper);
         Long totalElements = countQuery(searchQuery, criteriaBuilder, pieceSQMapper, historiqueSQMapper);
 
@@ -150,75 +151,24 @@ public class PieceRepositoryImpl implements PieceRepository {
 
         Subquery<PieceWithHistoriqueView> subQuery = countQuery.subquery(PieceWithHistoriqueView.class);
 
-        Root<PieceWithHistoriqueView> pieceRoot = subQuery.from(PieceWithHistoriqueView.class);
-        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot = pieceRoot.join("historique", JoinType.LEFT);
-        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueSortieRoot = pieceRoot.join("historique", JoinType.LEFT);
+        JoinedContext joinedContext = applyJoinsAndAggregations(
+                subQuery,
+                criteriaBuilder,
+                searchQuery,
+                historiqueSQMapper);
 
-        pieceHistoriqueEntreeRoot.on(
-                criteriaBuilder.equal(
-                        pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
-                        PieceHistoriqueType.ENTREE
-                ),
-                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
-                        SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
-                        pieceHistoriqueEntreeRoot,
-                        criteriaBuilder
-                ))
-        );
-
-        pieceHistoriqueSortieRoot.on(
-                criteriaBuilder.equal(
-                        pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
-                        PieceHistoriqueType.SORTIE
-                ),
-                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
-                        SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
-                        pieceHistoriqueSortieRoot,
-                        criteriaBuilder
-                ))
-        );
-
-        subQuery.select(pieceRoot);
+        subQuery.select(joinedContext.root);
 
         subQuery.where(
             criteriaBuilder.and(
                 SearchQueryUtils.getPredicatesOfCombinaison(
                         SearchQueryUtils.getFilters(searchQuery, pieceSQMapper),
-                        pieceRoot,
+                        joinedContext.root,
                         criteriaBuilder
                 )
             ),
-            criteriaBuilder.equal(pieceRoot, pieceMainRoot)
+            criteriaBuilder.equal(joinedContext.root, pieceMainRoot)
         );
-
-        Expression<Number> sumEntrees = criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
-        Expression<Number> sumSorties = criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
-
-        List<Predicate> having = new ArrayList<>();
-
-        if (Objects.nonNull(searchQuery.getQuantiteEntree())) {
-            if (Objects.nonNull(searchQuery.getQuantiteEntree().getValue())) {
-                having.add(criteriaBuilder.equal(
-                        sumEntrees,
-                        searchQuery.getQuantiteEntree().getValue()
-                ));
-            }
-        }
-
-        if (Objects.nonNull(searchQuery.getQuantiteSortie())) {
-            if (Objects.nonNull(searchQuery.getQuantiteSortie().getValue())) {
-                having.add(criteriaBuilder.equal(
-                        sumSorties,
-                        searchQuery.getQuantiteSortie().getValue()
-                ));
-            }
-        }
-
-        if (CollectionUtils.isNotEmpty(having)) {
-            subQuery.having(having.toArray(new Predicate[0]));
-        }
-
-        subQuery.groupBy(pieceRoot);
 
         countQuery.select(criteriaBuilder.count(pieceMainRoot));
         countQuery.where(criteriaBuilder.exists(subQuery));
@@ -234,6 +184,87 @@ public class PieceRepositoryImpl implements PieceRepository {
                                                       List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> historiqueSQMapper) {
         CriteriaQuery<Tuple> query = criteriaBuilder.createTupleQuery();
 
+        JoinedContext joinedContext = applyJoinsAndAggregations(
+                query,
+                criteriaBuilder,
+                searchQuery,
+                historiqueSQMapper);
+
+        query.multiselect(
+                joinedContext.root,
+                joinedContext.sumEntrees,
+                joinedContext.sumSorties);
+
+        query.where(
+                criteriaBuilder.and(
+                        SearchQueryUtils.getPredicatesOfCombinaison(
+                                SearchQueryUtils.getFilters(searchQuery, pieceSQMapper),
+                                joinedContext.root,
+                                criteriaBuilder
+                        )
+                )
+        );
+
+        List<Order> havingOrders = new ArrayList<>();
+
+        if (Objects.nonNull(searchQuery.getQuantiteEntree())
+            && Objects.nonNull(searchQuery.getQuantiteEntree().getOrder())) {
+
+            switch (searchQuery.getQuantiteEntree().getOrder()) {
+                case ASC -> havingOrders.add(criteriaBuilder.asc(joinedContext.sumEntrees));
+                case DESC -> havingOrders.add(criteriaBuilder.desc(joinedContext.sumEntrees));
+            }
+        }
+
+        if (Objects.nonNull(searchQuery.getQuantiteSortie())
+            && Objects.nonNull(searchQuery.getQuantiteSortie().getOrder())) {
+
+            switch (searchQuery.getQuantiteSortie().getOrder()) {
+                case ASC -> havingOrders.add(criteriaBuilder.asc(joinedContext.sumSorties));
+                case DESC -> havingOrders.add(criteriaBuilder.desc(joinedContext.sumSorties));
+            }
+        }
+
+        query.orderBy(Stream
+                .of(
+                        SearchQueryUtils
+                                .getSorts(searchQuery, pieceSQMapper)
+                                .stream()
+                                .map(sort -> sort.getOrder(joinedContext.root, criteriaBuilder))
+                                .toList(),
+                        SearchQueryUtils
+                                .getSorts(searchQuery, historiqueSQMapper)
+                                .stream()
+                                .map(sort -> sort.getOrder(joinedContext.entreeJoin, criteriaBuilder))
+                                .toList(),
+                        SearchQueryUtils
+                                .getSorts(searchQuery, historiqueSQMapper)
+                                .stream()
+                                .map(sort -> sort.getOrder(joinedContext.sortieJoin, criteriaBuilder))
+                                .toList(),
+                        havingOrders
+                )
+                .flatMap(Collection::stream)
+                .toList());
+
+        return entityManager
+                .createQuery(query)
+                .setFirstResult(searchQuery.getPage())
+                .setMaxResults(searchQuery.getPageSize())
+                .getResultList()
+                .stream()
+                .map(tuple -> new PieceWithHistoriquePojo(
+                        ((PieceWithHistoriqueView) tuple.get(0)).toDomain(),
+                        Optional.ofNullable((Long) tuple.get(1)).orElse(0L),
+                        Optional.ofNullable((Long) tuple.get(2)).orElse(0L)
+                ))
+                .toList();
+    }
+
+    private JoinedContext applyJoinsAndAggregations(AbstractQuery<?> query,
+                                                    CriteriaBuilder criteriaBuilder,
+                                                    PieceWithHistoriqueSearchQuery searchQuery,
+                                                    List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> historiqueSQMapper) {
         Root<PieceWithHistoriqueView> pieceRoot = query.from(PieceWithHistoriqueView.class);
         Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot = pieceRoot.join("historique", JoinType.LEFT);
         Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueSortieRoot = pieceRoot.join("historique", JoinType.LEFT);
@@ -262,104 +293,40 @@ public class PieceRepositoryImpl implements PieceRepository {
                 ))
         );
 
-        Expression<Number> sumEntrees = criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
-        Expression<Number> sumSorties = criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
-
-        query.multiselect(
-                pieceRoot,
-                sumEntrees,
-                sumSorties);
-
-        query.where(
-                criteriaBuilder.and(
-                        SearchQueryUtils.getPredicatesOfCombinaison(
-                                SearchQueryUtils.getFilters(searchQuery, pieceSQMapper),
-                                pieceRoot,
-                                criteriaBuilder
-                        )
-                )
-        );
+        Expression<Long> sumEntrees = criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
+        Expression<Long> sumSorties = criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
 
         List<Predicate> having = new ArrayList<>();
-        List<Order> havingOrders = new ArrayList<>();
 
-        if (Objects.nonNull(searchQuery.getQuantiteEntree())) {
-            if (Objects.nonNull(searchQuery.getQuantiteEntree().getValue())) {
-                having.add(criteriaBuilder.equal(
-                        sumEntrees,
-                        searchQuery.getQuantiteEntree().getValue()
-                ));
-            }
-
-            if (Objects.nonNull(searchQuery.getQuantiteEntree().getOrder())) {
-                switch (searchQuery.getQuantiteEntree().getOrder()) {
-                    case ASC -> havingOrders.add(criteriaBuilder.asc(sumEntrees));
-                    case DESC -> havingOrders.add(criteriaBuilder.desc(sumEntrees));
-                }
-            }
+        if (Objects.nonNull(searchQuery.getQuantiteEntree())
+            && Objects.nonNull(searchQuery.getQuantiteEntree().getValue())) {
+            having.add(criteriaBuilder.equal(
+                    sumEntrees,
+                    searchQuery.getQuantiteEntree().getValue()
+            ));
         }
 
-        if (Objects.nonNull(searchQuery.getQuantiteSortie())) {
-            if (Objects.nonNull(searchQuery.getQuantiteSortie().getValue())) {
-                having.add(criteriaBuilder.equal(
-                        sumSorties,
-                        searchQuery.getQuantiteSortie().getValue()
-                ));
-            }
-
-            if (Objects.nonNull(searchQuery.getQuantiteSortie().getOrder())) {
-                switch (searchQuery.getQuantiteSortie().getOrder()) {
-                    case ASC -> havingOrders.add(criteriaBuilder.asc(sumSorties));
-                    case DESC -> havingOrders.add(criteriaBuilder.desc(sumSorties));
-                }
-            }
+        if (Objects.nonNull(searchQuery.getQuantiteSortie())
+            && Objects.nonNull(searchQuery.getQuantiteSortie().getValue())) {
+            having.add(criteriaBuilder.equal(
+                    sumSorties,
+                    searchQuery.getQuantiteSortie().getValue()
+            ));
         }
 
         if (CollectionUtils.isNotEmpty(having)) {
             query.having(having.toArray(new Predicate[0]));
         }
 
-        query.orderBy(Stream
-                .of(
-                        SearchQueryUtils
-                                .getSorts(searchQuery, pieceSQMapper)
-                                .stream()
-                                .map(sort -> sort.getOrder(pieceRoot, criteriaBuilder))
-                                .toList(),
-                        SearchQueryUtils
-                                .getSorts(searchQuery, historiqueSQMapper)
-                                .stream()
-                                .map(sort -> sort.getOrder(pieceHistoriqueEntreeRoot, criteriaBuilder))
-                                .toList(),
-                        SearchQueryUtils
-                                .getSorts(searchQuery, historiqueSQMapper)
-                                .stream()
-                                .map(sort -> sort.getOrder(pieceHistoriqueSortieRoot, criteriaBuilder))
-                                .toList(),
-                        havingOrders
-                )
-                .flatMap(Collection::stream)
-                .toList());
-
         query.groupBy(pieceRoot);
 
-        return entityManager
-                .createQuery(query)
-                .setFirstResult(searchQuery.getPage())
-                .setMaxResults(searchQuery.getPageSize())
-                .getResultList()
-                .stream()
-                .map(tuple -> new PieceWithHistoriquePojo(
-                        ((PieceWithHistoriqueView) tuple.get(0)).toDomain(),
-                        Optional.ofNullable((Long) tuple.get(1)).orElse(0L),
-                        Optional.ofNullable((Long) tuple.get(2)).orElse(0L)
-                ))
-                .toList();
-    }
-
-    private JoinedContext applyJoinsAndAggregations(AbstractQuery<?> query,
-                                                    CriteriaBuilder criteriaBuilder) {
-
+        return new JoinedContext(
+                pieceRoot,
+                pieceHistoriqueEntreeRoot,
+                pieceHistoriqueSortieRoot,
+                sumEntrees,
+                sumSorties
+        );
     }
 
     @Override
@@ -378,7 +345,7 @@ public class PieceRepositoryImpl implements PieceRepository {
 
     @Override
     public SearchResult<Piece> autocomplete(String searchValue) {
-        Specification<PieceEntity> specification = (root, query, criteriaBuilder) ->
+        Specification<PieceEntity> specification = (root, _, criteriaBuilder) ->
                 criteriaBuilder.like(
                         criteriaBuilder.lower(
                         criteriaBuilder.concat("",
