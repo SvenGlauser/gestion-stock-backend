@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.exception.repository;
 
 import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
@@ -26,7 +27,7 @@ public class ThrownExceptionRepositoryImpl implements ThrownExceptionRepository 
 
     @Override
     public SearchResult<ThrownException> searchExceptions(SearchRequest searchRequest) {
-        Page<ThrownExceptionEntity> page = this.thrownExceptionJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+        Page<ThrownExceptionEntity> page = this.thrownExceptionJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(searchRequest), AutomatedSearchQueryUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 

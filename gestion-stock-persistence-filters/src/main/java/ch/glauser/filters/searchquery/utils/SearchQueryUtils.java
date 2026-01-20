@@ -1,29 +1,31 @@
-package ch.glauser.filters.utils;
+package ch.glauser.filters.searchquery.utils;
 
-import ch.glauser.filters.api.field.Field;
-import ch.glauser.filters.api.search.SearchQuery;
+import ch.glauser.filters.field.api.Field;
 import ch.glauser.filters.filter.api.Filter;
 import ch.glauser.filters.filter.api.FilterCombinaison;
+import ch.glauser.filters.search.api.SearchQuery;
 import ch.glauser.filters.sort.api.Sort;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Path;
-import jakarta.persistence.criteria.Predicate;
+import ch.glauser.filters.utils.PaginationUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SearchQueryUtils {
 
-    public static final int DEFAULT_PAGE_NUMBER = 0;
-    public static final int DEFAULT_PAGE_SIZE = 10;
-
+    /**
+     * Pagine la search query
+     * @param searchQuery Search query
+     * @param mappers Mapper pour pouvoir récupérer les order by
+     * @return Une page
+     * @param <T> Type de la search query
+     */
     public static <T extends SearchQuery> Pageable paginate(T searchQuery,
                                                             List<SearchQueryMapper<T, ?>> mappers) {
         List<org.springframework.data.domain.Sort.Order> orders = getSorts(searchQuery, mappers)
@@ -31,13 +33,16 @@ public class SearchQueryUtils {
                 .map(Sort::getOrder)
                 .toList();
 
-        return PageRequest.of(
-                Optional.ofNullable(searchQuery.getPage()).orElse(DEFAULT_PAGE_NUMBER),
-                Optional.ofNullable(searchQuery.getPageSize()).orElse(DEFAULT_PAGE_SIZE),
-                org.springframework.data.domain.Sort.by(orders)
-        );
+        return PaginationUtils.getPage(searchQuery, orders);
     }
 
+    /**
+     * Récupère une liste de tri
+     * @param searchQuery Search query
+     * @param mappers Mapper pour récupérer les champs de la search query
+     * @return Une liste de tri
+     * @param <T> Type de la search query
+     */
     public static <T extends SearchQuery> List<Sort> getSorts(T searchQuery, List<SearchQueryMapper<T, ?>> mappers) {
         return mappers
                 .stream()
@@ -63,14 +68,29 @@ public class SearchQueryUtils {
                         .collect(Collectors.joining(".")));
     }
 
+    /**
+     * Récupère une liste de combinaison de filtre depuis une SearchQuery et une liste de mapper
+     * @param searchQuery Search query
+     * @param mappers Mapper pour transformer la SearchQuery en filtre
+     * @return Une liste de combinaison de filtres
+     * @param <T> Type de la SearchQuery
+     */
     public static <T extends SearchQuery> List<FilterCombinaison> filterCombinaison(T searchQuery,
-                                                                              List<SearchQueryMapper<T, ?>> mappers) {
+                                                                                    List<SearchQueryMapper<T, ?>> mappers) {
         List<Filter<?>> combinaison = getFilters(searchQuery, mappers);
 
         return List.of(FilterCombinaison.and(combinaison));
     }
 
-    public static <T extends SearchQuery> List<Filter<?>> getFilters(T searchQuery, List<SearchQueryMapper<T, ?>> mappers) {
+    /**
+     * Récupère une liste de filtre depuis une SearchQuery et une liste de mapper
+     * @param searchQuery Search query
+     * @param mappers Mapper pour transformer la SearchQuery en filtre
+     * @return Une liste de filtre
+     * @param <T> Type de la SearchQuery
+     */
+    public static <T extends SearchQuery> List<Filter<?>> getFilters(T searchQuery,
+                                                                     List<SearchQueryMapper<T, ?>> mappers) {
         return mappers
                 .stream()
                 .filter(Objects::nonNull)
@@ -94,42 +114,5 @@ public class SearchQueryUtils {
                 .collect(Collectors.joining(".")));
         filter.setValue(field.getValue());
         return filter;
-    }
-
-    /**
-     * Créer des filtres pour les recherches
-     *
-     * @param combinaisons Filtres à appliquer
-     * @return Une instance de Specification
-     */
-    public static <T> Specification<T> specificationOf(Collection<FilterCombinaison> combinaisons) {
-        return (root, query, criteriaBuilder) -> toPredicates(combinaisons, root, criteriaBuilder);
-    }
-
-    public static <T> Predicate toPredicates(Collection<FilterCombinaison> combinaisons, Path<T> root, CriteriaBuilder criteriaBuilder) {
-        List<Predicate> predicates = new ArrayList<>();
-
-        for (FilterCombinaison combinaison : combinaisons) {
-            if (Objects.isNull(combinaison.getType())) {
-                combinaison.setType(FilterCombinaison.Type.AND);
-            }
-
-            final Predicate[] combinaisonPredicates = getPredicatesOfCombinaison(combinaison.getFilters(), root, criteriaBuilder);
-
-            switch (combinaison.getType()) {
-                case AND -> predicates.add(criteriaBuilder.and(combinaisonPredicates));
-                case OR -> predicates.add(criteriaBuilder.or(combinaisonPredicates));
-            }
-        }
-
-        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-    }
-
-    public static <T> Predicate[] getPredicatesOfCombinaison(List<Filter<?>> filters, Path<T> root, CriteriaBuilder criteriaBuilder) {
-        return filters
-                .stream()
-                .filter(Objects::nonNull)
-                .map(filter -> filter.getPredicate(root, criteriaBuilder))
-                .toArray(Predicate[]::new);
     }
 }

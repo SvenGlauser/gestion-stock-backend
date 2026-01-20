@@ -1,5 +1,6 @@
-package ch.glauser.filters.api.field;
+package ch.glauser.filters.field.api;
 
+import ch.glauser.filters.sort.api.Direction;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,8 +21,4 @@ public class Field<T> {
         return field;
     }
 
-    public enum Direction {
-        ASC,
-        DESC
-    }
 }

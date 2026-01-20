@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.machine.repository;
 
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.gestionstock.common.repository.RepositoryUtils;
+import ch.glauser.filters.filter.api.FilterCombinaison;
+import ch.glauser.filters.filter.utils.FilterUtils;
 import ch.glauser.gestionstock.machine.entity.MachineEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +58,7 @@ public interface MachineJpaRepository extends JpaRepository<MachineEntity, Long>
             AND machine.nom = :nom""")
     boolean existsByNomAndIdProprietaire(@Param("nom") String nom, @Param("idProprietaire") Long idProprietaire);
 
-    default Page<MachineEntity> search(Collection<AutomaticFieldCombinator> filters, Pageable pageable) {
-        return findAll(RepositoryUtils.specificationOf(filters), pageable);
+    default Page<MachineEntity> search(Collection<FilterCombinaison> filters, Pageable pageable) {
+        return findAll(FilterUtils.specificationOf(filters), pageable);
     }
 }

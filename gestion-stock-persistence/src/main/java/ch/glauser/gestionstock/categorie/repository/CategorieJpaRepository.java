@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.categorie.repository;
 
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.filter.api.FilterCombinaison;
+import ch.glauser.filters.filter.utils.FilterUtils;
 import ch.glauser.gestionstock.categorie.entity.CategorieEntity;
-import ch.glauser.gestionstock.common.repository.RepositoryUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,7 +25,7 @@ public interface CategorieJpaRepository extends JpaRepository<CategorieEntity, L
      */
     boolean existsByNom(String nom);
 
-    default Page<CategorieEntity> search(Collection<AutomaticFieldCombinator> filters, Pageable pageable) {
-        return findAll(RepositoryUtils.specificationOf(filters), pageable);
+    default Page<CategorieEntity> search(Collection<FilterCombinaison> filters, Pageable pageable) {
+        return findAll(FilterUtils.specificationOf(filters), pageable);
     }
 }

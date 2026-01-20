@@ -14,11 +14,11 @@ import java.util.Objects;
 @Setter
 public class FilterCombinaison {
     private List<Filter<?>> filters;
-    private Type type;
+    private CombinaisonType type;
 
     public FilterCombinaison() {
         this.filters = new ArrayList<>();
-        this.type = Type.AND;
+        this.type = CombinaisonType.AND;
     }
 
     public static FilterCombinaison and(Collection<Filter<?>> filters) {
@@ -28,7 +28,7 @@ public class FilterCombinaison {
                 .stream()
                 .filter(Objects::nonNull)
                 .toList());
-        combinator.setType(Type.AND);
+        combinator.setType(CombinaisonType.AND);
         return combinator;
     }
 
@@ -39,12 +39,7 @@ public class FilterCombinaison {
                 .stream()
                 .filter(Objects::nonNull)
                 .toList());
-        combinator.setType(Type.OR);
+        combinator.setType(CombinaisonType.OR);
         return combinator;
-    }
-
-    public enum Type {
-        AND,
-        OR
     }
 }

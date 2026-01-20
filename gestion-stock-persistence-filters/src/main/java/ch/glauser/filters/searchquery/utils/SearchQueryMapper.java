@@ -1,8 +1,8 @@
-package ch.glauser.filters.utils;
+package ch.glauser.filters.searchquery.utils;
 
-import ch.glauser.filters.api.field.Field;
-import ch.glauser.filters.api.search.SearchQuery;
+import ch.glauser.filters.field.api.Field;
 import ch.glauser.filters.filter.api.Filter;
+import ch.glauser.filters.search.api.SearchQuery;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

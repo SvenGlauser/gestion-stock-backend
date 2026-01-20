@@ -1,8 +1,7 @@
 package ch.glauser.gestionstock.piece.controller;
 
-import ch.glauser.filters.automatic.AutomaticField;
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.field.api.Field;
+import ch.glauser.filters.sort.api.Direction;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
@@ -18,6 +17,7 @@ import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.controller.MachineController;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
+import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
 import ch.glauser.gestionstock.utils.TestSecurityConfiguration;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.assertj.core.api.Assertions;
@@ -166,34 +166,29 @@ class PieceControllerTest {
         piece3.setPrix(1D);
         assertDoesNotThrow(() -> pieceController.create(piece3));
 
-        SearchRequest searchRequest = new SearchRequest();
+        PieceSearchQuery searchQuery = new PieceSearchQuery();
         
-        SearchResult<PieceDto> result = pieceController.search(searchRequest).getBody();
+        SearchResult<PieceDto> result = pieceController.search(searchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticField categorieFilter = new AutomaticField();
-        categorieFilter.setValue(categorie.getId());
-        categorieFilter.setField("categorie.id");
-        SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(categorieFilter))));
-        SearchResult<PieceDto> result1 = pieceController.search(searchRequest1).getBody();
+        searchQuery.setCategorieId(new Field<>());
+        searchQuery.getCategorieId().setValue(categorie.getId());
+        SearchResult<PieceDto> result1 = pieceController.search(searchQuery).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(2);
 
-        AutomaticField nom = new AutomaticField();
-        nom.setValue("Piece");
-        nom.setField("nom");
-        nom.setType(AutomaticField.Type.STRING_LIKE);
-        SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(nom))));
-        SearchResult<PieceDto> result2 = pieceController.search(searchRequest2).getBody();
+        searchQuery.setCategorieId(null);
+        searchQuery.setNom(new Field<>());
+        searchQuery.getNom().setValue("Piece");
+        searchQuery.getNom().setOrder(Direction.ASC);
+        SearchResult<PieceDto> result2 = pieceController.search(searchQuery).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
                 .isNotNull()

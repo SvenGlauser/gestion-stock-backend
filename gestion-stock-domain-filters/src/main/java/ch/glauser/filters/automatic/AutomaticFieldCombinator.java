@@ -1,5 +1,6 @@
 package ch.glauser.filters.automatic;
 
+import ch.glauser.filters.filter.api.CombinaisonType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,24 +12,19 @@ import java.util.List;
 @NoArgsConstructor
 public class AutomaticFieldCombinator {
     private List<AutomaticField<?>> filters;
-    private Type type;
+    private CombinaisonType type;
 
     public static AutomaticFieldCombinator and(List<AutomaticField<?>> filters) {
         AutomaticFieldCombinator combinator = new AutomaticFieldCombinator();
         combinator.setFilters(filters);
-        combinator.setType(Type.AND);
+        combinator.setType(CombinaisonType.AND);
         return combinator;
     }
 
     public static AutomaticFieldCombinator or(List<AutomaticField<?>> filters) {
         AutomaticFieldCombinator combinator = new AutomaticFieldCombinator();
         combinator.setFilters(filters);
-        combinator.setType(Type.OR);
+        combinator.setType(CombinaisonType.OR);
         return combinator;
-    }
-
-    public enum Type {
-        AND,
-        OR
     }
 }

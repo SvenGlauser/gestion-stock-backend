@@ -1,6 +1,6 @@
 package ch.glauser.filters.filter.api;
 
-import ch.glauser.filters.api.field.Field;
+import ch.glauser.filters.field.api.Field;
 import ch.glauser.filters.utils.JpaUtils;
 import ch.glauser.validation.common.Validation;
 import jakarta.persistence.criteria.CriteriaBuilder;

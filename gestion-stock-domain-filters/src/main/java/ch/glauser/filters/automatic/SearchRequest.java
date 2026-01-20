@@ -1,6 +1,6 @@
 package ch.glauser.filters.automatic;
 
-import ch.glauser.filters.api.search.SearchQuery;
+import ch.glauser.filters.search.api.SearchQuery;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

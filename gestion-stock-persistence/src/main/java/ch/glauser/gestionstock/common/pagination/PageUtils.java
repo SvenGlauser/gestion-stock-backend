@@ -1,31 +1,18 @@
 package ch.glauser.gestionstock.common.pagination;
 
-import ch.glauser.filters.automatic.AutomaticField;
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.filters.automatic.SearchRequest;
-import ch.glauser.filters.sort.api.Sort;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.model.Model;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Utilitaire de gestion des pages
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PageUtils {
-
-    public static final int DEFAULT_PAGE_NUMBER = 0;
-    public static final int DEFAULT_PAGE_SIZE = 10;
 
     public static <T> SearchResult<T> of(List<T> elements,
                                          int currentPage,
@@ -50,46 +37,5 @@ public final class PageUtils {
         searchResult.setElements(page.getContent().stream().map(ModelEntity::toDomain).toList());
 
         return searchResult;
-    }
-
-    public static Pageable paginate(SearchRequest searchRequest) {
-        List<org.springframework.data.domain.Sort.Order> orders = searchRequest
-                .getCombinators()
-                .stream()
-                .filter(Objects::nonNull)
-                .map(AutomaticFieldCombinator::getFilters)
-                .filter(Objects::nonNull)
-                .flatMap(Collection::stream)
-                .map(Sort::of)
-                .filter(Objects::nonNull)
-                .map(Sort::getOrder)
-                .toList();
-
-        return PageRequest.of(
-                Optional.ofNullable(searchRequest.getPage()).orElse(DEFAULT_PAGE_NUMBER),
-                Optional.ofNullable(searchRequest.getPageSize()).orElse(DEFAULT_PAGE_SIZE),
-                org.springframework.data.domain.Sort.by(orders)
-        );
-    }
-
-    public static Pageable getDefaultPage(List<org.springframework.data.domain.Sort.Order> orders) {
-        return PageRequest.of(
-                DEFAULT_PAGE_NUMBER,
-                DEFAULT_PAGE_SIZE,
-                org.springframework.data.domain.Sort.by(orders)
-        );
-    }
-
-    public static Collection<AutomaticField<?>> getFilters(SearchRequest searchRequest) {
-        return CollectionUtils
-                .emptyIfNull(searchRequest.getCombinators())
-                .stream()
-                .map(AutomaticFieldCombinator::getFilters)
-                .flatMap(Collection::stream)
-                .toList();
-    }
-
-    public static Collection<AutomaticFieldCombinator> getFiltersCombinators(SearchRequest searchRequest) {
-        return CollectionUtils.emptyIfNull(searchRequest.getCombinators());
     }
 }

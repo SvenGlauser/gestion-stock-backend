@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.piece.search;
 
-import ch.glauser.filters.api.field.Field;
-import ch.glauser.filters.api.search.SearchQuery;
+import ch.glauser.filters.field.api.Field;
+import ch.glauser.filters.search.api.SearchQuery;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

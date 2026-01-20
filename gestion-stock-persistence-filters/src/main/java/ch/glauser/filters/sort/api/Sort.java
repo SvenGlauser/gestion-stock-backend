@@ -1,7 +1,7 @@
 package ch.glauser.filters.sort.api;
 
-import ch.glauser.filters.api.field.Field;
 import ch.glauser.filters.automatic.AutomaticField;
+import ch.glauser.filters.field.api.Field;
 import ch.glauser.filters.utils.JpaUtils;
 import ch.glauser.validation.common.Validation;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -69,10 +69,7 @@ public class Sort {
 
         final String fieldName = String.join(".", fieldNames);
 
-        return switch (Direction.of(field.getOrder())) {
-            case ASC -> Sort.asc(fieldName);
-            case DESC -> Sort.desc(fieldName);
-        };
+        return Sort.of(fieldName, field.getOrder());
     }
 
     /**
@@ -85,10 +82,21 @@ public class Sort {
             return null;
         }
 
-        return switch (Direction.of(field.getOrder())) {
-            case ASC -> Sort.asc(field.getField());
-            case DESC -> Sort.desc(field.getField());
-        };
+        return Sort.of(field.getField(), field.getOrder());
+    }
+
+    /**
+     * Génère un ordre
+     *
+     * @param field Nom du champ séparé par des points pour les champs imbriqués
+     *
+     * @return L'ordre
+     */
+    public static Sort of(String field, Direction direction) {
+        Sort sort = new Sort();
+        sort.setField(field);
+        sort.setDirection(direction);
+        return sort;
     }
 
     /**
@@ -117,20 +125,5 @@ public class Sort {
         sort.setField(field);
         sort.setDirection(Direction.DESC);
         return sort;
-    }
-
-    /**
-     * Types d'ordres possibles
-     */
-    public enum Direction {
-        ASC,
-        DESC;
-
-        public static Direction of(Field.Direction direction) {
-            return switch (direction) {
-                case ASC -> ASC;
-                case DESC -> DESC;
-            };
-        }
     }
 }

@@ -1,14 +1,16 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.filters.api.field.Field;
 import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.field.api.Field;
 import ch.glauser.filters.filter.charsequence.FilterLike;
 import ch.glauser.filters.filter.number.FilterGreaterThanOrEquals;
 import ch.glauser.filters.filter.number.FilterLessThanOrEquals;
 import ch.glauser.filters.filter.object.FilterEquals;
-import ch.glauser.filters.utils.SearchQueryMapper;
-import ch.glauser.filters.utils.SearchQueryMapperBuilder;
-import ch.glauser.filters.utils.SearchQueryUtils;
+import ch.glauser.filters.filter.utils.FilterUtils;
+import ch.glauser.filters.searchquery.utils.SearchQueryMapper;
+import ch.glauser.filters.searchquery.utils.SearchQueryMapperBuilder;
+import ch.glauser.filters.searchquery.utils.SearchQueryUtils;
+import ch.glauser.filters.utils.PaginationUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.entity.ModelEntity_;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
@@ -161,7 +163,7 @@ public class PieceRepositoryImpl implements PieceRepository {
 
         subQuery.where(
             criteriaBuilder.and(
-                SearchQueryUtils.getPredicatesOfCombinaison(
+                FilterUtils.getPredicatesOfCombinaison(
                         SearchQueryUtils.getFilters(searchQuery, pieceSQMapper),
                         joinedContext.root,
                         criteriaBuilder
@@ -197,7 +199,7 @@ public class PieceRepositoryImpl implements PieceRepository {
 
         query.where(
                 criteriaBuilder.and(
-                        SearchQueryUtils.getPredicatesOfCombinaison(
+                        FilterUtils.getPredicatesOfCombinaison(
                                 SearchQueryUtils.getFilters(searchQuery, pieceSQMapper),
                                 joinedContext.root,
                                 criteriaBuilder
@@ -274,7 +276,7 @@ public class PieceRepositoryImpl implements PieceRepository {
                         pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
                         PieceHistoriqueType.ENTREE
                 ),
-                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
+                criteriaBuilder.and(FilterUtils.getPredicatesOfCombinaison(
                         SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
                         pieceHistoriqueEntreeRoot,
                         criteriaBuilder
@@ -286,7 +288,7 @@ public class PieceRepositoryImpl implements PieceRepository {
                         pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
                         PieceHistoriqueType.SORTIE
                 ),
-                criteriaBuilder.and(SearchQueryUtils.getPredicatesOfCombinaison(
+                criteriaBuilder.and(FilterUtils.getPredicatesOfCombinaison(
                         SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
                         pieceHistoriqueSortieRoot,
                         criteriaBuilder
@@ -354,7 +356,7 @@ public class PieceRepositoryImpl implements PieceRepository {
                                                root.get(PieceConstantes.FIELD_NOM))))),
                         "%" + searchValue.toLowerCase() + "%");
 
-        Pageable pageable = PageUtils.getDefaultPage(List.of(
+        Pageable pageable = PaginationUtils.getDefaultPage(List.of(
                 Sort.Order.asc(PieceConstantes.FIELD_NUMERO_INVENTAIRE),
                 Sort.Order.asc(PieceConstantes.FIELD_NOM)));
 

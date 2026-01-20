@@ -1,6 +1,6 @@
 package ch.glauser.filters.filter.object;
 
-import ch.glauser.filters.api.field.Field;
+import ch.glauser.filters.field.api.Field;
 import ch.glauser.filters.filter.api.Filter;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;

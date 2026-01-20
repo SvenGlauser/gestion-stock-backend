@@ -1,6 +1,7 @@
 package ch.glauser.gestionstock.machine.repository;
 
 import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
@@ -28,7 +29,7 @@ public class MachineRepositoryImpl implements MachineRepository {
 
     @Override
     public SearchResult<Machine> search(SearchRequest searchRequest) {
-        Page<MachineEntity> page = this.machineJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+        Page<MachineEntity> page = this.machineJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(searchRequest), AutomatedSearchQueryUtils.paginate(searchRequest));
         return PageUtils.transform(page);
     }
 
