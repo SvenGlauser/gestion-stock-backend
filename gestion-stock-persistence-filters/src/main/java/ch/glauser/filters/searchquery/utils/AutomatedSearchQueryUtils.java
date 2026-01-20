@@ -120,13 +120,16 @@ public class AutomatedSearchQueryUtils {
     }
 
     private static <T> Filter<?> getFilter(AutomaticSearchField<T> field) {
-        if (Objects.isNull(field)
-            || Objects.isNull(field.getType())
-            || Objects.isNull(field.getField())) {
+        if (Objects.isNull(field) || Objects.isNull(field.getField())) {
             return null;
         }
 
-        return switch (field.getType()) {
+        AutomaticSearchField.Type type = field.getType();
+        if (Objects.isNull(type)) {
+            type = AutomaticSearchField.Type.EQUAL;
+        }
+
+        return switch (type) {
             case EQUAL -> FilterEquals.of(field, field.getField());
             case STRING_LIKE -> FilterLike.of((SearchField<? extends CharSequence>) field, field.getField());
         };

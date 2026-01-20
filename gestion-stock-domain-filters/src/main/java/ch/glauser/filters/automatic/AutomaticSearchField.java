@@ -18,7 +18,6 @@ public class AutomaticSearchField<T> extends SearchField<T> {
      * Construit un nouveau champ de recherche
      */
     public AutomaticSearchField() {
-        // FIXME SVG retirer ca et gérer le cas dans les utilitaires
         this.type = Type.EQUAL;
     }
 
