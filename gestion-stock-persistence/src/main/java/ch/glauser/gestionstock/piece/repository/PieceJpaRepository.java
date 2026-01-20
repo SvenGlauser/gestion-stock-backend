@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
 import ch.glauser.filters.filter.api.FilterCombinaison;
 import ch.glauser.filters.filter.utils.FilterUtils;
 import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
@@ -57,7 +57,7 @@ public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, Jp
         return findAll(FilterUtils.specificationOf(filters), pageable);
     }
 
-    default List<PieceEntity> searchAll(Collection<AutomaticFieldCombinator> filters) {
+    default List<PieceEntity> searchAll(Collection<AutomaticSearchFieldCombinaison> filters) {
         return findAll(FilterUtils.specificationOf(AutomatedSearchQueryUtils.getFiltersCombinators(filters)));
     }
 }

@@ -1,21 +1,27 @@
 package ch.glauser.filters.searchquery.utils;
 
-import ch.glauser.filters.field.api.Field;
+import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.filter.api.Filter;
 import ch.glauser.filters.filter.api.FilterCombinaison;
 import ch.glauser.filters.search.api.SearchQuery;
-import ch.glauser.filters.sort.api.Sort;
+import ch.glauser.filters.sort.api.SortField;
 import ch.glauser.filters.utils.PaginationUtils;
+import ch.glauser.validation.common.Validation;
+import ch.glauser.validation.exception.ValidationException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Utilitaire permettant de traiter les SearchQuery
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SearchQueryUtils {
 
@@ -25,13 +31,21 @@ public class SearchQueryUtils {
      * @param mappers Mapper pour pouvoir récupérer les order by
      * @return Une page
      * @param <T> Type de la search query
+     * @throws ValidationException Si les paramètres sont nuls
      */
     public static <T extends SearchQuery> Pageable paginate(T searchQuery,
-                                                            List<SearchQueryMapper<T, ?>> mappers) {
-        List<org.springframework.data.domain.Sort.Order> orders = getSorts(searchQuery, mappers)
+                                                            List<SearchQueryMapper<T, ?>> mappers) throws ValidationException {
+        Validation
+                .of(SearchQueryUtils.class)
+                .validateNotNull(searchQuery, "searchQuery")
+                .validateNotNull(mappers, "mappers")
+                .execute();
+
+        List<Sort.Order> orders = SearchQueryUtils
+                .getSorts(searchQuery, mappers)
                 .stream()
-                .map(Sort::getOrder)
-                .toList();
+                .map(SortField::getJpaPaginationOrder)
+                .collect(Collectors.toCollection(LinkedList::new));
 
         return PaginationUtils.getPage(searchQuery, orders);
     }
@@ -42,30 +56,34 @@ public class SearchQueryUtils {
      * @param mappers Mapper pour récupérer les champs de la search query
      * @return Une liste de tri
      * @param <T> Type de la search query
+     * @throws ValidationException Si les paramètres sont nuls
      */
-    public static <T extends SearchQuery> List<Sort> getSorts(T searchQuery, List<SearchQueryMapper<T, ?>> mappers) {
+    public static <T extends SearchQuery> List<SortField> getSorts(T searchQuery,
+                                                                   List<SearchQueryMapper<T, ?>> mappers) throws ValidationException {
+        Validation
+                .of(SearchQueryUtils.class)
+                .validateNotNull(searchQuery, "searchQuery")
+                .validateNotNull(mappers, "mappers")
+                .execute();
+
         return mappers
                 .stream()
                 .filter(Objects::nonNull)
-                .map(mapper -> getSort(searchQuery, mapper))
+                .map(mapper -> SearchQueryUtils.getSort(searchQuery, mapper))
                 .filter(Objects::nonNull)
-                .toList();
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    private static <T extends SearchQuery> Sort getSort(T searchQuery, SearchQueryMapper<T, ?> mapper) {
-        Field<?> field = mapper.getFieldGetter().apply(searchQuery);
+    private static <T extends SearchQuery> SortField getSort(T searchQuery, SearchQueryMapper<T, ?> mapper) {
+        SearchField<?> searchField = mapper.fieldGetter().apply(searchQuery);
 
-        if (Objects.isNull(field) || Objects.isNull(field.getOrder())) {
+        if (Objects.isNull(searchField) || Objects.isNull(searchField.getOrder())) {
             return null;
         }
 
-        return Sort.of(
-                mapper.getFieldGetter().apply(searchQuery),
-                mapper
-                        .getFields()
-                        .stream()
-                        .filter(StringUtils::isNotBlank)
-                        .collect(Collectors.joining(".")));
+        return SortField.of(
+                searchField,
+                Strings.join(mapper.fieldsName(), '.'));
     }
 
     /**
@@ -77,7 +95,13 @@ public class SearchQueryUtils {
      */
     public static <T extends SearchQuery> List<FilterCombinaison> filterCombinaison(T searchQuery,
                                                                                     List<SearchQueryMapper<T, ?>> mappers) {
-        List<Filter<?>> combinaison = getFilters(searchQuery, mappers);
+        Validation
+                .of(SearchQueryUtils.class)
+                .validateNotNull(searchQuery, "searchQuery")
+                .validateNotNull(mappers, "mappers")
+                .execute();
+
+        List<Filter<?>> combinaison = SearchQueryUtils.getFilters(searchQuery, mappers);
 
         return List.of(FilterCombinaison.and(combinaison));
     }
@@ -91,28 +115,30 @@ public class SearchQueryUtils {
      */
     public static <T extends SearchQuery> List<Filter<?>> getFilters(T searchQuery,
                                                                      List<SearchQueryMapper<T, ?>> mappers) {
+        Validation
+                .of(SearchQueryUtils.class)
+                .validateNotNull(searchQuery, "searchQuery")
+                .validateNotNull(mappers, "mappers")
+                .execute();
+
         return mappers
                 .stream()
                 .filter(Objects::nonNull)
-                .map(mapper -> getFilter(searchQuery, mapper))
+                .map(mapper -> SearchQueryUtils.getFilter(searchQuery, mapper))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private static <T extends SearchQuery, R> Filter<R> getFilter(T searchQuery, SearchQueryMapper<T, R> mapper) {
-        Field<R> field = mapper.getFieldGetter().apply(searchQuery);
+        SearchField<R> searchField = mapper.fieldGetter().apply(searchQuery);
 
-        if (Objects.isNull(field) || Objects.isNull(field.getValue())) {
+        if (Objects.isNull(searchField) || Objects.isNull(searchField.getValue())) {
             return null;
         }
 
-        final Filter<R> filter = mapper.getFilterSupplier().get();
-        filter.setField(mapper
-                .getFields()
-                .stream()
-                .filter(StringUtils::isNotBlank)
-                .collect(Collectors.joining(".")));
-        filter.setValue(field.getValue());
+        final Filter<R> filter = mapper.filterSupplier().get();
+        filter.setField(Strings.join(mapper.fieldsName(), '.'));
+        filter.setValue(searchField.getValue());
         return filter;
     }
 }

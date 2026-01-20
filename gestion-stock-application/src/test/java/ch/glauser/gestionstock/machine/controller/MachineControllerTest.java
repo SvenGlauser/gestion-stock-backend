@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.machine.controller;
 
-import ch.glauser.filters.automatic.AutomaticField;
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchField;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
@@ -112,33 +112,33 @@ class MachineControllerTest {
         machine3.setProprietaire(this.getPersonnePhysique2());
         assertDoesNotThrow(() -> machineController.create(machine3));
 
-        SearchRequest searchRequest = new SearchRequest();
+        AutomaticSearchQuery automaticSearchQuery = new AutomaticSearchQuery();
         
-        SearchResult<MachineDto> result = machineController.search(searchRequest).getBody();
+        SearchResult<MachineDto> result = machineController.search(automaticSearchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticField contactFilter = new AutomaticField();
+        AutomaticSearchField contactFilter = new AutomaticSearchField();
         contactFilter.setValue(contact.getId());
         contactFilter.setField("proprietaire.id");
-        SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(contactFilter))));
-        SearchResult<MachineDto> result1 = machineController.search(searchRequest1).getBody();
+        AutomaticSearchQuery automaticSearchQuery1 = new AutomaticSearchQuery();
+        automaticSearchQuery1.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(contactFilter))));
+        SearchResult<MachineDto> result1 = machineController.search(automaticSearchQuery1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(2);
 
-        AutomaticField nom = new AutomaticField();
+        AutomaticSearchField nom = new AutomaticSearchField();
         nom.setValue("Machine");
         nom.setField("nom");
-        SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(nom))));
-        SearchResult<MachineDto> result2 = machineController.search(searchRequest2).getBody();
+        AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();
+        automaticSearchQuery2.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(nom))));
+        SearchResult<MachineDto> result2 = machineController.search(automaticSearchQuery2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
                 .isNotNull()

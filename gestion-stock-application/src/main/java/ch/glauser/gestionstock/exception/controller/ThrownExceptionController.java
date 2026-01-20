@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.exception.controller;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.exception.dto.ThrownExceptionDto;
 import ch.glauser.gestionstock.exception.service.ThrownExceptionApplicationService;
@@ -25,7 +25,7 @@ public class ThrownExceptionController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<ThrownExceptionDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.thrownExceptionApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<ThrownExceptionDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.thrownExceptionApplicationService.search(automaticSearchQuery));
     }
 }

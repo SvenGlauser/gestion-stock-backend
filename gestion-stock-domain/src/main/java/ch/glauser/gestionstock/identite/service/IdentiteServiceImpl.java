@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.identite.model.Identite;
@@ -30,12 +30,12 @@ public class IdentiteServiceImpl implements IdentiteService {
     }
 
     @Override
-    public SearchResult<Identite> search(SearchRequest searchRequest) {
+    public SearchResult<Identite> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(IdentiteServiceImpl.class)
-                .validateNotNull(searchRequest, IdentiteConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, IdentiteConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return identiteRepository.search(searchRequest);
+        return identiteRepository.search(automaticSearchQuery);
     }
 
     @Override

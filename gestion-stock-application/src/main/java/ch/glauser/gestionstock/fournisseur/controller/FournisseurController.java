@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.fournisseur.controller;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.fournisseur.service.FournisseurApplicationService;
@@ -26,8 +26,8 @@ public class FournisseurController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<FournisseurDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.fournisseurApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<FournisseurDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.fournisseurApplicationService.search(automaticSearchQuery));
     }
 
     @PutMapping

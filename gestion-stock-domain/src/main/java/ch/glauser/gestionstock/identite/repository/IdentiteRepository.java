@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.model.Identite;
 
@@ -22,10 +22,10 @@ public interface IdentiteRepository {
     /**
      * Récupère les identités
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste d'identités paginée
      */
-    SearchResult<Identite> search(SearchRequest searchRequest);
+    SearchResult<Identite> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Vérifie s'il existe une identité avec cette localité

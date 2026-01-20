@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.filters.field.api.Field;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
+import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.filter.charsequence.FilterLike;
 import ch.glauser.filters.filter.number.FilterGreaterThanOrEquals;
 import ch.glauser.filters.filter.number.FilterLessThanOrEquals;
@@ -123,14 +123,14 @@ public class PieceRepositoryImpl implements PieceRepository {
                 .add(
                         innerSearchQuery -> Optional
                                 .ofNullable(innerSearchQuery.getDateDebut())
-                                .<Field<ChronoLocalDateTime<?>>>map(dateDebut -> dateDebut.cast(date -> LocalDateTime.of(date, LocalDateTime.MIN.toLocalTime())))
+                                .<SearchField<ChronoLocalDateTime<?>>>map(dateDebut -> dateDebut.cast(date -> LocalDateTime.of(date, LocalDateTime.MIN.toLocalTime())))
                                 .orElse(null),
                         FilterGreaterThanOrEquals::new,
                         PieceHistoriqueView_.HEURE)
                 .add(
                         innerSearchQuery -> Optional
                                 .ofNullable(innerSearchQuery.getDateFin())
-                                .<Field<ChronoLocalDateTime<?>>>map(dateFin -> dateFin.cast(date -> LocalDateTime.of(date, LocalDateTime.MAX.toLocalTime())))
+                                .<SearchField<ChronoLocalDateTime<?>>>map(dateFin -> dateFin.cast(date -> LocalDateTime.of(date, LocalDateTime.MAX.toLocalTime())))
                                 .orElse(null),
                         FilterLessThanOrEquals::new,
                         PieceHistoriqueView_.HEURE)
@@ -232,17 +232,17 @@ public class PieceRepositoryImpl implements PieceRepository {
                         SearchQueryUtils
                                 .getSorts(searchQuery, pieceSQMapper)
                                 .stream()
-                                .map(sort -> sort.getOrder(joinedContext.root, criteriaBuilder))
+                                .map(sort -> sort.getCriteriaBuilderOrder(joinedContext.root, criteriaBuilder))
                                 .toList(),
                         SearchQueryUtils
                                 .getSorts(searchQuery, historiqueSQMapper)
                                 .stream()
-                                .map(sort -> sort.getOrder(joinedContext.entreeJoin, criteriaBuilder))
+                                .map(sort -> sort.getCriteriaBuilderOrder(joinedContext.entreeJoin, criteriaBuilder))
                                 .toList(),
                         SearchQueryUtils
                                 .getSorts(searchQuery, historiqueSQMapper)
                                 .stream()
-                                .map(sort -> sort.getOrder(joinedContext.sortieJoin, criteriaBuilder))
+                                .map(sort -> sort.getCriteriaBuilderOrder(joinedContext.sortieJoin, criteriaBuilder))
                                 .toList(),
                         havingOrders
                 )
@@ -332,7 +332,7 @@ public class PieceRepositoryImpl implements PieceRepository {
     }
 
     @Override
-    public List<Piece> searchAll(List<AutomaticFieldCombinator> filters) {
+    public List<Piece> searchAll(List<AutomaticSearchFieldCombinaison> filters) {
         return this.pieceJpaRepository
                 .searchAll(filters)
                 .stream()

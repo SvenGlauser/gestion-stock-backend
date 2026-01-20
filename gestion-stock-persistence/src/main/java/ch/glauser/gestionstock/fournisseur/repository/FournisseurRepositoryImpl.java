@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.fournisseur.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
@@ -39,8 +39,8 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
     }
 
     @Override
-    public SearchResult<Fournisseur> search(SearchRequest searchRequest) {
-        Page<FournisseurEntity> page = this.fournisseurJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(searchRequest), AutomatedSearchQueryUtils.paginate(searchRequest));
+    public SearchResult<Fournisseur> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<FournisseurEntity> page = this.fournisseurJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
         return PageUtils.transform(page);
     }
 

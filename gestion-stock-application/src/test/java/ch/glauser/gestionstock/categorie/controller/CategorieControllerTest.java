@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.categorie.controller;
 
-import ch.glauser.filters.automatic.AutomaticField;
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchField;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
@@ -110,33 +110,33 @@ class CategorieControllerTest {
         categorie3.setActif(true);
         assertDoesNotThrow(() -> categorieController.create(categorie3));
 
-        SearchRequest searchRequest = new SearchRequest();
+        AutomaticSearchQuery automaticSearchQuery = new AutomaticSearchQuery();
         
-        SearchResult<CategorieDto> result = categorieController.search(searchRequest).getBody();
+        SearchResult<CategorieDto> result = categorieController.search(automaticSearchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticField actif = new AutomaticField();
+        AutomaticSearchField actif = new AutomaticSearchField();
         actif.setValue(false);
         actif.setField("actif");
-        SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(actif))));
-        SearchResult<CategorieDto> result1 = categorieController.search(searchRequest1).getBody();
+        AutomaticSearchQuery automaticSearchQuery1 = new AutomaticSearchQuery();
+        automaticSearchQuery1.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(actif))));
+        SearchResult<CategorieDto> result1 = categorieController.search(automaticSearchQuery1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(2);
 
-        AutomaticField nom = new AutomaticField();
+        AutomaticSearchField nom = new AutomaticSearchField();
         nom.setValue("Categorie - Test Search - 3");
         nom.setField("nom");
-        SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(AutomaticFieldCombinator.and(List.of(nom))));
-        SearchResult<CategorieDto> result2 = categorieController.search(searchRequest2).getBody();
+        AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();
+        automaticSearchQuery2.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(nom))));
+        SearchResult<CategorieDto> result2 = categorieController.search(automaticSearchQuery2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
                 .isNotNull()

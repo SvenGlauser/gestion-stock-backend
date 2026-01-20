@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
@@ -36,12 +36,12 @@ public class PieceHistoriqueServiceImpl implements PieceHistoriqueService {
     }
 
     @Override
-    public SearchResult<PieceHistorique> search(SearchRequest searchRequest) {
+    public SearchResult<PieceHistorique> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(PieceHistoriqueServiceImpl.class)
-                .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.pieceHistoriqueRepository.search(searchRequest);
+        return this.pieceHistoriqueRepository.search(automaticSearchQuery);
     }
 
     @Override

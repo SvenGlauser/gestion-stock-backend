@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
@@ -44,7 +44,7 @@ public interface PieceRepository {
      * @param filters Paramètres de recherche
      * @return Une liste de pièces
      */
-    List<Piece> searchAll(List<AutomaticFieldCombinator> filters);
+    List<Piece> searchAll(List<AutomaticSearchFieldCombinaison> filters);
 
     /**
      * Récupère toutes les pièces

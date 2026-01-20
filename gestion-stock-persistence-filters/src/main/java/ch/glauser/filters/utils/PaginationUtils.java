@@ -1,6 +1,6 @@
 package ch.glauser.filters.utils;
 
-import ch.glauser.filters.search.api.SearchQuery;
+import ch.glauser.filters.search.api.PageableSearchQuery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +10,9 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Utilitaire pour la création de {@link Pageable}
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PaginationUtils {
 
@@ -31,14 +34,14 @@ public class PaginationUtils {
 
     /**
      * Récupère la page
-     * @param searchQuery Search query
+     * @param pageable PageableSearchQuery
      * @param orders Ordre de tri
      * @return Une page
      */
-    public static Pageable getPage(SearchQuery searchQuery, List<Sort.Order> orders) {
+    public static Pageable getPage(PageableSearchQuery pageable, List<Sort.Order> orders) {
         return PageRequest.of(
-                Optional.ofNullable(searchQuery.getPage()).orElse(DEFAULT_PAGE_NUMBER),
-                Optional.ofNullable(searchQuery.getPageSize()).orElse(DEFAULT_PAGE_SIZE),
+                Optional.ofNullable(pageable.getPage()).orElse(DEFAULT_PAGE_NUMBER),
+                Optional.ofNullable(pageable.getPageSize()).orElse(DEFAULT_PAGE_SIZE),
                 Sort.by(orders)
         );
     }

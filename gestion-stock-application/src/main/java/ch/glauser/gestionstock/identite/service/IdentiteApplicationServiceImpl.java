@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
@@ -25,12 +25,12 @@ public class IdentiteApplicationServiceImpl implements IdentiteApplicationServic
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).IDENTITE_LECTEUR.name())")
-    public SearchResult<IdentiteLightDto> search(SearchRequest searchRequest) {
+    public SearchResult<IdentiteLightDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, PersonnePhysiqueConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, PersonnePhysiqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Identite> searchResult = this.identiteService.search(searchRequest);
+        SearchResult<Identite> searchResult = this.identiteService.search(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, IdentiteLightDto::new);
     }

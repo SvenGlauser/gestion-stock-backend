@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.machine.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
@@ -42,12 +42,12 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_LECTEUR.name())")
-    public SearchResult<MachineDto> search(SearchRequest searchRequest) {
+    public SearchResult<MachineDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Machine> searchResult = this.machineService.search(searchRequest);
+        SearchResult<Machine> searchResult = this.machineService.search(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, MachineDto::new);
     }

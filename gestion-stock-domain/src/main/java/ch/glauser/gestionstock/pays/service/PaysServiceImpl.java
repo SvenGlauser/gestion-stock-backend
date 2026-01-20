@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.pays.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
@@ -49,12 +49,12 @@ public class PaysServiceImpl implements PaysService {
     }
 
     @Override
-    public SearchResult<Pays> search(SearchRequest searchRequest) {
+    public SearchResult<Pays> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, PaysConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, PaysConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.paysRepository.search(searchRequest);
+        return this.paysRepository.search(automaticSearchQuery);
     }
 
     @Override

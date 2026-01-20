@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.fournisseur.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 
@@ -30,10 +30,10 @@ public interface FournisseurRepository {
     /**
      * Récupère les fournisseurs
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de fournisseur paginée
      */
-    SearchResult<Fournisseur> search(SearchRequest searchRequest);
+    SearchResult<Fournisseur> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée un fournisseur

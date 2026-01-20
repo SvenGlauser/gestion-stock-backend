@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.exception.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.exception.model.ThrownException;
 
@@ -18,10 +18,10 @@ public interface ThrownExceptionRepository {
 
     /**
      * Récupère une liste d'exceptions
-     * @param searchRequest Requête
+     * @param automaticSearchQuery Requête
      * @return Une liste d'exception paginée
      */
-    SearchResult<ThrownException> searchExceptions(SearchRequest searchRequest);
+    SearchResult<ThrownException> searchExceptions(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée une exception

@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.pays.controller;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.pays.dto.PaysDto;
 import ch.glauser.gestionstock.pays.service.PaysApplicationService;
@@ -26,8 +26,8 @@ public class PaysController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<PaysDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.paysApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<PaysDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.paysApplicationService.search(automaticSearchQuery));
     }
 
     @PutMapping

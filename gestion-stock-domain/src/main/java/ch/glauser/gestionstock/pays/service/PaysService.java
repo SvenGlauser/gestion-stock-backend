@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.pays.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.pays.model.Pays;
 
@@ -27,10 +27,10 @@ public interface PaysService {
     /**
      * Récupère les pays
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de pays paginée
      */
-    SearchResult<Pays> search(SearchRequest searchRequest);
+    SearchResult<Pays> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée un pays

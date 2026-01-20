@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.pays.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
@@ -42,12 +42,12 @@ public class PaysApplicationServiceImpl implements PaysApplicationService {
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PAYS_LECTEUR.name())")
-    public SearchResult<PaysDto> search(SearchRequest searchRequest) {
+    public SearchResult<PaysDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Pays> searchResult = this.paysService.search(searchRequest);
+        SearchResult<Pays> searchResult = this.paysService.search(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, PaysDto::new);
     }

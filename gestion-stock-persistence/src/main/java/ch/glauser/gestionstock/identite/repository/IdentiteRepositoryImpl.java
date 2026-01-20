@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
@@ -31,8 +31,8 @@ public class IdentiteRepositoryImpl implements IdentiteRepository {
     }
 
     @Override
-    public SearchResult<Identite> search(SearchRequest searchRequest) {
-        Page<IdentiteEntity> page = this.identiteJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(searchRequest), AutomatedSearchQueryUtils.paginate(searchRequest));
+    public SearchResult<Identite> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<IdentiteEntity> page = this.identiteJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
 
         SearchResult<Identite> searchResult = new SearchResult<>();
         searchResult.setCurrentPage(page.getNumber());

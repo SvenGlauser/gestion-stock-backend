@@ -1,5 +1,6 @@
 package ch.glauser.filters.utils;
 
+import ch.glauser.validation.common.Validation;
 import jakarta.persistence.criteria.Path;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Utilitaire pour JPA
+ */
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class JpaUtils {
     /**
@@ -20,6 +24,11 @@ public class JpaUtils {
      * @return Le chemin JPA calculé ou racine si le nom du champ est vide
      */
     public static Path<?> getPath(Path<?> path, String fieldName) {
+        Validation
+                .of(JpaUtils.class)
+                .validateNotNull(path, "path")
+                .execute();
+
         if (StringUtils.isBlank(fieldName)) {
             return path;
         }

@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.categorie.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.categorie.entity.CategorieEntity;
 import ch.glauser.gestionstock.categorie.model.Categorie;
@@ -28,8 +28,8 @@ public class CategorieRepositoryImpl implements CategorieRepository {
     }
 
     @Override
-    public SearchResult<Categorie> search(SearchRequest searchRequest) {
-        Page<CategorieEntity> page = this.categorieJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(searchRequest), AutomatedSearchQueryUtils.paginate(searchRequest));
+    public SearchResult<Categorie> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<CategorieEntity> page = this.categorieJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
         return PageUtils.transform(page);
     }
 

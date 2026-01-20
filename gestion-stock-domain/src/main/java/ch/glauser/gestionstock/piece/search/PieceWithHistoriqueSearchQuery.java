@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.search;
 
-import ch.glauser.filters.field.api.Field;
+import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.search.api.SearchQuery;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,14 +12,14 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class PieceWithHistoriqueSearchQuery extends SearchQuery {
-    private Field<String> numeroInventaire;
-    private Field<String> nom;
-    private Field<Long> categorieId;
-    private Field<Long> prix;
-    private Field<Long> quantite;
+    private SearchField<String> numeroInventaire;
+    private SearchField<String> nom;
+    private SearchField<Long> categorieId;
+    private SearchField<Long> prix;
+    private SearchField<Long> quantite;
 
-    private Field<LocalDate> dateDebut;
-    private Field<LocalDate> dateFin;
-    private Field<Integer> quantiteEntree;
-    private Field<Integer> quantiteSortie;
+    private SearchField<LocalDate> dateDebut;
+    private SearchField<LocalDate> dateFin;
+    private SearchField<Integer> quantiteEntree;
+    private SearchField<Integer> quantiteSortie;
 }

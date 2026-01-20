@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.localite.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
@@ -42,12 +42,12 @@ public class LocaliteApplicationServiceImpl implements LocaliteApplicationServic
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).LOCALITE_LECTEUR.name())")
-    public SearchResult<LocaliteDto> search(SearchRequest searchRequest) {
+    public SearchResult<LocaliteDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Localite> searchResult = this.localiteService.search(searchRequest);
+        SearchResult<Localite> searchResult = this.localiteService.search(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, LocaliteDto::new);
     }

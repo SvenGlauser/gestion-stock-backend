@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.controller;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.dto.IdentiteLightDto;
 import ch.glauser.gestionstock.identite.service.IdentiteApplicationService;
@@ -19,7 +19,7 @@ public class IdentiteController {
     private final IdentiteApplicationService identiteApplicationService;
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<IdentiteLightDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.identiteApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<IdentiteLightDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.identiteApplicationService.search(automaticSearchQuery));
     }
 }

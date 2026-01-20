@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.categorie.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 
@@ -21,10 +21,10 @@ public interface CategorieRepository {
     /**
      * Récupère les catégories
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de catégorie paginée
      */
-    SearchResult<Categorie> search(SearchRequest searchRequest);
+    SearchResult<Categorie> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée une catégorie

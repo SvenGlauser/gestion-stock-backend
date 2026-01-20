@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.controller;
 
-import ch.glauser.filters.field.api.Field;
+import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.sort.api.Direction;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
@@ -175,7 +175,7 @@ class PieceControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        searchQuery.setCategorieId(new Field<>());
+        searchQuery.setCategorieId(new SearchField<>());
         searchQuery.getCategorieId().setValue(categorie.getId());
         SearchResult<PieceDto> result1 = pieceController.search(searchQuery).getBody();
         assertThat(result1).isNotNull();
@@ -185,7 +185,7 @@ class PieceControllerTest {
                 .hasSize(2);
 
         searchQuery.setCategorieId(null);
-        searchQuery.setNom(new Field<>());
+        searchQuery.setNom(new SearchField<>());
         searchQuery.getNom().setValue("Piece");
         searchQuery.getNom().setOrder(Direction.ASC);
         SearchResult<PieceDto> result2 = pieceController.search(searchQuery).getBody();

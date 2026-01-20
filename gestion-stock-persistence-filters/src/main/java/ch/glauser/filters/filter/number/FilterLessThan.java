@@ -1,18 +1,31 @@
 package ch.glauser.filters.filter.number;
 
-import ch.glauser.filters.field.api.Field;
+import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.filter.api.Filter;
+import ch.glauser.validation.exception.ValidationException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import lombok.NoArgsConstructor;
 
+/**
+ * Filtre de recherche de type LESS THAN
+ * @param <T> Type de données
+ */
 @NoArgsConstructor
 public class FilterLessThan<T extends Comparable<T>> extends Filter<T> {
 
-    public static <T extends Comparable<T>> FilterLessThan<T> of(Field<T> field, String ...fieldNames) {
-        return Filter.of(new FilterLessThan<>(), field, fieldNames);
+    /**
+     * Création d'un filtre de type LESS THAN
+     * @param searchField Champ sur lequel est basé le filtre
+     * @param fieldNames Nom des champs en cascade de l'entité
+     * @return Le filtre
+     * @param <T> Type de données
+     * @throws ValidationException Si les paramètres sont nuls
+     */
+    public static <T extends Comparable<T>> FilterLessThan<T> of(SearchField<T> searchField, String ...fieldNames) throws ValidationException {
+        return Filter.of(FilterLessThan::new, searchField, fieldNames);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.exception.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.exception.model.ThrownException;
 import ch.glauser.gestionstock.exception.model.ThrownExceptionConstantes;
@@ -22,12 +22,12 @@ public class ThrownExceptionServiceImpl implements ThrownExceptionService {
     private final ThrownExceptionRepository thrownExceptionRepository;
 
     @Override
-    public SearchResult<ThrownException> searchExceptions(SearchRequest searchRequest) {
+    public SearchResult<ThrownException> searchExceptions(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(ThrownExceptionServiceImpl.class)
-                .validateNotNull(searchRequest, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.thrownExceptionRepository.searchExceptions(searchRequest);
+        return this.thrownExceptionRepository.searchExceptions(automaticSearchQuery);
     }
 
     @Override

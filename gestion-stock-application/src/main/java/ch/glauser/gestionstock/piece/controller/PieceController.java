@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.controller;
 
-import ch.glauser.filters.automatic.AutomaticFieldCombinator;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import ch.glauser.gestionstock.piece.dto.PieceWithHistoriqueDto;
@@ -39,7 +39,7 @@ public class PieceController {
     }
 
     @PostMapping(path = "/statistiques")
-    public ResponseEntity<List<PieceStatistique>> statistiques(@RequestBody List<AutomaticFieldCombinator> filters) {
+    public ResponseEntity<List<PieceStatistique>> statistiques(@RequestBody List<AutomaticSearchFieldCombinaison> filters) {
         return ResponseEntity.ok(this.pieceStatistiqueApplicationService.getStatistiques(filters));
     }
 

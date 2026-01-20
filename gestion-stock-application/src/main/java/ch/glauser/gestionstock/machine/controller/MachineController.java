@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.machine.controller;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.machine.service.MachineApplicatifService;
@@ -26,8 +26,8 @@ public class MachineController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<MachineDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.machineApplicatifService.search(searchRequest));
+    public ResponseEntity<SearchResult<MachineDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.machineApplicatifService.search(automaticSearchQuery));
     }
 
     @PutMapping

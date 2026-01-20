@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.localite.controller;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 import ch.glauser.gestionstock.localite.service.LocaliteApplicationService;
@@ -26,8 +26,8 @@ public class LocaliteController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<LocaliteDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.localiteApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<LocaliteDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.localiteApplicationService.search(automaticSearchQuery));
     }
 
     @PutMapping

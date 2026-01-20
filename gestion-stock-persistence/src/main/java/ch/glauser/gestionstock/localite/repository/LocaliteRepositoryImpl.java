@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.localite.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
@@ -28,8 +28,8 @@ public class LocaliteRepositoryImpl implements LocaliteRepository {
     }
 
     @Override
-    public SearchResult<Localite> search(SearchRequest searchRequest) {
-        Page<LocaliteEntity> page = this.localiteJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(searchRequest), AutomatedSearchQueryUtils.paginate(searchRequest));
+    public SearchResult<Localite> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<LocaliteEntity> page = this.localiteJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
         return PageUtils.transform(page);
     }
 

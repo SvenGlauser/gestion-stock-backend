@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.categorie.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.model.Categorie;
 import ch.glauser.gestionstock.categorie.model.CategorieConstantes;
 import ch.glauser.gestionstock.categorie.repository.CategorieRepository;
@@ -39,12 +39,12 @@ public class CategorieServiceImpl implements CategorieService {
     }
 
     @Override
-    public SearchResult<Categorie> search(SearchRequest searchRequest) {
+    public SearchResult<Categorie> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, CategorieConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, CategorieConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.categorieRepository.search(searchRequest);
+        return this.categorieRepository.search(automaticSearchQuery);
     }
 
     @Override

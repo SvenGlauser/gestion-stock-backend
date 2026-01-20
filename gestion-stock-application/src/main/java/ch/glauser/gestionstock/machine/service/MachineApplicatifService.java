@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.machine.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 
@@ -19,10 +19,10 @@ public interface MachineApplicatifService {
     /**
      * Récupère les machines
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de machine paginée
      */
-    SearchResult<MachineDto> search(SearchRequest searchRequest);
+    SearchResult<MachineDto> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée une machine

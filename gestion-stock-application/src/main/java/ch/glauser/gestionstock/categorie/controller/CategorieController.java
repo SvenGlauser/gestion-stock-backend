@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.categorie.controller;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.categorie.service.CategorieApplicationService;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
@@ -26,8 +26,8 @@ public class CategorieController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<CategorieDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.categorieApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<CategorieDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.categorieApplicationService.search(automaticSearchQuery));
     }
 
     @PutMapping

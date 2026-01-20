@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.localite.service;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
@@ -44,12 +44,12 @@ public class LocaliteServiceImpl implements LocaliteService {
     }
 
     @Override
-    public SearchResult<Localite> search(SearchRequest searchRequest) {
+    public SearchResult<Localite> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, LocaliteConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, LocaliteConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.localiteRepository.search(searchRequest);
+        return this.localiteRepository.search(automaticSearchQuery);
     }
 
     @Override

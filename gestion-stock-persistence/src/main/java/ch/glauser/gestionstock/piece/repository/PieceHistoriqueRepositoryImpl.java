@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.filters.automatic.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
@@ -34,8 +34,8 @@ public class PieceHistoriqueRepositoryImpl implements PieceHistoriqueRepository 
     }
 
     @Override
-    public SearchResult<PieceHistorique> search(SearchRequest searchRequest) {
-        Page<PieceHistoriqueEntity> page = this.pieceHistoriqueJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(searchRequest), AutomatedSearchQueryUtils.paginate(searchRequest));
+    public SearchResult<PieceHistorique> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<PieceHistoriqueEntity> page = this.pieceHistoriqueJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
         return PageUtils.transform(page);
     }
 
