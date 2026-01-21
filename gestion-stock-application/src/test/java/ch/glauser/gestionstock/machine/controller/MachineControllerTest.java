@@ -121,7 +121,7 @@ class MachineControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticSearchField contactFilter = new AutomaticSearchField();
+        AutomaticSearchField<Long> contactFilter = new AutomaticSearchField<>();
         contactFilter.setValue(contact.getId());
         contactFilter.setField("proprietaire.id");
         AutomaticSearchQuery automaticSearchQuery1 = new AutomaticSearchQuery();
@@ -133,7 +133,7 @@ class MachineControllerTest {
                 .isNotEmpty()
                 .hasSize(2);
 
-        AutomaticSearchField nom = new AutomaticSearchField();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("Machine");
         nom.setField("nom");
         AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();

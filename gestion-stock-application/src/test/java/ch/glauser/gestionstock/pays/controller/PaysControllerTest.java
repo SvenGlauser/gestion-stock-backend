@@ -114,7 +114,7 @@ class PaysControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticSearchField nom = new AutomaticSearchField();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("Pays - Test Search - 3");
         nom.setField("nom");
         AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();

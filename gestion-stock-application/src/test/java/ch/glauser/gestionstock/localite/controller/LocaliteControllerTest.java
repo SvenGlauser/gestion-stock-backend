@@ -133,7 +133,7 @@ class LocaliteControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticSearchField paysFilter = new AutomaticSearchField();
+        AutomaticSearchField<Long> paysFilter = new AutomaticSearchField<>();
         paysFilter.setValue(pays.getId());
         paysFilter.setField("pays.id");
         AutomaticSearchQuery automaticSearchQuery1 = new AutomaticSearchQuery();
@@ -145,10 +145,10 @@ class LocaliteControllerTest {
                 .isNotEmpty()
                 .hasSize(2);
 
-        AutomaticSearchField nom = new AutomaticSearchField();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("Localite");
         nom.setField("nom");
-        AutomaticSearchField npa = new AutomaticSearchField();
+        AutomaticSearchField<String> npa = new AutomaticSearchField<>();
         npa.setValue("1234");
         npa.setField("npa");
         npa.setType(AutomaticSearchField.Type.STRING_LIKE);

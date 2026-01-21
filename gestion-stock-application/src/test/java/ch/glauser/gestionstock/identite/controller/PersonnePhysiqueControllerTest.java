@@ -100,7 +100,7 @@ class PersonnePhysiqueControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticSearchField nom = new AutomaticSearchField();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("Nom");
         nom.setField("nom");
         AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();

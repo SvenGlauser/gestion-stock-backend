@@ -148,7 +148,7 @@ class FournisseurControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticSearchField description = new AutomaticSearchField();
+        AutomaticSearchField<String> description = new AutomaticSearchField<>();
         description.setValue("Description 2");
         description.setField("description");
         description.setType(AutomaticSearchField.Type.STRING_LIKE);
@@ -161,7 +161,7 @@ class FournisseurControllerTest {
                 .isNotEmpty()
                 .hasSize(1);
 
-        AutomaticSearchField nom = new AutomaticSearchField();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("fournisseur");
         nom.setField("identite.designation");
         nom.setType(AutomaticSearchField.Type.STRING_LIKE);

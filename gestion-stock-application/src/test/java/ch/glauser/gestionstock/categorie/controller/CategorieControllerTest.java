@@ -119,7 +119,7 @@ class CategorieControllerTest {
                 .isNotEmpty()
                 .hasSize(3);
 
-        AutomaticSearchField actif = new AutomaticSearchField();
+        AutomaticSearchField<Boolean> actif = new AutomaticSearchField<>();
         actif.setValue(false);
         actif.setField("actif");
         AutomaticSearchQuery automaticSearchQuery1 = new AutomaticSearchQuery();
@@ -131,7 +131,7 @@ class CategorieControllerTest {
                 .isNotEmpty()
                 .hasSize(2);
 
-        AutomaticSearchField nom = new AutomaticSearchField();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("Categorie - Test Search - 3");
         nom.setField("nom");
         AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();
