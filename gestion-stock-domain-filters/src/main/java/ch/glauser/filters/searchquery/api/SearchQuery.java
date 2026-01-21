@@ -1,4 +1,4 @@
-package ch.glauser.filters.search.api;
+package ch.glauser.filters.searchquery.api;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

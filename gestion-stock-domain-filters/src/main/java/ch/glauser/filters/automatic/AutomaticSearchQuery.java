@@ -1,6 +1,6 @@
 package ch.glauser.filters.automatic;
 
-import ch.glauser.filters.search.api.PageableSearchQuery;
+import ch.glauser.filters.searchquery.api.PageableSearchQuery;
 import lombok.Getter;
 import lombok.Setter;
 

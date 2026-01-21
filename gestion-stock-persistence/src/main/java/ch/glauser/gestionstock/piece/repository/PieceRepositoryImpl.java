@@ -212,19 +212,23 @@ public class PieceRepositoryImpl implements PieceRepository {
         if (Objects.nonNull(searchQuery.getQuantiteEntree())
             && Objects.nonNull(searchQuery.getQuantiteEntree().getOrder())) {
 
-            switch (searchQuery.getQuantiteEntree().getOrder()) {
-                case ASC -> havingOrders.add(criteriaBuilder.asc(joinedContext.sumEntrees));
-                case DESC -> havingOrders.add(criteriaBuilder.desc(joinedContext.sumEntrees));
-            }
+            Order order = switch (searchQuery.getQuantiteEntree().getOrder()) {
+                case ASC -> criteriaBuilder.asc(joinedContext.sumEntrees);
+                case DESC -> criteriaBuilder.desc(joinedContext.sumEntrees);
+            };
+
+            havingOrders.add(order);
         }
 
         if (Objects.nonNull(searchQuery.getQuantiteSortie())
             && Objects.nonNull(searchQuery.getQuantiteSortie().getOrder())) {
 
-            switch (searchQuery.getQuantiteSortie().getOrder()) {
-                case ASC -> havingOrders.add(criteriaBuilder.asc(joinedContext.sumSorties));
-                case DESC -> havingOrders.add(criteriaBuilder.desc(joinedContext.sumSorties));
-            }
+            Order order = switch (searchQuery.getQuantiteSortie().getOrder()) {
+                case ASC -> criteriaBuilder.asc(joinedContext.sumSorties);
+                case DESC -> criteriaBuilder.desc(joinedContext.sumSorties);
+            };
+
+            havingOrders.add(order);
         }
 
         query.orderBy(Stream

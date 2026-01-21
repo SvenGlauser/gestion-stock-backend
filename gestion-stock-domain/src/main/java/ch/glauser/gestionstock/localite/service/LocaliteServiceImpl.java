@@ -8,7 +8,6 @@ import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingId
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.model.Model;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.identite.repository.IdentiteRepository;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.localite.model.LocaliteConstantes;
@@ -30,7 +29,6 @@ public class LocaliteServiceImpl implements LocaliteService {
     private final LocaliteRepository localiteRepository;
 
     private final IdentiteRepository identiteRepository;
-    private final FournisseurRepository fournisseurRepository;
 
     @Override
     public Localite get(Long id) {

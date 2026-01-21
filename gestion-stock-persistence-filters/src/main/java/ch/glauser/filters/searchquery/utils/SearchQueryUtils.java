@@ -3,7 +3,7 @@ package ch.glauser.filters.searchquery.utils;
 import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.filter.api.Filter;
 import ch.glauser.filters.filter.api.FilterCombinaison;
-import ch.glauser.filters.search.api.SearchQuery;
+import ch.glauser.filters.searchquery.api.SearchQuery;
 import ch.glauser.filters.sort.api.SortField;
 import ch.glauser.filters.utils.PaginationUtils;
 import ch.glauser.validation.common.Validation;

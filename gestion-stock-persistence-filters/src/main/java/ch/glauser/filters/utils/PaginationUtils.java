@@ -1,6 +1,6 @@
 package ch.glauser.filters.utils;
 
-import ch.glauser.filters.search.api.PageableSearchQuery;
+import ch.glauser.filters.searchquery.api.PageableSearchQuery;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;

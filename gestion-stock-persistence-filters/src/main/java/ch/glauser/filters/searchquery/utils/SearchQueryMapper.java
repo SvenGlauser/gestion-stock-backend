@@ -2,7 +2,7 @@ package ch.glauser.filters.searchquery.utils;
 
 import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.filter.api.Filter;
-import ch.glauser.filters.search.api.SearchQuery;
+import ch.glauser.filters.searchquery.api.SearchQuery;
 import ch.glauser.validation.common.Validation;
 
 import java.util.Arrays;
