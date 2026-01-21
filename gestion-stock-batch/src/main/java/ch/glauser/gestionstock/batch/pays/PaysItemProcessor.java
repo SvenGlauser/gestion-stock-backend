@@ -20,7 +20,7 @@ public class PaysItemProcessor implements ItemProcessor<Object, Pays> {
     public static final String MAP_PAYS_COMMON = "common";
     public static final String MAP_PAYS_CCA2 = "cca2";
 
-    private List<String> nomsDejaTraites = new ArrayList<>();
+    private final List<String> nomsDejaTraites = new ArrayList<>();
 
     @Override
     public Pays process(@NonNull Object item) {

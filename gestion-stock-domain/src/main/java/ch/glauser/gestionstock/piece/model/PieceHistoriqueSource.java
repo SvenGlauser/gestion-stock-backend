@@ -6,5 +6,5 @@ package ch.glauser.gestionstock.piece.model;
 public enum PieceHistoriqueSource {
     CREATION,
     MODIFICATION,
-    IMPORTATION;
+    IMPORTATION
 }
