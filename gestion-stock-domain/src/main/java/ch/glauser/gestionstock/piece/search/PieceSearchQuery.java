@@ -13,6 +13,7 @@ public class PieceSearchQuery extends SearchQuery {
     private SearchField<String> numeroInventaire;
     private SearchField<String> nom;
     private SearchField<Long> categorieId;
+    private SearchField<String> categorieNom;
     private SearchField<Long> prix;
     private SearchField<Long> quantite;
 }

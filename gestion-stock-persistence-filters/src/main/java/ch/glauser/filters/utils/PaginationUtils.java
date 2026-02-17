@@ -35,6 +35,18 @@ public class PaginationUtils {
     /**
      * Récupère la page
      * @param pageable PageableSearchQuery
+     * @return Une page
+     */
+    public static Pageable getPage(PageableSearchQuery pageable) {
+        return PageRequest.of(
+                Optional.ofNullable(pageable.getPage()).orElse(DEFAULT_PAGE_NUMBER),
+                Optional.ofNullable(pageable.getPageSize()).orElse(DEFAULT_PAGE_SIZE)
+        );
+    }
+
+    /**
+     * Récupère la page
+     * @param pageable PageableSearchQuery
      * @param orders Ordre de tri
      * @return Une page
      */

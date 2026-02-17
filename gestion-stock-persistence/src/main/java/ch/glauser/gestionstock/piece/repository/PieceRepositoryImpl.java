@@ -10,7 +10,9 @@ import ch.glauser.filters.filter.utils.FilterUtils;
 import ch.glauser.filters.searchquery.utils.SearchQueryMapper;
 import ch.glauser.filters.searchquery.utils.SearchQueryMapperBuilder;
 import ch.glauser.filters.searchquery.utils.SearchQueryUtils;
+import ch.glauser.filters.utils.JpaUtils;
 import ch.glauser.filters.utils.PaginationUtils;
+import ch.glauser.gestionstock.categorie.entity.CategorieEntity_;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.entity.ModelEntity_;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
@@ -65,6 +67,10 @@ public class PieceRepositoryImpl implements PieceRepository {
                     FilterEquals::new,
                     PieceEntity_.CATEGORIE, ModelEntity_.ID)
             .add(
+                    PieceSearchQuery::getCategorieNom,
+                    FilterEquals::new,
+                    PieceEntity_.CATEGORIE, CategorieEntity_.NOM)
+            .add(
                     PieceSearchQuery::getPrix,
                     FilterEquals::new,
                     PieceEntity_.PRIX)
@@ -109,6 +115,10 @@ public class PieceRepositoryImpl implements PieceRepository {
                         FilterEquals::new,
                         PieceEntity_.CATEGORIE, ModelEntity_.ID)
                 .add(
+                        PieceWithHistoriqueSearchQuery::getCategorieNom,
+                        FilterEquals::new,
+                        PieceEntity_.CATEGORIE, CategorieEntity_.NOM)
+                .add(
                         PieceWithHistoriqueSearchQuery::getPrix,
                         FilterEquals::new,
                         PieceEntity_.PRIX)
@@ -141,7 +151,9 @@ public class PieceRepositoryImpl implements PieceRepository {
         List<PieceWithHistoriquePojo> result = searchQuery(searchQuery, criteriaBuilder, pieceSQMapper, historiqueSQMapper);
         Long totalElements = countQuery(searchQuery, criteriaBuilder, pieceSQMapper, historiqueSQMapper);
 
-        return PageUtils.of(result, searchQuery.getPage(), searchQuery.getPageSize(), totalElements);
+        Pageable page = PaginationUtils.getPage(searchQuery);
+
+        return PageUtils.of(result, page.getPageNumber(), page.getPageSize(), totalElements);
     }
 
     private Long countQuery(PieceWithHistoriqueSearchQuery searchQuery,
@@ -171,6 +183,8 @@ public class PieceRepositoryImpl implements PieceRepository {
             ),
             criteriaBuilder.equal(joinedContext.root, pieceMainRoot)
         );
+
+        subQuery.groupBy(joinedContext.root);
 
         countQuery.select(criteriaBuilder.count(pieceMainRoot));
         countQuery.where(criteriaBuilder.exists(subQuery));
@@ -206,6 +220,16 @@ public class PieceRepositoryImpl implements PieceRepository {
                         )
                 )
         );
+
+        List<Expression<?>> groupByExpressions = new ArrayList<>();
+        groupByExpressions.add(joinedContext.root);
+        groupByExpressions.addAll(SearchQueryUtils
+                .getSorts(searchQuery, pieceSQMapper)
+                .stream()
+                .map(sort -> JpaUtils.getPath(joinedContext.root, sort.getField()))
+                .toList());
+
+        query.groupBy(groupByExpressions);
 
         List<Order> havingOrders = new ArrayList<>();
 
@@ -253,10 +277,12 @@ public class PieceRepositoryImpl implements PieceRepository {
                 .flatMap(Collection::stream)
                 .toList());
 
+        Pageable page = PaginationUtils.getPage(searchQuery);
+
         return entityManager
                 .createQuery(query)
-                .setFirstResult(searchQuery.getPage())
-                .setMaxResults(searchQuery.getPageSize())
+                .setFirstResult((int) page.getOffset())
+                .setMaxResults(page.getPageSize())
                 .getResultList()
                 .stream()
                 .map(tuple -> new PieceWithHistoriquePojo(
@@ -323,8 +349,6 @@ public class PieceRepositoryImpl implements PieceRepository {
         if (CollectionUtils.isNotEmpty(having)) {
             query.having(having.toArray(new Predicate[0]));
         }
-
-        query.groupBy(pieceRoot);
 
         return new JoinedContext(
                 pieceRoot,

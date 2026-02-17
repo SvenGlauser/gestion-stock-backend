@@ -108,6 +108,7 @@ public class AutomatedSearchQueryUtils {
                             .emptyIfNull(automaticFieldCombinator.getFields())
                             .stream()
                             .filter(Objects::nonNull)
+                            .filter(filter -> Objects.nonNull(filter.getValue()))
                             .<Filter<?>>map(AutomatedSearchQueryUtils::getFilter)
                             .filter(Objects::nonNull)
                             .toList();
