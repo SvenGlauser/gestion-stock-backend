@@ -30,6 +30,16 @@
 
         <dependency>
             <groupId>ch.glauser</groupId>
+            <artifactId>gestion-stock-domain-filters</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.glauser</groupId>
+            <artifactId>gestion-stock-persistence-filters</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.glauser</groupId>
             <artifactId>gestion-stock-domain</artifactId>
         </dependency>
 
