@@ -2,12 +2,15 @@ package ch.glauser.filters.filter.number;
 
 import ch.glauser.filters.field.api.SearchField;
 import ch.glauser.filters.filter.api.Filter;
+import ch.glauser.validation.common.Validation;
 import ch.glauser.validation.exception.ValidationException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 /**
  * Filtre de recherche de type GREATER THAN
@@ -26,6 +29,18 @@ public class FilterGreaterThan<T extends Comparable<T>> extends Filter<T> {
      */
     public static <T extends Comparable<T>> FilterGreaterThan<T> of(SearchField<T> searchField, String ...fieldNames) throws ValidationException {
         return Filter.of(FilterGreaterThan::new, searchField, fieldNames);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return Objects.isNull(this.getValue());
+    }
+
+    @Override
+    protected Validation validateChild() {
+        return Validation
+                .of(this.getClass())
+                .validateNotNull(this.getValue(), "value");
     }
 
     @Override

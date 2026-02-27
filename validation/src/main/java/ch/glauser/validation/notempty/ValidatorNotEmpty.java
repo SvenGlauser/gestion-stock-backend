@@ -48,6 +48,19 @@ public class ValidatorNotEmpty implements Validator {
     }
 
     /**
+     * Valide que le champ n'est pas une chaîne de caractères vide
+     *
+     * @param validation Instance de validation
+     * @param object Objet à valider
+     * @param field Champ à valider
+     */
+    public static void validateSoft(Validation validation, String object, String field) {
+        if (StringUtils.isEmpty(object)) {
+            validation.addError("Le champ ne doit pas être vide", field);
+        }
+    }
+
+    /**
      * Valide que le champ n'est pas une liste vide
      *
      * @param validation Instance de validation

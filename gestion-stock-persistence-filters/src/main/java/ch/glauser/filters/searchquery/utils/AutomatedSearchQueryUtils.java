@@ -72,6 +72,7 @@ public class AutomatedSearchQueryUtils {
                 // Transformation en Sort
                 .map(SortField::of)
                 .filter(Objects::nonNull)
+                .filter(SortField::isNotEmpty)
                 .toList();
     }
 
@@ -111,6 +112,7 @@ public class AutomatedSearchQueryUtils {
                             .filter(filter -> Objects.nonNull(filter.getValue()))
                             .<Filter<?>>map(AutomatedSearchQueryUtils::getFilter)
                             .filter(Objects::nonNull)
+                            .filter(Filter::isNotEmpty)
                             .toList();
 
                     filterCombinaison.setFilters(filters);
@@ -121,7 +123,7 @@ public class AutomatedSearchQueryUtils {
     }
 
     private static <T> Filter<?> getFilter(AutomaticSearchField<T> field) {
-        if (Objects.isNull(field) || Objects.isNull(field.getField())) {
+        if (Objects.isNull(field)) {
             return null;
         }
 

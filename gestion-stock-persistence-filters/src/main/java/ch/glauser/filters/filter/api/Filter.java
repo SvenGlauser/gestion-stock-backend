@@ -25,6 +25,26 @@ public abstract class Filter<T> {
     private T value;
 
     /**
+     * Vérifie si la valeur contenue dans le champ {@code value} est considérée comme vide
+     * @return Renvoie {@code true} si le filtre est considéré comme vide
+     */
+    public abstract boolean isEmpty();
+
+    /**
+     * Vérifie si la valeur contenue dans le champ {@code value} n'est pas considérée comme vide
+     * @return Renvoie {@code true} si le filtre n'est pas considérée comme vide
+     */
+    public boolean isNotEmpty() {
+        return !isEmpty();
+    }
+
+    /**
+     * Valide la classe enfant
+     * @return L'instance de validation
+     */
+    protected abstract Validation validateChild();
+
+    /**
      * Génère le Predicate
      * @param rootPath Chemin racine
      * @param criteriaBuilder CriteriaBuilder
@@ -32,12 +52,10 @@ public abstract class Filter<T> {
      */
     public Predicate getPredicate(Path<?> rootPath,
                                   CriteriaBuilder criteriaBuilder) throws ValidationException {
-        Validation
-                .of(this.getClass())
+        this.validateChild()
                 .validateNotNull(rootPath, "rootPath")
                 .validateNotNull(criteriaBuilder, "criteriaBuilder")
                 .validateNotNull(this.field, "field")
-                .validateNotNull(this.value, "value")
                 .execute();
 
         Path<?> fieldPath = JpaUtils.getPath(rootPath, this.field);

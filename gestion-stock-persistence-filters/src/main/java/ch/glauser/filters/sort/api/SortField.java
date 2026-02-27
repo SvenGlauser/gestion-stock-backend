@@ -29,11 +29,7 @@ public class SortField {
      * @return La condition order by
      */
     public Sort.Order getJpaPaginationOrder() {
-        Validation
-                .of(this.getClass())
-                .validateNotNull(this.getField(), "field")
-                .validateNotNull(this.getDirection(), "direction")
-                .execute();
+        this.validate();
 
         return switch (this.getDirection()) {
             case ASC -> Sort.Order.asc(this.getField());
@@ -48,11 +44,7 @@ public class SortField {
      * @return La condition pour le order by
      */
     public Order getCriteriaBuilderOrder(Path<?> path, CriteriaBuilder criteriaBuilder) {
-        Validation
-                .of(this.getClass())
-                .validateNotNull(this.getField(), "field")
-                .validateNotNull(this.getDirection(), "direction")
-                .execute();
+        this.validate();
 
         final Path<?> fieldPath = JpaUtils.getPath(path, this.field);
 
@@ -63,13 +55,29 @@ public class SortField {
     }
 
     /**
+     * Vérifie le tri n'est pas {@code null}
+     * @return Renvoie {@code true} si le tri considéré comme vide
+     */
+    public boolean isEmpty() {
+        return Objects.isNull(this.getDirection());
+    }
+
+    /**
+     * Vérifie le tri n'est pas {@code null}
+     * @return Renvoie {@code true} si le tri n'est considéré pas comme vide
+     */
+    public boolean isNotEmpty() {
+        return !this.isEmpty();
+    }
+
+    /**
      * Génère un ordre à partir d'un champ
      * @param searchField Champ
      * @param fieldNames Noms du champ
      * @return L'ordre généré
      */
     public static SortField of(SearchField<?> searchField, String ...fieldNames) {
-        if (Objects.isNull(searchField) || Objects.isNull(searchField.getOrder())) {
+        if (Objects.isNull(searchField)) {
             return null;
         }
 
@@ -84,7 +92,7 @@ public class SortField {
      * @return L'ordre généré
      */
     public static SortField of(AutomaticSearchField<?> field) {
-        if (Objects.isNull(field) || Objects.isNull(field.getOrder())) {
+        if (Objects.isNull(field)) {
             return null;
         }
 
@@ -132,5 +140,13 @@ public class SortField {
         sortField.setField(field);
         sortField.setDirection(Direction.DESC);
         return sortField;
+    }
+
+    private void validate() {
+        Validation
+                .of(this.getClass())
+                .validateNotEmpty(this.getField(), "field")
+                .validateNotNull(this.getDirection(), "direction")
+                .execute();
     }
 }

@@ -43,16 +43,20 @@ public class FilterUtils {
         List<Predicate> predicates = new ArrayList<>();
 
         for (FilterCombinaison combinaison : combinaisons) {
-            SearchFieldCombinaisonType type = combinaison.getType();
-            if (Objects.isNull(type)) {
-                type = SearchFieldCombinaisonType.AND;
-            }
-
             final Predicate[] combinaisonPredicates = FilterUtils.getPredicatesOfCombinaison(
                     combinaison.getFilters(),
                     root,
                     criteriaBuilder
             );
+
+            if (combinaisonPredicates.length == 0) {
+                continue;
+            }
+
+            SearchFieldCombinaisonType type = combinaison.getType();
+            if (Objects.isNull(type)) {
+                type = SearchFieldCombinaisonType.AND;
+            }
 
             switch (type) {
                 case AND -> predicates.add(criteriaBuilder.and(combinaisonPredicates));

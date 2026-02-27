@@ -71,13 +71,14 @@ public class SearchQueryUtils {
                 .filter(Objects::nonNull)
                 .map(mapper -> SearchQueryUtils.getSort(searchQuery, mapper))
                 .filter(Objects::nonNull)
+                .filter(SortField::isNotEmpty)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private static <T extends SearchQuery> SortField getSort(T searchQuery, SearchQueryMapper<T, ?> mapper) {
         SearchField<?> searchField = mapper.fieldGetter().apply(searchQuery);
 
-        if (Objects.isNull(searchField) || Objects.isNull(searchField.getOrder())) {
+        if (Objects.isNull(searchField)) {
             return null;
         }
 
@@ -126,13 +127,14 @@ public class SearchQueryUtils {
                 .filter(Objects::nonNull)
                 .map(mapper -> SearchQueryUtils.getFilter(searchQuery, mapper))
                 .filter(Objects::nonNull)
+                .filter(Filter::isNotEmpty)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private static <T extends SearchQuery, R> Filter<R> getFilter(T searchQuery, SearchQueryMapper<T, R> mapper) {
         SearchField<R> searchField = mapper.fieldGetter().apply(searchQuery);
 
-        if (Objects.isNull(searchField) || Objects.isNull(searchField.getValue())) {
+        if (Objects.isNull(searchField)) {
             return null;
         }
 

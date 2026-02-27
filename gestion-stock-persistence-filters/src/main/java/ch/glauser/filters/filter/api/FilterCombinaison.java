@@ -2,6 +2,7 @@ package ch.glauser.filters.filter.api;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +22,18 @@ public class FilterCombinaison {
     public FilterCombinaison() {
         this.filters = new ArrayList<>();
         this.type = SearchFieldCombinaisonType.AND;
+    }
+
+    /**
+     * Récupère la liste des filtres qui ne sont pas considérés comme vide
+     * @return Une liste de filtre
+     */
+    public Collection<Filter<?>> getNotEmptyFilters() {
+        return CollectionUtils
+                .emptyIfNull(this.filters)
+                .stream()
+                .filter(Filter::isNotEmpty)
+                .toList();
     }
 
     /**
