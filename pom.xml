@@ -146,6 +146,14 @@
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${org.apache.commons.validator.version}</version>
+                <exclusions>
+                    <!-- Supprimée, car peut rentrer en conflit avec Spring (Log INFO de Spring au lancement) -->
+                    <!-- https://stackoverflow.com/questions/76706612/standard-commons-logging-discovery-in-action-with-spring-jcl -->
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
 

@@ -24,14 +24,14 @@ public class PieceWithHistoriquePojo {
     private Categorie categorie;
 
     private Long quantite;
-    private Long quantiteEntreeAnneeCourante;
-    private Long quantiteSortieAnneeCourante;
+    private Long quantiteEntree;
+    private Long quantiteSortie;
 
     private Double prix;
 
     public PieceWithHistoriquePojo(Piece piece,
-                                   Long quantiteEntreeAnneeCourante,
-                                   Long quantiteSortieAnneeCourante) {
+                                   Long quantiteEntree,
+                                   Long quantiteSortie) {
         this.id = piece.getId();
         this.numeroInventaire = piece.getNumeroInventaire();
         this.nom = piece.getNom();
@@ -39,8 +39,8 @@ public class PieceWithHistoriquePojo {
         this.fournisseur = piece.getFournisseur();
         this.categorie = piece.getCategorie();
         this.quantite = piece.getQuantite();
-        this.quantiteEntreeAnneeCourante = quantiteEntreeAnneeCourante;
-        this.quantiteSortieAnneeCourante = quantiteSortieAnneeCourante;
+        this.quantiteEntree = quantiteEntree;
+        this.quantiteSortie = quantiteSortie;
         this.prix = piece.getPrix();
     }
 }

@@ -265,12 +265,7 @@ public class PieceRepositoryImpl implements PieceRepository {
                         SearchQueryUtils
                                 .getSorts(searchQuery, historiqueSQMapper)
                                 .stream()
-                                .map(sort -> sort.getCriteriaBuilderOrder(joinedContext.entreeJoin, criteriaBuilder))
-                                .toList(),
-                        SearchQueryUtils
-                                .getSorts(searchQuery, historiqueSQMapper)
-                                .stream()
-                                .map(sort -> sort.getCriteriaBuilderOrder(joinedContext.sortieJoin, criteriaBuilder))
+                                .map(sort -> sort.getCriteriaBuilderOrder(joinedContext.historiqueJoin, criteriaBuilder))
                                 .toList(),
                         havingOrders
                 )
@@ -298,35 +293,33 @@ public class PieceRepositoryImpl implements PieceRepository {
                                                     PieceWithHistoriqueSearchQuery searchQuery,
                                                     List<SearchQueryMapper<PieceWithHistoriqueSearchQuery, ?>> historiqueSQMapper) {
         Root<PieceWithHistoriqueView> pieceRoot = query.from(PieceWithHistoriqueView.class);
-        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueEntreeRoot = pieceRoot.join("historique", JoinType.LEFT);
-        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> pieceHistoriqueSortieRoot = pieceRoot.join("historique", JoinType.LEFT);
+        Join<PieceWithHistoriqueView, PieceHistoriqueEntity> historiqueRoot = pieceRoot.join("historique", JoinType.LEFT);
 
-        pieceHistoriqueEntreeRoot.on(
-                criteriaBuilder.equal(
-                        pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
-                        PieceHistoriqueType.ENTREE
-                ),
+        historiqueRoot.on(
                 criteriaBuilder.and(FilterUtils.getPredicatesOfCombinaison(
                         SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
-                        pieceHistoriqueEntreeRoot,
+                        historiqueRoot,
                         criteriaBuilder
                 ))
         );
 
-        pieceHistoriqueSortieRoot.on(
-                criteriaBuilder.equal(
-                        pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
-                        PieceHistoriqueType.SORTIE
-                ),
-                criteriaBuilder.and(FilterUtils.getPredicatesOfCombinaison(
-                        SearchQueryUtils.getFilters(searchQuery, historiqueSQMapper),
-                        pieceHistoriqueSortieRoot,
-                        criteriaBuilder
-                ))
-        );
+        Expression<Long> sumEntrees = criteriaBuilder.sum(
+                criteriaBuilder.<Long>selectCase()
+                        .when(
+                                criteriaBuilder.equal(
+                                    historiqueRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
+                                    PieceHistoriqueType.ENTREE),
+                                historiqueRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE))
+                        .otherwise(0L));
 
-        Expression<Long> sumEntrees = criteriaBuilder.sum(pieceHistoriqueEntreeRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
-        Expression<Long> sumSorties = criteriaBuilder.sum(pieceHistoriqueSortieRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE));
+        Expression<Long> sumSorties = criteriaBuilder.sum(
+                criteriaBuilder.<Long>selectCase()
+                        .when(
+                                criteriaBuilder.equal(
+                                        historiqueRoot.get(PieceHistoriqueConstantes.FIELD_TYPE),
+                                        PieceHistoriqueType.SORTIE),
+                                historiqueRoot.get(PieceHistoriqueConstantes.FIELD_DIFFERENCE))
+                        .otherwise(0L));
 
         List<Predicate> having = new ArrayList<>();
 
@@ -352,8 +345,7 @@ public class PieceRepositoryImpl implements PieceRepository {
 
         return new JoinedContext(
                 pieceRoot,
-                pieceHistoriqueEntreeRoot,
-                pieceHistoriqueSortieRoot,
+                historiqueRoot,
                 sumEntrees,
                 sumSorties
         );
@@ -425,15 +417,13 @@ public class PieceRepositoryImpl implements PieceRepository {
     /**
      * Contexte des jointures pour la requête avec historique
      * @param root Chemin racine
-     * @param entreeJoin Join des entrées
-     * @param sortieJoin Join des sorties
+     * @param historiqueJoin Join des historiques
      * @param sumEntrees Somme des entrées
      * @param sumSorties Somme des sorties
      */
     private record JoinedContext(
             Root<PieceWithHistoriqueView> root,
-            Join<?, ?> entreeJoin,
-            Join<?, ?> sortieJoin,
+            Join<?, ?> historiqueJoin,
             Expression<Long> sumEntrees,
             Expression<Long> sumSorties
     ) {}

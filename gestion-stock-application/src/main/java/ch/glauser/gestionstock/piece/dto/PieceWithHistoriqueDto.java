@@ -26,8 +26,8 @@ public class PieceWithHistoriqueDto {
     private CategorieDto categorie;
 
     private Long quantite;
-    private Long quantiteEntreeAnneeCourante;
-    private Long quantiteSortieAnneeCourante;
+    private Long quantiteEntree;
+    private Long quantiteSortie;
 
     private Double prix;
 
@@ -39,8 +39,8 @@ public class PieceWithHistoriqueDto {
         this.fournisseur = Optional.ofNullable(pieceWithHistoriquePojo.getFournisseur()).map(FournisseurDto::new).orElse(null);
         this.categorie = Optional.ofNullable(pieceWithHistoriquePojo.getCategorie()).map(CategorieDto::new).orElse(null);
         this.quantite = pieceWithHistoriquePojo.getQuantite();
-        this.quantiteEntreeAnneeCourante = pieceWithHistoriquePojo.getQuantiteEntreeAnneeCourante();
-        this.quantiteSortieAnneeCourante = pieceWithHistoriquePojo.getQuantiteSortieAnneeCourante();
+        this.quantiteEntree = pieceWithHistoriquePojo.getQuantiteEntree();
+        this.quantiteSortie = pieceWithHistoriquePojo.getQuantiteSortie();
         this.prix = pieceWithHistoriquePojo.getPrix();
     }
 }

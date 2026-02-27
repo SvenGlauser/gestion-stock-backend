@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -26,7 +27,9 @@ public class SearchField<T> {
      */
     public <R> SearchField<R> cast(Function<T, R> mapper) {
         SearchField<R> searchField = new SearchField<>();
-        searchField.setValue(mapper.apply(this.value));
+        if (Objects.nonNull(this.value)) {
+            searchField.setValue(mapper.apply(this.value));
+        }
         searchField.setOrder(this.order);
         return searchField;
     }
