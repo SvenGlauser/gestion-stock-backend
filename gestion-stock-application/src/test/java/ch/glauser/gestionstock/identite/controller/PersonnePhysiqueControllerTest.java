@@ -101,8 +101,9 @@ class PersonnePhysiqueControllerTest {
                 .hasSize(3);
 
         AutomaticSearchField<String> nom = new AutomaticSearchField<>();
-        nom.setValue("Nom");
-        nom.setField("nom");
+        nom.setValue("Prénom 2");
+        nom.setField("designation");
+        nom.setType(AutomaticSearchField.Type.STRING_LIKE);
         AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();
         automaticSearchQuery2.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(nom))));
         SearchResult<IdentiteLightDto> result2 = identiteController.search(automaticSearchQuery2).getBody();

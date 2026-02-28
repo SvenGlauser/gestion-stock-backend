@@ -206,10 +206,12 @@ public class PieceRepositoryImpl implements PieceRepository {
                 searchQuery,
                 historiqueSQMapper);
 
-        query.multiselect(
-                joinedContext.root,
-                joinedContext.sumEntrees,
-                joinedContext.sumSorties);
+        query.select(
+                criteriaBuilder.tuple(
+                        joinedContext.root,
+                        joinedContext.sumEntrees,
+                        joinedContext.sumSorties
+                ));
 
         query.where(
                 criteriaBuilder.and(

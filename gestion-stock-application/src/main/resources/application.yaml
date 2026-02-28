@@ -12,8 +12,8 @@ spring:
     open-in-view: false
 
   batch:
-    jdbc:
-      initialize-schema: always
+    job:
+      enabled: false
 
   servlet:
     multipart:
