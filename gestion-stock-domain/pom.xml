@@ -30,7 +30,7 @@
 
         <dependency>
             <groupId>ch.glauser</groupId>
-            <artifactId>gestion-stock-domain-filters</artifactId>
+            <artifactId>domain-filters</artifactId>
         </dependency>
 
         <dependency>

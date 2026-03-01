@@ -25,7 +25,7 @@
 
         <dependency>
             <groupId>ch.glauser</groupId>
-            <artifactId>gestion-stock-persistence-filters</artifactId>
+            <artifactId>persistence-filters</artifactId>
         </dependency>
 
         <dependency>

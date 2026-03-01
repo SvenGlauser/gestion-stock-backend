@@ -12,8 +12,8 @@
     <modules>
         <module>utilities</module>
         <module>validation</module>
-        <module>gestion-stock-persistence-filters</module>
-        <module>gestion-stock-domain-filters</module>
+        <module>persistence-filters</module>
+        <module>domain-filters</module>
         <module>gestion-stock-persistence</module>
         <module>gestion-stock-domain</module>
         <module>gestion-stock-application</module>
@@ -68,7 +68,7 @@
 
             <dependency>
                 <groupId>ch.glauser</groupId>
-                <artifactId>gestion-stock-domain-filters</artifactId>
+                <artifactId>domain-filters</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -80,7 +80,7 @@
 
             <dependency>
                 <groupId>ch.glauser</groupId>
-                <artifactId>gestion-stock-persistence-filters</artifactId>
+                <artifactId>persistence-filters</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

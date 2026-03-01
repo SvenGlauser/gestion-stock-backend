@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gestion-stock-persistence-filters</artifactId>
+    <artifactId>domain-filters</artifactId>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -18,21 +18,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>ch.glauser</groupId>
-            <artifactId>validation</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.glauser</groupId>
-            <artifactId>gestion-stock-domain-filters</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
