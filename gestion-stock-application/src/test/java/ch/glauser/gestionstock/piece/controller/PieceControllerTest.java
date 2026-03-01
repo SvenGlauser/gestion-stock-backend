@@ -17,7 +17,9 @@ import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.controller.MachineController;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
+import ch.glauser.gestionstock.piece.dto.PieceWithHistoriqueDto;
 import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
+import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
 import ch.glauser.gestionstock.utils.TestSecurityConfiguration;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.assertj.core.api.Assertions;
@@ -167,10 +169,17 @@ class PieceControllerTest {
         assertDoesNotThrow(() -> pieceController.create(piece3));
 
         PieceSearchQuery searchQuery = new PieceSearchQuery();
+        PieceWithHistoriqueSearchQuery namedSearchQuery = new PieceWithHistoriqueSearchQuery();
         
         SearchResult<PieceDto> result = pieceController.search(searchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(3);
+        SearchResult<PieceWithHistoriqueDto> resultWithHistorique = pieceController.searchWithHistorique(namedSearchQuery).getBody();
+        assertThat(resultWithHistorique).isNotNull();
+        assertThat(resultWithHistorique.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
@@ -183,6 +192,14 @@ class PieceControllerTest {
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(2);
+        namedSearchQuery.setCategorieId(new SearchField<>());
+        namedSearchQuery.getCategorieId().setValue(categorie.getId());
+        SearchResult<PieceDto> result1WithHistorique = pieceController.search(searchQuery).getBody();
+        assertThat(result1WithHistorique).isNotNull();
+        assertThat(result1WithHistorique.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(2);
 
         searchQuery.setCategorieId(null);
         searchQuery.setNom(new SearchField<>());
@@ -191,6 +208,16 @@ class PieceControllerTest {
         SearchResult<PieceDto> result2 = pieceController.search(searchQuery).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(3);
+        namedSearchQuery.setCategorieId(null);
+        namedSearchQuery.setNom(new SearchField<>());
+        namedSearchQuery.getNom().setValue("Piece");
+        namedSearchQuery.getNom().setOrder(Direction.ASC);
+        SearchResult<PieceDto> result2WithHistorique = pieceController.search(searchQuery).getBody();
+        assertThat(result2WithHistorique).isNotNull();
+        assertThat(result2WithHistorique.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
