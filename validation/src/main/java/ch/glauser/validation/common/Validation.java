@@ -1,6 +1,7 @@
 package ch.glauser.validation.common;
 
 import ch.glauser.validation.exception.ValidationException;
+import ch.glauser.validation.notempty.ValidatorNotEmpty;
 import ch.glauser.validation.notnull.ValidatorNotNull;
 import lombok.Getter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -71,6 +72,19 @@ public final class Validation {
     }
 
     /**
+     * Valide que le champ n'est pas vide
+     *
+     * @param object Objet à valider
+     * @param field Champ à valider
+     * @return L'instance de validation
+     */
+    public Validation validateNotEmpty(String object, String field) {
+        ValidatorNotEmpty.validate(this, object, field);
+
+        return this;
+    }
+
+    /**
      * Valide que le champ n'est pas null
      *
      * @param object Objet à valider
@@ -119,8 +133,10 @@ public final class Validation {
 
     /**
      * Valide la classe
+     *
+     * @throws ValidationException Si des erreurs de validation sont présentes
      */
-    public void execute() {
+    public void execute() throws ValidationException {
         if (CollectionUtils.isNotEmpty(errors)) {
             throw new ValidationException(errors);
         }

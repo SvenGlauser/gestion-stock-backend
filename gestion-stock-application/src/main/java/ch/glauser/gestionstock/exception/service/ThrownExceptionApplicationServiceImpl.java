@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.exception.service;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.exception.dto.ThrownExceptionDto;
@@ -22,12 +22,12 @@ public class ThrownExceptionApplicationServiceImpl implements ThrownExceptionApp
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).EXCEPTION_LECTEUR.name())")
-    public SearchResult<ThrownExceptionDto> search(SearchRequest searchRequest) {
+    public SearchResult<ThrownExceptionDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(ThrownExceptionApplicationServiceImpl.class)
-                .validateNotNull(searchRequest, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, ThrownExceptionConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<ThrownException> searchResult = this.thrownExceptionService.searchExceptions(searchRequest);
+        SearchResult<ThrownException> searchResult = this.thrownExceptionService.searchExceptions(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, ThrownExceptionDto::new);
     }

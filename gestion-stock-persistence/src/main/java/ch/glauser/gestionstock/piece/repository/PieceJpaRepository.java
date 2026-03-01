@@ -1,7 +1,9 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.repository.RepositoryUtils;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
+import ch.glauser.filters.filter.api.FilterCombinaison;
+import ch.glauser.filters.filter.utils.FilterUtils;
+import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,11 +53,11 @@ public interface PieceJpaRepository extends JpaRepository<PieceEntity, Long>, Jp
      */
     boolean existsByNumeroInventaire(String numeroInventaire);
 
-    default Page<PieceEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
-        return findAll(RepositoryUtils.specificationOf(filters), pageable);
+    default Page<PieceEntity> search(Collection<FilterCombinaison> filters, Pageable pageable) {
+        return findAll(FilterUtils.specificationOf(filters), pageable);
     }
 
-    default List<PieceEntity> searchAll(Collection<FilterCombinator> filters) {
-        return findAll(RepositoryUtils.specificationOf(filters));
+    default List<PieceEntity> searchAll(Collection<AutomaticSearchFieldCombinaison> filters) {
+        return findAll(FilterUtils.specificationOf(AutomatedSearchQueryUtils.getFiltersCombinators(filters)));
     }
 }

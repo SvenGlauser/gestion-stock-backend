@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.exception.repository;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.repository.RepositoryUtils;
+import ch.glauser.filters.filter.api.FilterCombinaison;
+import ch.glauser.filters.filter.utils.FilterUtils;
 import ch.glauser.gestionstock.exception.entity.ThrownExceptionEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ public interface ThrownExceptionJpaRepository extends JpaRepository<ThrownExcept
      */
     Optional<ThrownExceptionEntity> findOptionalById(Long id);
 
-    default Page<ThrownExceptionEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
-        return findAll(RepositoryUtils.specificationOf(filters), pageable);
+    default Page<ThrownExceptionEntity> search(Collection<FilterCombinaison> filters, Pageable pageable) {
+        return findAll(FilterUtils.specificationOf(filters), pageable);
     }
 }

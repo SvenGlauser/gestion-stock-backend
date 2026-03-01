@@ -1,10 +1,10 @@
 package ch.glauser.gestionstock.pays.controller;
 
+import ch.glauser.filters.automatic.AutomaticSearchField;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.controller.LocaliteController;
 import ch.glauser.gestionstock.localite.dto.LocaliteDto;
@@ -105,21 +105,21 @@ class PaysControllerTest {
         pays3.setAbreviation("Pays - Test Search - Abreviation - 3");
         assertDoesNotThrow(() -> paysController.create(pays3));
 
-        SearchRequest searchRequest = new SearchRequest();
+        AutomaticSearchQuery automaticSearchQuery = new AutomaticSearchQuery();
         
-        SearchResult<PaysDto> result = paysController.search(searchRequest).getBody();
+        SearchResult<PaysDto> result = paysController.search(automaticSearchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
 
-        Filter nom = new Filter();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("Pays - Test Search - 3");
         nom.setField("nom");
-        SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
-        SearchResult<PaysDto> result2 = paysController.search(searchRequest2).getBody();
+        AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();
+        automaticSearchQuery2.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(nom))));
+        SearchResult<PaysDto> result2 = paysController.search(automaticSearchQuery2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
                 .isNotNull()

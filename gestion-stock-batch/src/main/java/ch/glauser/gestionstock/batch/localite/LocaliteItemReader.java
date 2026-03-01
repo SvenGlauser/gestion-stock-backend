@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.batch.localite;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.infrastructure.item.ItemReader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 

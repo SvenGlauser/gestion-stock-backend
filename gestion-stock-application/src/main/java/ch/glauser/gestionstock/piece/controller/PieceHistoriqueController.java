@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.controller;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceHistoriqueDto;
 import ch.glauser.gestionstock.piece.service.PieceHistoriqueApplicationService;
@@ -21,8 +21,8 @@ public class PieceHistoriqueController {
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<PieceHistoriqueDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.pieceHistoriqueApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<PieceHistoriqueDto>> search(@RequestBody AutomaticSearchQuery automaticSearchQuery) {
+        return ResponseEntity.ok(this.pieceHistoriqueApplicationService.search(automaticSearchQuery));
     }
 
     @DeleteMapping(path = "/{id}")

@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.categorie.service;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 
 /**
@@ -19,10 +19,10 @@ public interface CategorieApplicationService {
     /**
      * Récupère les catégories
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de catégorie paginée
      */
-    SearchResult<CategorieDto> search(SearchRequest searchRequest);
+    SearchResult<CategorieDto> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée une catégorie

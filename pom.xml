@@ -10,12 +10,14 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>utilities</module>
         <module>validation</module>
+        <module>persistence-filters</module>
+        <module>domain-filters</module>
         <module>gestion-stock-persistence</module>
         <module>gestion-stock-domain</module>
         <module>gestion-stock-application</module>
         <module>gestion-stock-batch</module>
-        <module>utilities</module>
         <module>report-aggregate</module>
     </modules>
 
@@ -32,20 +34,20 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 
-        <org.apache.maven.plugins.version>3.14.1</org.apache.maven.plugins.version>
+        <org.apache.maven.plugins.version>3.15.0</org.apache.maven.plugins.version>
 
-        <spring.boot.dependencies.version>3.5.6</spring.boot.dependencies.version>
+        <spring.boot.dependencies.version>4.0.3</spring.boot.dependencies.version>
 
         <org.projectlombok.lombok.version>1.18.42</org.projectlombok.lombok.version>
 
-        <org.apache.commons.io.version>2.19.0</org.apache.commons.io.version>
-        <org.apache.commons.csv.version>1.14.0</org.apache.commons.csv.version>
-        <org.apache.commons.lang3.version>3.17.0</org.apache.commons.lang3.version>
-        <org.apache.commons.collections4.version>4.4</org.apache.commons.collections4.version>
-        <org.apache.commons.validator.version>1.9.0</org.apache.commons.validator.version>
+        <org.apache.commons.io.version>2.21.0</org.apache.commons.io.version>
+        <org.apache.commons.csv.version>1.14.1</org.apache.commons.csv.version>
+        <org.apache.commons.lang3.version>3.20.0</org.apache.commons.lang3.version>
+        <org.apache.commons.collections4.version>4.5.0</org.apache.commons.collections4.version>
+        <org.apache.commons.validator.version>1.10.1</org.apache.commons.validator.version>
 
-        <org.junit.jupiter.version>5.12.2</org.junit.jupiter.version>
-        <org.assertj.core.version>3.27.6</org.assertj.core.version>
+        <org.junit.jupiter.version>6.0.3</org.junit.jupiter.version>
+        <org.assertj.core.version>3.27.7</org.assertj.core.version>
 
         <jacoco.maven.plugin.version>0.8.14</jacoco.maven.plugin.version>
     </properties>
@@ -66,7 +68,19 @@
 
             <dependency>
                 <groupId>ch.glauser</groupId>
+                <artifactId>domain-filters</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.glauser</groupId>
                 <artifactId>gestion-stock-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.glauser</groupId>
+                <artifactId>persistence-filters</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -132,6 +146,14 @@
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${org.apache.commons.validator.version}</version>
+                <exclusions>
+                    <!-- Supprimée, car peut rentrer en conflit avec Spring (Log INFO de Spring au lancement) -->
+                    <!-- https://stackoverflow.com/questions/76706612/standard-commons-logging-discovery-in-action-with-spring-jcl -->
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
 
@@ -141,6 +163,7 @@
                 <version>${org.junit.jupiter.version}</version>
                 <scope>test</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
@@ -151,28 +174,23 @@
     </dependencyManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${org.apache.maven.plugins.version}</version>
-                    <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${org.projectlombok.lombok.version}</version>
-                            </path>
-                        </annotationProcessorPaths>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${org.apache.maven.plugins.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

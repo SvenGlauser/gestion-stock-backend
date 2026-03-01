@@ -1,11 +1,13 @@
 package ch.glauser.gestionstock.machine.repository;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
+import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.machine.entity.MachineEntity;
 import ch.glauser.gestionstock.machine.model.Machine;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +17,10 @@ import java.util.Optional;
  * Implémentation du repository de gestion des machines
  */
 @Repository
+@RequiredArgsConstructor
 public class MachineRepositoryImpl implements MachineRepository {
 
     private final MachineJpaRepository machineJpaRepository;
-
-    public MachineRepositoryImpl(MachineJpaRepository machineJpaRepository) {
-        this.machineJpaRepository = machineJpaRepository;
-    }
 
     @Override
     public Optional<Machine> get(Long id) {
@@ -29,8 +28,8 @@ public class MachineRepositoryImpl implements MachineRepository {
     }
 
     @Override
-    public SearchResult<Machine> search(SearchRequest searchRequest) {
-        Page<MachineEntity> page = this.machineJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+    public SearchResult<Machine> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<MachineEntity> page = this.machineJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
         return PageUtils.transform(page);
     }
 

@@ -1,8 +1,8 @@
 package ch.glauser.gestionstock.categorie.service;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.categorie.model.Categorie;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.validation.common.Validation;
@@ -41,12 +41,12 @@ public class CategorieApplicationServiceImpl implements CategorieApplicationServ
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).CATEGORIE_LECTEUR.name())")
-    public SearchResult<CategorieDto> search(SearchRequest searchRequest) {
+    public SearchResult<CategorieDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieApplicationServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Categorie> searchResult = this.categorieService.search(searchRequest);
+        SearchResult<Categorie> searchResult = this.categorieService.search(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, CategorieDto::new);
     }

@@ -1,11 +1,11 @@
 package ch.glauser.gestionstock.pays.service;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.pays.model.Pays;
@@ -49,12 +49,12 @@ public class PaysServiceImpl implements PaysService {
     }
 
     @Override
-    public SearchResult<Pays> search(SearchRequest searchRequest) {
+    public SearchResult<Pays> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, PaysConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, PaysConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.paysRepository.search(searchRequest);
+        return this.paysRepository.search(automaticSearchQuery);
     }
 
     @Override

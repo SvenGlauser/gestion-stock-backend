@@ -1,12 +1,11 @@
 package ch.glauser.gestionstock.piece.controller;
 
+import ch.glauser.filters.field.api.SearchField;
+import ch.glauser.filters.sort.api.Direction;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.controller.FournisseurController;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
@@ -18,6 +17,9 @@ import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.controller.MachineController;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
+import ch.glauser.gestionstock.piece.dto.PieceWithHistoriqueDto;
+import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
+import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
 import ch.glauser.gestionstock.utils.TestSecurityConfiguration;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.assertj.core.api.Assertions;
@@ -166,36 +168,56 @@ class PieceControllerTest {
         piece3.setPrix(1D);
         assertDoesNotThrow(() -> pieceController.create(piece3));
 
-        SearchRequest searchRequest = new SearchRequest();
+        PieceSearchQuery searchQuery = new PieceSearchQuery();
+        PieceWithHistoriqueSearchQuery namedSearchQuery = new PieceWithHistoriqueSearchQuery();
         
-        SearchResult<PieceDto> result = pieceController.search(searchRequest).getBody();
+        SearchResult<PieceDto> result = pieceController.search(searchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
+        SearchResult<PieceWithHistoriqueDto> resultWithHistorique = pieceController.searchWithHistorique(namedSearchQuery).getBody();
+        assertThat(resultWithHistorique).isNotNull();
+        assertThat(resultWithHistorique.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(3);
 
-        Filter categorieFilter = new Filter();
-        categorieFilter.setValue(categorie.getId());
-        categorieFilter.setField("categorie.id");
-        SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(categorieFilter))));
-        SearchResult<PieceDto> result1 = pieceController.search(searchRequest1).getBody();
+        searchQuery.setCategorieId(new SearchField<>());
+        searchQuery.getCategorieId().setValue(categorie.getId());
+        SearchResult<PieceDto> result1 = pieceController.search(searchQuery).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(2);
+        namedSearchQuery.setCategorieId(new SearchField<>());
+        namedSearchQuery.getCategorieId().setValue(categorie.getId());
+        SearchResult<PieceDto> result1WithHistorique = pieceController.search(searchQuery).getBody();
+        assertThat(result1WithHistorique).isNotNull();
+        assertThat(result1WithHistorique.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(2);
 
-        Filter nom = new Filter();
-        nom.setValue("Piece");
-        nom.setField("nom");
-        nom.setType(Filter.Type.STRING_LIKE);
-        SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
-        SearchResult<PieceDto> result2 = pieceController.search(searchRequest2).getBody();
+        searchQuery.setCategorieId(null);
+        searchQuery.setNom(new SearchField<>());
+        searchQuery.getNom().setValue("Piece");
+        searchQuery.getNom().setOrder(Direction.ASC);
+        SearchResult<PieceDto> result2 = pieceController.search(searchQuery).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
+                .isNotNull()
+                .isNotEmpty()
+                .hasSize(3);
+        namedSearchQuery.setCategorieId(null);
+        namedSearchQuery.setNom(new SearchField<>());
+        namedSearchQuery.getNom().setValue("Piece");
+        namedSearchQuery.getNom().setOrder(Direction.ASC);
+        SearchResult<PieceDto> result2WithHistorique = pieceController.search(searchQuery).getBody();
+        assertThat(result2WithHistorique).isNotNull();
+        assertThat(result2WithHistorique.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);

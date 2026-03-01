@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.service;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.piece.dto.PieceHistoriqueDto;
@@ -38,12 +38,12 @@ public class PieceHistoriqueApplicationServiceImpl implements PieceHistoriqueApp
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_HISTORIQUE_LECTEUR.name())")
-    public SearchResult<PieceHistoriqueDto> search(SearchRequest searchRequest) {
+    public SearchResult<PieceHistoriqueDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(PieceHistoriqueApplicationServiceImpl.class)
-                .validateNotNull(searchRequest, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, PieceHistoriqueConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<PieceHistorique> searchResult = this.pieceHistoriqueService.search(searchRequest);
+        SearchResult<PieceHistorique> searchResult = this.pieceHistoriqueService.search(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, PieceHistoriqueDto::new);
     }

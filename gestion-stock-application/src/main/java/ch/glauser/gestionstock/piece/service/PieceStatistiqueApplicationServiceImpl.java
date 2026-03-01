@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.service;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
 import ch.glauser.gestionstock.piece.statistique.PieceStatistique;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +21,7 @@ public class PieceStatistiqueApplicationServiceImpl implements PieceStatistiqueA
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).PIECE_STATISTIQUE_LECTEUR.name())")
-    public List<PieceStatistique> getStatistiques(List<FilterCombinator> filters) {
+    public List<PieceStatistique> getStatistiques(List<AutomaticSearchFieldCombinaison> filters) {
         return this.pieceStatistiqueService.getStatistiques(filters);
     }
 }

@@ -1,12 +1,12 @@
 package ch.glauser.gestionstock.fournisseur.service;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
 import ch.glauser.gestionstock.fournisseur.model.FournisseurConstantes;
@@ -52,12 +52,12 @@ public class FournisseurServiceImpl implements FournisseurService {
     }
 
     @Override
-    public SearchResult<Fournisseur> search(SearchRequest searchRequest) {
+    public SearchResult<Fournisseur> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FournisseurConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, FournisseurConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.fournisseurRepository.search(searchRequest);
+        return this.fournisseurRepository.search(automaticSearchQuery);
     }
 
     @Override

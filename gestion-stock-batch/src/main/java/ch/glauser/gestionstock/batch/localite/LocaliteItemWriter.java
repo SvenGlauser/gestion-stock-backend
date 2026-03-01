@@ -4,8 +4,8 @@ import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.localite.service.LocaliteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.item.Chunk;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.infrastructure.item.Chunk;
+import org.springframework.batch.infrastructure.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
 @Component("localiteItemWriter")

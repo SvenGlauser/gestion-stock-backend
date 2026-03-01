@@ -1,14 +1,13 @@
 package ch.glauser.gestionstock.localite.service;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.fournisseur.repository.FournisseurRepository;
 import ch.glauser.gestionstock.identite.repository.IdentiteRepository;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.localite.model.LocaliteConstantes;
@@ -30,7 +29,6 @@ public class LocaliteServiceImpl implements LocaliteService {
     private final LocaliteRepository localiteRepository;
 
     private final IdentiteRepository identiteRepository;
-    private final FournisseurRepository fournisseurRepository;
 
     @Override
     public Localite get(Long id) {
@@ -44,12 +42,12 @@ public class LocaliteServiceImpl implements LocaliteService {
     }
 
     @Override
-    public SearchResult<Localite> search(SearchRequest searchRequest) {
+    public SearchResult<Localite> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, LocaliteConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, LocaliteConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.localiteRepository.search(searchRequest);
+        return this.localiteRepository.search(automaticSearchQuery);
     }
 
     @Override

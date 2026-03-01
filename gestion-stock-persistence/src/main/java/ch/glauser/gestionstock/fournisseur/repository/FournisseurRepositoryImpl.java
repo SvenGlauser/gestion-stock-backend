@@ -1,11 +1,13 @@
 package ch.glauser.gestionstock.fournisseur.repository;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
+import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.entity.FournisseurEntity;
 import ch.glauser.gestionstock.fournisseur.model.Fournisseur;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +19,10 @@ import java.util.stream.Collectors;
  * Implémentation du repository de gestion des fournisseurs
  */
 @Repository
+@RequiredArgsConstructor
 public class FournisseurRepositoryImpl implements FournisseurRepository {
 
     private final FournisseurJpaRepository fournisseurJpaRepository;
-
-    public FournisseurRepositoryImpl(FournisseurJpaRepository fournisseurJpaRepository) {
-        this.fournisseurJpaRepository = fournisseurJpaRepository;
-    }
 
     @Override
     public Optional<Fournisseur> get(Long id) {
@@ -40,8 +39,8 @@ public class FournisseurRepositoryImpl implements FournisseurRepository {
     }
 
     @Override
-    public SearchResult<Fournisseur> search(SearchRequest searchRequest) {
-        Page<FournisseurEntity> page = this.fournisseurJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+    public SearchResult<Fournisseur> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<FournisseurEntity> page = this.fournisseurJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
         return PageUtils.transform(page);
     }
 

@@ -1,10 +1,10 @@
 package ch.glauser.gestionstock.identite.controller;
 
+import ch.glauser.filters.automatic.AutomaticSearchField;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.dto.IdentiteLightDto;
 import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
@@ -91,21 +91,22 @@ class PersonnePhysiqueControllerTest {
         contact3.setPrenom("Prénom 2");
         assertDoesNotThrow(() -> personnePhysiqueController.create(contact3));
 
-        SearchRequest searchRequest = new SearchRequest();
+        AutomaticSearchQuery automaticSearchQuery = new AutomaticSearchQuery();
         
-        SearchResult<IdentiteLightDto> result = identiteController.search(searchRequest).getBody();
+        SearchResult<IdentiteLightDto> result = identiteController.search(automaticSearchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
 
-        Filter nom = new Filter();
-        nom.setValue("Nom");
-        nom.setField("nom");
-        SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
-        SearchResult<IdentiteLightDto> result2 = identiteController.search(searchRequest2).getBody();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
+        nom.setValue("Prénom 2");
+        nom.setField("designation");
+        nom.setType(AutomaticSearchField.Type.STRING_LIKE);
+        AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();
+        automaticSearchQuery2.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(nom))));
+        SearchResult<IdentiteLightDto> result2 = identiteController.search(automaticSearchQuery2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
                 .isNotNull()

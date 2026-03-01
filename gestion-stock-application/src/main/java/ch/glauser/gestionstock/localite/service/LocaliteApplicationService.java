@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.localite.service;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.dto.LocaliteDto;
 
@@ -19,10 +19,10 @@ public interface LocaliteApplicationService {
     /**
      * Récupère les localités
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de localité paginée
      */
-    SearchResult<LocaliteDto> search(SearchRequest searchRequest);
+    SearchResult<LocaliteDto> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée une localité

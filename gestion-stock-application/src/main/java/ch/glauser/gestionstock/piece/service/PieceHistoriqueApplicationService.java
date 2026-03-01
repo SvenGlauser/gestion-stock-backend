@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.service;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceHistoriqueDto;
 
@@ -19,10 +19,10 @@ public interface PieceHistoriqueApplicationService {
     /**
      * Récupère les mouvements de pièce
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de mouvements de pièce
      */
-    SearchResult<PieceHistoriqueDto> search(SearchRequest searchRequest);
+    SearchResult<PieceHistoriqueDto> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Supprime une entrée de l'historique

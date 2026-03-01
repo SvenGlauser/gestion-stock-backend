@@ -1,9 +1,11 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.model.Piece;
+import ch.glauser.gestionstock.piece.pojo.PieceWithHistoriquePojo;
+import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
+import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +28,15 @@ public interface PieceRepository {
      * @param searchRequest Paramètres de recherche
      * @return Une liste de pièces paginée
      */
-    SearchResult<Piece> search(SearchRequest searchRequest);
+    SearchResult<Piece> search(PieceSearchQuery searchRequest);
+
+    /**
+     * Récupère les pièces avec les informations de l'historique
+     *
+     * @param searchQuery Paramètres de recherche
+     * @return Une liste de pièces paginée
+     */
+    SearchResult<PieceWithHistoriquePojo> searchWithHistorique(PieceWithHistoriqueSearchQuery searchQuery);
 
     /**
      * Récupère toutes les pièces
@@ -34,7 +44,7 @@ public interface PieceRepository {
      * @param filters Paramètres de recherche
      * @return Une liste de pièces
      */
-    List<Piece> searchAll(List<FilterCombinator> filters);
+    List<Piece> searchAll(List<AutomaticSearchFieldCombinaison> filters);
 
     /**
      * Récupère toutes les pièces

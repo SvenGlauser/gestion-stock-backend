@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.piece.repository;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.repository.RepositoryUtils;
+import ch.glauser.filters.filter.api.FilterCombinaison;
+import ch.glauser.filters.filter.utils.FilterUtils;
 import ch.glauser.gestionstock.piece.entity.PieceHistoriqueEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +52,7 @@ public interface PieceHistoriqueJpaRepository extends JpaRepository<PieceHistori
             WHERE pieceHistorique.piece.id = :idPiece""")
     void deleteAllByPieceId(@Param("idPiece") Long idPiece);
 
-    default Page<PieceHistoriqueEntity> search(Collection<FilterCombinator> filters, Pageable pageable) {
-        return findAll(RepositoryUtils.specificationOf(filters), pageable);
+    default Page<PieceHistoriqueEntity> search(Collection<FilterCombinaison> filters, Pageable pageable) {
+        return findAll(FilterUtils.specificationOf(filters), pageable);
     }
 }

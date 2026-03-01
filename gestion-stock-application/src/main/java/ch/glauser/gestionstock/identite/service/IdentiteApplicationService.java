@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.identite.service;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.dto.IdentiteLightDto;
 
@@ -12,8 +12,8 @@ public interface IdentiteApplicationService {
     /**
      * Récupère les identités
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste d'identités paginée
      */
-    SearchResult<IdentiteLightDto> search(SearchRequest searchRequest);
+    SearchResult<IdentiteLightDto> search(AutomaticSearchQuery automaticSearchQuery);
 }

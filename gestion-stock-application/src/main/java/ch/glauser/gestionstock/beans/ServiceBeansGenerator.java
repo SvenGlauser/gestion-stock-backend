@@ -64,9 +64,8 @@ public class ServiceBeansGenerator {
 
     @Bean
     public LocaliteService localiteService(LocaliteRepository localiteRepository,
-                                           IdentiteRepository identiteRepository,
-                                           FournisseurRepository fournisseurRepository) {
-        return new LocaliteServiceImpl(localiteRepository, identiteRepository, fournisseurRepository);
+                                           IdentiteRepository identiteRepository) {
+        return new LocaliteServiceImpl(localiteRepository, identiteRepository);
     }
 
     @Bean

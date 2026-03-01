@@ -1,7 +1,7 @@
 package ch.glauser.gestionstock.fournisseur.service;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.common.pagination.SearchResultUtils;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
@@ -42,12 +42,12 @@ public class FournisseurApplicationServiceImpl implements FournisseurApplication
 
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).FOURNISSEUR_LECTEUR.name())")
-    public SearchResult<FournisseurDto> search(SearchRequest searchRequest) {
+    public SearchResult<FournisseurDto> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, FIELD_SEARCH_REQUEST)
                 .execute();
 
-        SearchResult<Fournisseur> searchResult = this.fournisseurService.search(searchRequest);
+        SearchResult<Fournisseur> searchResult = this.fournisseurService.search(automaticSearchQuery);
 
         return SearchResultUtils.transformDto(searchResult, FournisseurDto::new);
     }

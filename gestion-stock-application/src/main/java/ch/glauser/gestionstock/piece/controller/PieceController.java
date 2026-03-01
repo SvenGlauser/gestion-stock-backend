@@ -1,9 +1,11 @@
 package ch.glauser.gestionstock.piece.controller;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
+import ch.glauser.gestionstock.piece.dto.PieceWithHistoriqueDto;
+import ch.glauser.gestionstock.piece.search.PieceSearchQuery;
+import ch.glauser.gestionstock.piece.search.PieceWithHistoriqueSearchQuery;
 import ch.glauser.gestionstock.piece.service.PieceApplicationService;
 import ch.glauser.gestionstock.piece.service.PieceStatistiqueApplicationService;
 import ch.glauser.gestionstock.piece.statistique.PieceStatistique;
@@ -37,13 +39,18 @@ public class PieceController {
     }
 
     @PostMapping(path = "/statistiques")
-    public ResponseEntity<List<PieceStatistique>> statistiques(@RequestBody List<FilterCombinator> filters) {
+    public ResponseEntity<List<PieceStatistique>> statistiques(@RequestBody List<AutomaticSearchFieldCombinaison> filters) {
         return ResponseEntity.ok(this.pieceStatistiqueApplicationService.getStatistiques(filters));
     }
 
     @PostMapping(path = "/search")
-    public ResponseEntity<SearchResult<PieceDto>> search(@RequestBody SearchRequest searchRequest) {
-        return ResponseEntity.ok(this.pieceApplicationService.search(searchRequest));
+    public ResponseEntity<SearchResult<PieceDto>> search(@RequestBody PieceSearchQuery searchQuery) {
+        return ResponseEntity.ok(this.pieceApplicationService.search(searchQuery));
+    }
+
+    @PostMapping(path = "/search/historique")
+    public ResponseEntity<SearchResult<PieceWithHistoriqueDto>> searchWithHistorique(@RequestBody PieceWithHistoriqueSearchQuery searchQuery) {
+        return ResponseEntity.ok(this.pieceApplicationService.searchWithHistorique(searchQuery));
     }
 
     @PutMapping

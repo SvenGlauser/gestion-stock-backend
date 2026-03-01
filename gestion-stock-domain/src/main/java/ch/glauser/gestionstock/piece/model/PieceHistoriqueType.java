@@ -5,5 +5,5 @@ package ch.glauser.gestionstock.piece.model;
  */
 public enum PieceHistoriqueType {
     ENTREE,
-    SORTIE;
+    SORTIE
 }

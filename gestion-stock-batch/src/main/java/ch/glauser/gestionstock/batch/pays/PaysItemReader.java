@@ -1,9 +1,9 @@
 package ch.glauser.gestionstock.batch.pays;
 
-import org.springframework.batch.item.ItemReader;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.batch.infrastructure.item.ItemReader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -25,7 +25,7 @@ public class PaysItemReader implements ItemReader<Object> {
     @Override
     public Object read() {
         if (Objects.isNull(pays)) {
-            URI uri = UriComponentsBuilder
+            final URI uri = UriComponentsBuilder
                     .newInstance()
                     .scheme("https")
                     .host("restcountries.com")
@@ -34,9 +34,11 @@ public class PaysItemReader implements ItemReader<Object> {
                     .build()
                     .toUri();
 
-            this.pays = new RestTemplateBuilder()
-                    .build()
-                    .getForObject(uri, List.class);
+            this.pays = RestClient.create()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .body(List.class);
         }
 
         return CollectionUtils.isEmpty(pays) ? null : pays.removeFirst();

@@ -1,12 +1,12 @@
 package ch.glauser.gestionstock.machine.service;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
 import ch.glauser.gestionstock.common.model.Model;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.machine.model.MachineConstantes;
@@ -37,12 +37,12 @@ public class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public SearchResult<Machine> search(SearchRequest searchRequest) {
+    public SearchResult<Machine> search(AutomaticSearchQuery automaticSearchQuery) {
         Validation.of(CategorieServiceImpl.class)
-                .validateNotNull(searchRequest, MachineConstantes.FIELD_SEARCH_REQUEST)
+                .validateNotNull(automaticSearchQuery, MachineConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
-        return this.machineRepository.search(searchRequest);
+        return this.machineRepository.search(automaticSearchQuery);
     }
 
     @Override

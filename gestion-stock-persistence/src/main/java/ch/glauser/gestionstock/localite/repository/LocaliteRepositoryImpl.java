@@ -1,11 +1,13 @@
 package ch.glauser.gestionstock.localite.repository;
 
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
+import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.localite.entity.LocaliteEntity;
 import ch.glauser.gestionstock.localite.model.Localite;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +17,10 @@ import java.util.Optional;
  * Implémentation du repository de gestion des localités
  */
 @Repository
+@RequiredArgsConstructor
 public class LocaliteRepositoryImpl implements LocaliteRepository {
 
     private final LocaliteJpaRepository localiteJpaRepository;
-
-    public LocaliteRepositoryImpl(LocaliteJpaRepository localiteJpaRepository) {
-        this.localiteJpaRepository = localiteJpaRepository;
-    }
 
     @Override
     public Optional<Localite> get(Long id) {
@@ -29,8 +28,8 @@ public class LocaliteRepositoryImpl implements LocaliteRepository {
     }
 
     @Override
-    public SearchResult<Localite> search(SearchRequest searchRequest) {
-        Page<LocaliteEntity> page = this.localiteJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+    public SearchResult<Localite> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<LocaliteEntity> page = this.localiteJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
         return PageUtils.transform(page);
     }
 

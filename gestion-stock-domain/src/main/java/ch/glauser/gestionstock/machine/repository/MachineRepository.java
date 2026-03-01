@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.machine.repository;
 
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.machine.model.Machine;
 
@@ -21,10 +21,10 @@ public interface MachineRepository {
     /**
      * Récupère les machines
      *
-     * @param searchRequest Paramètres de recherche
+     * @param automaticSearchQuery Paramètres de recherche
      * @return Une liste de machine paginée
      */
-    SearchResult<Machine> search(SearchRequest searchRequest);
+    SearchResult<Machine> search(AutomaticSearchQuery automaticSearchQuery);
 
     /**
      * Crée une machine

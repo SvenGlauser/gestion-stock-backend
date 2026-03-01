@@ -5,8 +5,7 @@ import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.gestionstock.pays.service.PaysService;
 import ch.glauser.utilities.exception.TechnicalException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.lang.NonNull;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -26,7 +25,7 @@ public class LocaliteItemProcessor implements ItemProcessor<Object, Localite> {
     private Pays suisse;
 
     @Override
-    public Localite process(@NonNull Object item) {
+    public Localite process(Object item) {
         if (Objects.isNull(this.suisse)) {
             this.suisse = this.paysService.getByAbreviation(ABREVIATION_SUISSE);
 

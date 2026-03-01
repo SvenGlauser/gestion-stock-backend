@@ -2,8 +2,7 @@ package ch.glauser.gestionstock.batch.pays;
 
 import ch.glauser.gestionstock.pays.model.Pays;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.lang.NonNull;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,10 +19,10 @@ public class PaysItemProcessor implements ItemProcessor<Object, Pays> {
     public static final String MAP_PAYS_COMMON = "common";
     public static final String MAP_PAYS_CCA2 = "cca2";
 
-    private List<String> nomsDejaTraites = new ArrayList<>();
+    private final List<String> nomsDejaTraites = new ArrayList<>();
 
     @Override
-    public Pays process(@NonNull Object item) {
+    public Pays process(Object item) {
         if (item instanceof Map<?,?> mapItem) {
             Pays pays = new Pays();
 

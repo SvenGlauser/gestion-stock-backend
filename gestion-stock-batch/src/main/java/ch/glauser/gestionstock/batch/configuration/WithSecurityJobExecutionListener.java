@@ -1,8 +1,9 @@
 package ch.glauser.gestionstock.batch.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
+import org.jspecify.annotations.NullMarked;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.listener.JobExecutionListener;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ public class WithSecurityJobExecutionListener implements JobExecutionListener {
     private final BatchProperties batchProperties;
 
     @Override
+    @NullMarked
     public void beforeJob(JobExecution jobExecution) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(batchProperties.getUsername(), batchProperties.getPassword());
 

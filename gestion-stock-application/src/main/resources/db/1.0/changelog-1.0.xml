@@ -20,4 +20,6 @@
 
     <include file="fix/bigger-varchar-for-columns.xml" relativeToChangelogFile="true"/>
 
+    <include file="batch/batch-create-tables.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

@@ -1,12 +1,12 @@
 package ch.glauser.gestionstock.fournisseur.controller;
 
+import ch.glauser.filters.automatic.AutomaticSearchField;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.categorie.controller.CategorieController;
 import ch.glauser.gestionstock.categorie.dto.CategorieDto;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.SearchWithInexistingIdExceptionPerform;
-import ch.glauser.gestionstock.common.pagination.Filter;
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.fournisseur.dto.FournisseurDto;
 import ch.glauser.gestionstock.identite.controller.PersonneMoraleController;
@@ -139,35 +139,35 @@ class FournisseurControllerTest {
         fournisseur3.setDescription("Description 2");
         assertDoesNotThrow(() -> fournisseurController.create(fournisseur3));
 
-        SearchRequest searchRequest = new SearchRequest();
+        AutomaticSearchQuery automaticSearchQuery = new AutomaticSearchQuery();
         
-        SearchResult<FournisseurDto> result = fournisseurController.search(searchRequest).getBody();
+        SearchResult<FournisseurDto> result = fournisseurController.search(automaticSearchQuery).getBody();
         assertThat(result).isNotNull();
         assertThat(result.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(3);
 
-        Filter description = new Filter();
+        AutomaticSearchField<String> description = new AutomaticSearchField<>();
         description.setValue("Description 2");
         description.setField("description");
-        description.setType(Filter.Type.STRING_LIKE);
-        SearchRequest searchRequest1 = new SearchRequest();
-        searchRequest1.setCombinators(List.of(FilterCombinator.and(List.of(description))));
-        SearchResult<FournisseurDto> result1 = fournisseurController.search(searchRequest1).getBody();
+        description.setType(AutomaticSearchField.Type.STRING_LIKE);
+        AutomaticSearchQuery automaticSearchQuery1 = new AutomaticSearchQuery();
+        automaticSearchQuery1.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(description))));
+        SearchResult<FournisseurDto> result1 = fournisseurController.search(automaticSearchQuery1).getBody();
         assertThat(result1).isNotNull();
         assertThat(result1.getElements())
                 .isNotNull()
                 .isNotEmpty()
                 .hasSize(1);
 
-        Filter nom = new Filter();
+        AutomaticSearchField<String> nom = new AutomaticSearchField<>();
         nom.setValue("fournisseur");
         nom.setField("identite.designation");
-        nom.setType(Filter.Type.STRING_LIKE);
-        SearchRequest searchRequest2 = new SearchRequest();
-        searchRequest2.setCombinators(List.of(FilterCombinator.and(List.of(nom))));
-        SearchResult<FournisseurDto> result2 = fournisseurController.search(searchRequest2).getBody();
+        nom.setType(AutomaticSearchField.Type.STRING_LIKE);
+        AutomaticSearchQuery automaticSearchQuery2 = new AutomaticSearchQuery();
+        automaticSearchQuery2.setCombinators(List.of(AutomaticSearchFieldCombinaison.and(List.of(nom))));
+        SearchResult<FournisseurDto> result2 = fournisseurController.search(automaticSearchQuery2).getBody();
         assertThat(result2).isNotNull();
         assertThat(result2.getElements())
                 .isNotNull()

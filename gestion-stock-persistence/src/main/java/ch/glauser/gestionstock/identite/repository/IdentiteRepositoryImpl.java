@@ -1,10 +1,11 @@
 package ch.glauser.gestionstock.identite.repository;
 
-import ch.glauser.gestionstock.common.pagination.PageUtils;
-import ch.glauser.gestionstock.common.pagination.SearchRequest;
+import ch.glauser.filters.automatic.AutomaticSearchQuery;
+import ch.glauser.filters.searchquery.utils.AutomatedSearchQueryUtils;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.identite.entity.IdentiteEntity;
 import ch.glauser.gestionstock.identite.model.Identite;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +16,10 @@ import java.util.stream.Collectors;
  * Implémentation du repository de gestion des identités
  */
 @Repository
+@RequiredArgsConstructor
 public class IdentiteRepositoryImpl implements IdentiteRepository {
 
     private final IdentiteJpaRepository identiteJpaRepository;
-
-    public IdentiteRepositoryImpl(IdentiteJpaRepository identiteJpaRepository) {
-        this.identiteJpaRepository = identiteJpaRepository;
-    }
 
     @Override
     public Set<Identite> findAllByDesignation(String designation) {
@@ -33,8 +31,8 @@ public class IdentiteRepositoryImpl implements IdentiteRepository {
     }
 
     @Override
-    public SearchResult<Identite> search(SearchRequest searchRequest) {
-        Page<IdentiteEntity> page = this.identiteJpaRepository.search(PageUtils.getFiltersCombinators(searchRequest), PageUtils.paginate(searchRequest));
+    public SearchResult<Identite> search(AutomaticSearchQuery automaticSearchQuery) {
+        Page<IdentiteEntity> page = this.identiteJpaRepository.search(AutomatedSearchQueryUtils.getFiltersCombinators(automaticSearchQuery), AutomatedSearchQueryUtils.paginate(automaticSearchQuery));
 
         SearchResult<Identite> searchResult = new SearchResult<>();
         searchResult.setCurrentPage(page.getNumber());

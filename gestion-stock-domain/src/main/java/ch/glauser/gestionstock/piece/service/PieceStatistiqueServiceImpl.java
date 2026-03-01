@@ -1,6 +1,6 @@
 package ch.glauser.gestionstock.piece.service;
 
-import ch.glauser.gestionstock.common.pagination.FilterCombinator;
+import ch.glauser.filters.automatic.AutomaticSearchFieldCombinaison;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.piece.model.PieceHistorique;
 import ch.glauser.gestionstock.piece.repository.PieceHistoriqueRepository;
@@ -23,7 +23,7 @@ public class PieceStatistiqueServiceImpl implements PieceStatistiqueService {
     private final PieceHistoriqueRepository pieceHistoriqueRepository;
 
     @Override
-    public List<PieceStatistique> getStatistiques(List<FilterCombinator> filters) {
+    public List<PieceStatistique> getStatistiques(List<AutomaticSearchFieldCombinaison> filters) {
         final Map<LocalDate, PieceStatistique> mapStatistiques = new HashMap<>();
 
         final List<Piece> pieces = this.pieceRepository.searchAll(filters);
