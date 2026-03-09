@@ -20,8 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = TestSecurityConfiguration.class)
@@ -202,12 +201,14 @@ class PaysControllerTest {
 
         paysController.delete(pays.getId());
 
-        final PaysDto finalPays1 = pays;
-        assertThatThrownBy(() -> paysController.get(finalPays1.getId()))
+        Long paysId = pays.getId();
+        assertThatException()
+                .isThrownBy(() -> paysController.get(paysId))
                 .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        assertThatThrownBy(() -> paysController.delete(1000L))
+        assertThatException()
+                .isThrownBy(() -> paysController.delete(1000L))
                 .isInstanceOf(DeleteWithInexistingIdException.class);
 
         PaysDto pays2 = new PaysDto();

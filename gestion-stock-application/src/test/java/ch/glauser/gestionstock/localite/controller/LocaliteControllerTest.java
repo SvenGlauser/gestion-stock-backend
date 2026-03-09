@@ -23,8 +23,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = TestSecurityConfiguration.class)
@@ -243,12 +242,14 @@ class LocaliteControllerTest {
 
         localiteController.delete(localite.getId());
 
-        LocaliteDto finalLocalite = localite;
-        assertThatThrownBy(() -> localiteController.get(finalLocalite.getId()))
+        Long localiteId = localite.getId();
+        assertThatException()
+                .isThrownBy(() -> localiteController.get(localiteId))
                 .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        assertThatThrownBy(() -> localiteController.delete(1000L))
+        assertThatException()
+                .isThrownBy(() -> localiteController.delete(1000L))
                 .isInstanceOf(DeleteWithInexistingIdException.class);
 
         LocaliteDto localite2 = new LocaliteDto();

@@ -31,8 +31,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = TestSecurityConfiguration.class)
@@ -320,12 +319,14 @@ class PieceControllerTest {
 
         pieceController.delete(piece.getId());
 
-        final PieceDto finalPiece1 = piece;
-        assertThatThrownBy(() -> pieceController.get(finalPiece1.getId()))
+        Long pieceId = piece.getId();
+        assertThatException()
+                .isThrownBy(() -> pieceController.get(pieceId))
                 .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        assertThatThrownBy(() -> pieceController.delete(1000L))
+        assertThatException()
+                .isThrownBy(() -> pieceController.delete(1000L))
                 .isInstanceOf(DeleteWithInexistingIdException.class);
 
         PieceDto piece2 = new PieceDto();
