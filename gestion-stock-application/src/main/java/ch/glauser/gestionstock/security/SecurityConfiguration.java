@@ -47,7 +47,7 @@ public class SecurityConfiguration {
     private final SecurityProperties securityProperties;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(configurer -> configurer.configurationSource(corsConfigurationSource()))
@@ -68,7 +68,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 
