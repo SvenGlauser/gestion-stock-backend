@@ -17,8 +17,11 @@ import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
 import ch.glauser.gestionstock.localite.service.LocaliteService;
 import ch.glauser.gestionstock.localite.service.LocaliteServiceImpl;
 import ch.glauser.gestionstock.machine.repository.MachineRepository;
+import ch.glauser.gestionstock.machine.repository.ServiceRepository;
 import ch.glauser.gestionstock.machine.service.MachineService;
 import ch.glauser.gestionstock.machine.service.MachineServiceImpl;
+import ch.glauser.gestionstock.machine.service.ServiceService;
+import ch.glauser.gestionstock.machine.service.ServiceServiceImpl;
 import ch.glauser.gestionstock.pays.repository.PaysRepository;
 import ch.glauser.gestionstock.pays.service.PaysService;
 import ch.glauser.gestionstock.pays.service.PaysServiceImpl;
@@ -102,5 +105,10 @@ public class ServiceBeansGenerator {
     @Bean
     public ThrownExceptionService thrownExceptionService(ThrownExceptionRepository thrownExceptionRepository) {
         return new ThrownExceptionServiceImpl(thrownExceptionRepository);
+    }
+
+    @Bean
+    public ServiceService serviceService(ServiceRepository serviceRepository) {
+        return new ServiceServiceImpl(serviceRepository);
     }
 }

@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class MachineDto extends ModelDto<Machine> {
 
     private String nom;
+    private String numeroChassis;
     private String description;
     private IdentiteDto proprietaire;
     private List<PieceDto> pieces;
@@ -29,6 +30,7 @@ public class MachineDto extends ModelDto<Machine> {
     public MachineDto(Machine machine) {
         super(machine);
         this.nom = machine.getNom();
+        this.numeroChassis = machine.getNumeroChassis();
         this.description = machine.getDescription();
         this.proprietaire = Optional.ofNullable(machine.getProprietaire()).map(IdentiteType::castToDto).orElse(null);
         this.pieces = CollectionUtils.emptyIfNull(machine.getPieces()).stream().map(PieceDto::new).collect(Collectors.toCollection(LinkedList::new));
@@ -38,6 +40,7 @@ public class MachineDto extends ModelDto<Machine> {
     protected Machine toDomainChild() {
         Machine machine = new Machine();
         machine.setNom(Optional.ofNullable(this.nom).map(StringUtils::trimToNull).orElse(null));
+        machine.setNumeroChassis(Optional.ofNullable(this.numeroChassis).map(StringUtils::trimToNull).orElse(null));
         machine.setDescription(Optional.ofNullable(this.description).map(StringUtils::trimToNull).orElse(null));
         machine.setProprietaire(Optional.ofNullable(proprietaire).map(ModelDto::toDomain).orElse(null));
         machine.setPieces(CollectionUtils.emptyIfNull(this.pieces).stream().map(ModelDto::toDomain).collect(Collectors.toCollection(LinkedList::new)));

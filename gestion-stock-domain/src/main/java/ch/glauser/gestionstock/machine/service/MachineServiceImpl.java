@@ -38,7 +38,7 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     public SearchResult<Machine> search(AutomaticSearchQuery automaticSearchQuery) {
-        Validation.of(CategorieServiceImpl.class)
+        Validation.of(MachineServiceImpl.class)
                 .validateNotNull(automaticSearchQuery, MachineConstantes.FIELD_SEARCH_REQUEST)
                 .execute();
 
