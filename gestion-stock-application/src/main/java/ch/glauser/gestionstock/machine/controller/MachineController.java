@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/machine", produces="application/json")
+@RequestMapping(path = "/api/v1/machine", produces="application/json")
 @RequiredArgsConstructor
 public class MachineController {
 

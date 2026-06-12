@@ -5,10 +5,14 @@ import ch.glauser.gestionstock.machine.model.Service;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -16,9 +20,10 @@ import java.util.Optional;
 public class ServiceDto extends ModelDto<Service> {
     private MachineDto machine;
     private LocalDate date;
-    private Double duree;
+    private BigDecimal duree;
     private String descriptionTravaux;
     private String divers;
+    private Set<ChangementPieceDto> changementPieces;
 
     public ServiceDto(Service service) {
         super(service);
@@ -27,6 +32,11 @@ public class ServiceDto extends ModelDto<Service> {
         this.duree = service.getDuree();
         this.descriptionTravaux = service.getDescriptionTravaux();
         this.divers = service.getDivers();
+        this.changementPieces = CollectionUtils
+                .emptyIfNull(service.getChangementsPieces())
+                .stream()
+                .map(ChangementPieceDto::new)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -37,6 +47,11 @@ public class ServiceDto extends ModelDto<Service> {
         service.setDuree(this.duree);
         service.setDescriptionTravaux(Optional.ofNullable(this.descriptionTravaux).map(StringUtils::trimToNull).orElse(null));
         service.setDivers(Optional.ofNullable(this.divers).map(StringUtils::trimToNull).orElse(null));
+        service.setChangementsPieces(CollectionUtils
+                .emptyIfNull(this.changementPieces)
+                .stream()
+                .map(ChangementPieceDto::toDomain)
+                .collect(Collectors.toSet()));
         return service;
     }
 }

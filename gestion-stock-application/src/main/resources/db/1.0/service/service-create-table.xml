@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="svenglauser" id="service-create-table">
+        <createTable tableName="SERVICE">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_SERVICE"/>
+            </column>
+
+            <column name="CREATION_DATE" type="DATETIME"/>
+            <column name="CREATION_USER" type="VARCHAR(255)"/>
+            <column name="MODIFICATION_DATE" type="DATETIME"/>
+            <column name="MODIFICATION_USER" type="VARCHAR(255)"/>
+
+            <column name="MACHINE_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="DUREE" type="DECIMAL"/>
+            <column name="DESCRIPTION_TRAVAUX" type="VARCHAR(4096)"/>
+            <column name="DIVERS" type="VARCHAR(4096)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="MACHINE_ID"
+                                 baseTableName="SERVICE"
+                                 constraintName="FK_SERVICE_MACHINE_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="MACHINE"/>
+    </changeSet>
+</databaseChangeLog>

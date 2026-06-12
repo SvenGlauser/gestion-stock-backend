@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/identite", produces="application/json")
+@RequestMapping(path = "/api/v1/identite", produces="application/json")
 @RequiredArgsConstructor
 public class IdentiteController {
 

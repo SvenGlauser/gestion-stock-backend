@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/localite", produces="application/json")
+@RequestMapping(path = "/api/v1/localite", produces="application/json")
 @RequiredArgsConstructor
 public class LocaliteController {
 

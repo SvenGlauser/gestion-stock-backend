@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/service", produces="application/json")
+@RequestMapping(path = "/api/v1/service", produces="application/json")
 @RequiredArgsConstructor
 public class ServiceController {
 
@@ -22,7 +22,7 @@ public class ServiceController {
         return ResponseEntity.ok(this.serviceApplicationService.get(id));
     }
 
-    @PostMapping(path = "/search/machine/{id}")
+    @GetMapping(path = "/search/machine/{id}")
     public ResponseEntity<List<ServiceDto>> search(@PathVariable(name = "id") Long idMachine) {
         return ResponseEntity.ok(this.serviceApplicationService.searchByMachine(idMachine));
     }

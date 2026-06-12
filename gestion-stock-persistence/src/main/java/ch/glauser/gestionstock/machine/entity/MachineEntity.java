@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Entity(name = "Machine")
 @Table(
-        name = "MACHINE",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"NOM", "PROPRIETAIRE_ID"})})
+    name = "MACHINE",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"NOM", "PROPRIETAIRE_ID"})})
 public class MachineEntity extends ModelEntity<Machine> {
     @Column(name = "NOM", nullable = false)
     private String nom;
@@ -67,7 +67,7 @@ public class MachineEntity extends ModelEntity<Machine> {
     protected Machine toDomainChild() {
         Machine machine = new Machine();
         machine.setNom(this.nom);
-        machine.setNumeroChassis(this.numero);
+        machine.setNumeroChassis(this.numeroChassis);
         machine.setDescription(this.description);
         machine.setProprietaire(Optional.ofNullable(this.proprietaire).map(ModelEntity::toDomain).orElse(null));
         machine.setPieces(CollectionUtils.emptyIfNull(this.pieces).stream().map(ModelEntity::toDomain).collect(Collectors.toCollection(LinkedList::new)));

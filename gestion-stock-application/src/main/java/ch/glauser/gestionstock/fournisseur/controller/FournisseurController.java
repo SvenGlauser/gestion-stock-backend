@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/fournisseur", produces="application/json")
+@RequestMapping(path = "/api/v1/fournisseur", produces="application/json")
 @RequiredArgsConstructor
 public class FournisseurController {
 
