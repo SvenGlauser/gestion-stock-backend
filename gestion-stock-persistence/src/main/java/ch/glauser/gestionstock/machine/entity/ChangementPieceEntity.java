@@ -22,12 +22,16 @@ public class ChangementPieceEntity extends ModelEntity<ChangementPiece> {
     @JoinColumn(name="PIECE_ID", nullable = false)
     private PieceEntity piece;
 
+    @Column(name="QUANTITE", nullable = false)
+    private Integer quantite;
+
     @Column(name = "DESCRIPTION", nullable = true)
     private String description;
 
     public ChangementPieceEntity(ChangementPiece changementPiece) {
         super(changementPiece);
         this.piece = Optional.ofNullable(changementPiece.getPiece()).map(PieceEntity::new).orElse(null);
+        this.quantite = changementPiece.getQuantite();
         this.description = changementPiece.getDescription();
     }
 
@@ -35,6 +39,7 @@ public class ChangementPieceEntity extends ModelEntity<ChangementPiece> {
     protected ChangementPiece toDomainChild() {
         ChangementPiece changementPiece = new ChangementPiece();
         changementPiece.setPiece(Optional.ofNullable(this.piece).map(PieceEntity::toDomain).orElse(null));
+        changementPiece.setQuantite(this.quantite);
         changementPiece.setDescription(this.description);
         return changementPiece;
     }

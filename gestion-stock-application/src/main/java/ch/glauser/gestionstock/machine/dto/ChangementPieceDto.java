@@ -18,11 +18,13 @@ import java.util.Optional;
 @NoArgsConstructor
 public class ChangementPieceDto extends ModelDto<ChangementPiece> {
     private PieceDto piece;
+    private Integer quantite;
     private String description;
 
     public ChangementPieceDto(ChangementPiece changementPiece) {
         super(changementPiece);
         this.piece = Optional.ofNullable(changementPiece.getPiece()).map(PieceDto::new).orElse(null);
+        this.quantite = changementPiece.getQuantite();
         this.description = changementPiece.getDescription();
     }
 
@@ -30,6 +32,7 @@ public class ChangementPieceDto extends ModelDto<ChangementPiece> {
     protected ChangementPiece toDomainChild() {
         ChangementPiece changementPiece = new ChangementPiece();
         changementPiece.setPiece(Optional.ofNullable(this.piece).map(PieceDto::toDomain).orElse(null));
+        changementPiece.setQuantite(this.quantite);
         changementPiece.setDescription(Optional.ofNullable(this.description).map(StringUtils::trimToNull).orElse(null));
         return changementPiece;
     }

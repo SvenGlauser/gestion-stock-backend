@@ -24,9 +24,11 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="DESCRIPTION" type="VARCHAR(4096)">
+            <column name="QUANTITE" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="DESCRIPTION" type="VARCHAR(4096)" />
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="SERVICE_ID"
