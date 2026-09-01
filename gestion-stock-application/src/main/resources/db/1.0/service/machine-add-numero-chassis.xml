@@ -9,5 +9,11 @@
         <addColumn tableName="MACHINE">
             <column name="NUMERO_CHASSIS" type="VARCHAR(256)" />
         </addColumn>
+        
+        <sql>
+            UPDATE machine
+            SET numero_chassis = SUBSTRING(description FROM 'N° (?:|d |de )chassis[ :]\s*((?:(?!Année|[,;.]).)*)')
+            WHERE description LIKE '%chassis%';
+        </sql>
     </changeSet>
 </databaseChangeLog>

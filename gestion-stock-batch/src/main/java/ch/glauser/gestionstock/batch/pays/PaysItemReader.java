@@ -10,6 +10,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Reader permettant de lire les pays depuis l'API externe fournit par <a href="https://restcountries.com">https://restcountries.com</a>
+ *
+ * @deprecated Cette API n'est désormais plus disponible en lecture sans clé API, le code ci-dessous n'est donc plus utilisable
+ */
+@Deprecated(forRemoval = true)
 @Component("paysItemReader")
 public class PaysItemReader implements ItemReader<Object> {
 
