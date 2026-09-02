@@ -13,6 +13,7 @@ import ch.glauser.validation.common.Validation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -59,7 +60,7 @@ public class ServiceServiceImpl implements ServiceService {
                 .validateNotNull(service, ServiceConstantes.FIELD_SERVICE)
                 .execute();
 
-        service.validateCreate();
+        service.validateCreate().execute();
 
         return this.serviceRepository.create(service);
     }
@@ -78,7 +79,7 @@ public class ServiceServiceImpl implements ServiceService {
 
         Long idMachine = Optional.ofNullable(service.getMachine()).map(Model::getId).orElse(null);
 
-        if (Objects.equals(idMachine, oldService.getMachine().getId())) {
+        if (!Objects.equals(idMachine, oldService.getMachine().getId())) {
             validation.addError(ServiceConstantes.ERROR_IMPOSSIBLE_CHANGER_MACHINE_SERVICE, ServiceConstantes.FIELD_MACHINE);
         }
 
