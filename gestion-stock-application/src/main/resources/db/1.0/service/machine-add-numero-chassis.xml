@@ -9,7 +9,12 @@
         <addColumn tableName="MACHINE">
             <column name="NUMERO_CHASSIS" type="VARCHAR(256)" />
         </addColumn>
-        
+    </changeSet>
+
+    <changeSet author="svenglauser" id="machine-add-numero-chassis-populate-numero-chassis">
+        <preConditions onFail="CONTINUE">
+            <dbms type="postgresql" />
+        </preConditions>
         <sql>
             UPDATE machine
             SET numero_chassis = SUBSTRING(description FROM 'N° (?:|d |de )chassis[ :]\s*((?:(?!Année|[,;.]).)*)')
