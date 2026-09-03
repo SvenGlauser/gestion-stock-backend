@@ -1,16 +1,11 @@
 package ch.glauser.gestionstock.batch.pays.batch;
 
-import ch.glauser.gestionstock.batch.pays.client.PaysClient;
 import ch.glauser.gestionstock.batch.pays.model.PaysApiDto;
 import ch.glauser.gestionstock.pays.model.Pays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

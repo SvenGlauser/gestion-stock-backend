@@ -1,12 +1,8 @@
 package ch.glauser.gestionstock.machine.model;
 
-import ch.glauser.gestionstock.identite.model.PersonnePhysique;
 import ch.glauser.gestionstock.piece.model.Piece;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 

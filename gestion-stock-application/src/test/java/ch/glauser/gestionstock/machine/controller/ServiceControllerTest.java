@@ -11,7 +11,6 @@ import ch.glauser.gestionstock.identite.dto.PersonnePhysiqueDto;
 import ch.glauser.gestionstock.identite.model.Titre;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.machine.dto.ServiceDto;
-import ch.glauser.gestionstock.machine.model.Service;
 import ch.glauser.gestionstock.utils.TestSecurityConfiguration;
 import ch.glauser.gestionstock.utils.TestUtils;
 import org.junit.jupiter.api.Test;

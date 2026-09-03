@@ -31,13 +31,13 @@ public class LocaliteItemReader implements ItemReader<LocaliteApiDto> {
                 boolean lastPageEmpty = false;
 
                 while (!lastPageEmpty) {
-                    List<LocaliteApiDto> localites = this.localiteClient.getLocalites(
+                    List<LocaliteApiDto> localitesPage = this.localiteClient.getLocalites(
                             canton.getKey(),
                             page++,
                             50);
 
-                    if (CollectionUtils.isNotEmpty(localites)) {
-                        this.localites.addAll(localites);
+                    if (CollectionUtils.isNotEmpty(localitesPage)) {
+                        this.localites.addAll(localitesPage);
                     } else {
                         lastPageEmpty = true;
                     }

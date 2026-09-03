@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LocaliteItemReaderTest {
@@ -73,13 +72,13 @@ class LocaliteItemReaderTest {
             zurich100.add(zurich);
         }
 
-        Mockito.when(localiteClient.getCantons()).thenReturn(List.of(cantonBern, cantonZurich));
-        Mockito.when(localiteClient.getLocalites(1, 1, 50)).thenReturn(List.of(bern, sonceboz));
-        Mockito.when(localiteClient.getLocalites(1, 2, 50)).thenReturn(null);
-        Mockito.when(localiteClient.getLocalites(2, 1, 50)).thenReturn(zurich0a49);
-        Mockito.when(localiteClient.getLocalites(2, 2, 50)).thenReturn(zurich50a99);
-        Mockito.when(localiteClient.getLocalites(2, 3, 50)).thenReturn(zurich100);
-        Mockito.when(localiteClient.getLocalites(2, 4, 50)).thenReturn(List.of());
+        when(localiteClient.getCantons()).thenReturn(List.of(cantonBern, cantonZurich));
+        when(localiteClient.getLocalites(1, 1, 50)).thenReturn(List.of(bern, sonceboz));
+        when(localiteClient.getLocalites(1, 2, 50)).thenReturn(null);
+        when(localiteClient.getLocalites(2, 1, 50)).thenReturn(zurich0a49);
+        when(localiteClient.getLocalites(2, 2, 50)).thenReturn(zurich50a99);
+        when(localiteClient.getLocalites(2, 3, 50)).thenReturn(zurich100);
+        when(localiteClient.getLocalites(2, 4, 50)).thenReturn(List.of());
 
         List<LocaliteApiDto> localites = new LinkedList<>();
 
