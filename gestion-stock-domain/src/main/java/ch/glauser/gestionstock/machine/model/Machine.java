@@ -25,7 +25,6 @@ public class Machine extends Model {
     @MaxLength(4096)
     private String description;
 
-    // TODO SVG : Impossible de le mettre non null maintenant donc il faudra le faire dans le futur
     @MaxLength(255)
     private String numeroChassis;
 
