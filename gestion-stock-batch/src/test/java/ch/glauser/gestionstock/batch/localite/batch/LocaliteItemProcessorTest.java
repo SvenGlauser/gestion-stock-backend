@@ -28,7 +28,8 @@ class LocaliteItemProcessorTest {
     void process() {
         when(paysService.getByAbreviation("CH")).thenReturn(null);
 
-        assertThatThrownBy(() -> localiteItemProcessor.process(new LocaliteApiDto())).isInstanceOf(TechnicalException.class);
+        LocaliteApiDto localiteVide = new LocaliteApiDto();
+        assertThatThrownBy(() -> localiteItemProcessor.process(localiteVide)).isInstanceOf(TechnicalException.class);
 
         Pays suisse = new Pays();
         suisse.setAbreviation("CH");
