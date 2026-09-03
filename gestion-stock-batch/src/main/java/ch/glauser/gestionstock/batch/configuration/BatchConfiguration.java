@@ -1,5 +1,7 @@
 package ch.glauser.gestionstock.batch.configuration;
 
+import ch.glauser.gestionstock.batch.localite.model.LocaliteApiDto;
+import ch.glauser.gestionstock.batch.pays.model.PaysApiDto;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.pays.model.Pays;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -37,11 +39,11 @@ public class BatchConfiguration {
     @Bean("stepPays")
     public Step stepPays(JobRepository jobRepository,
                          PlatformTransactionManager transactionManager,
-                         @Qualifier("paysItemReader") ItemReader<Object> reader,
-                         @Qualifier("paysItemProcessor") ItemProcessor<Object, Pays> processor,
+                         @Qualifier("paysItemReader") ItemReader<PaysApiDto> reader,
+                         @Qualifier("paysItemProcessor") ItemProcessor<PaysApiDto, Pays> processor,
                          @Qualifier("paysItemWriter") ItemWriter<Pays> writer) {
         return new StepBuilder("step-pays", jobRepository)
-                .<Object, Pays>chunk(10)
+                .<PaysApiDto, Pays>chunk(10)
                 .transactionManager(transactionManager)
                 .reader(reader)
                 .processor(processor)
@@ -52,11 +54,11 @@ public class BatchConfiguration {
     @Bean("stepLocaliteCH")
     public Step stepLocaliteCH(JobRepository jobRepository,
                          PlatformTransactionManager transactionManager,
-                         @Qualifier("localiteItemReader") ItemReader<Object> reader,
-                         @Qualifier("localiteItemProcessor") ItemProcessor<Object, Localite> processor,
+                         @Qualifier("localiteItemReader") ItemReader<LocaliteApiDto> reader,
+                         @Qualifier("localiteItemProcessor") ItemProcessor<LocaliteApiDto, Localite> processor,
                          @Qualifier("localiteItemWriter") ItemWriter<Localite> writer) {
         return new StepBuilder("step-localite-CH", jobRepository)
-                .<Object, Localite>chunk(10)
+                .<LocaliteApiDto, Localite>chunk(10)
                 .transactionManager(transactionManager)
                 .reader(reader)
                 .processor(processor)

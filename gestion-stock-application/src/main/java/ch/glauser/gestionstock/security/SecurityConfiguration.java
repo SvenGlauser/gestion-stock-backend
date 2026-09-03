@@ -44,6 +44,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private static final String API_V1_ROUTE = "/api/v1/**";
+    private static final String ACTUATOR_ROUTE = "/actuator/**";
+
     private final BatchProperties batchProperties;
     private final SecurityProperties securityProperties;
 
@@ -53,13 +56,13 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(configurer -> configurer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, ACTUATOR_ROUTE).permitAll()
                         //
-                        .requestMatchers(HttpMethod.GET, "/api/v1/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").authenticated()
-                        .requestMatchers(HttpMethod.OPTIONS, "/api/v1/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.POST, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.PUT, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.DELETE, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.OPTIONS, API_V1_ROUTE).authenticated()
                         //
                         .anyRequest().denyAll())
                 .oauth2ResourceServer(ressourceServer -> ressourceServer

@@ -1,7 +1,6 @@
 package ch.glauser.gestionstock.machine.service;
 
 import ch.glauser.filters.automatic.AutomaticSearchQuery;
-import ch.glauser.gestionstock.categorie.service.CategorieServiceImpl;
 import ch.glauser.gestionstock.common.exception.id.DeleteWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.ModifyWithInexistingIdException;
 import ch.glauser.gestionstock.common.exception.id.PerformActionWithInexistingIdFunction;

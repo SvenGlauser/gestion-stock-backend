@@ -24,7 +24,8 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = TestSecurityConfiguration.class)

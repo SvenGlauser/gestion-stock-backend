@@ -2,14 +2,12 @@ package ch.glauser.gestionstock.machine.entity;
 
 import ch.glauser.gestionstock.common.entity.ModelEntity;
 import ch.glauser.gestionstock.machine.model.ChangementPiece;
-import ch.glauser.gestionstock.machine.model.Service;
 import ch.glauser.gestionstock.piece.entity.PieceEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Getter

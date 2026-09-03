@@ -2,7 +2,6 @@ package ch.glauser.gestionstock.machine.repository;
 
 import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
-import ch.glauser.gestionstock.machine.model.Machine;
 import ch.glauser.gestionstock.machine.model.Service;
 
 import java.util.List;

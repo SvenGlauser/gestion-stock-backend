@@ -4,7 +4,6 @@ import ch.glauser.filters.automatic.AutomaticSearchQuery;
 import ch.glauser.gestionstock.common.pagination.SearchResult;
 import ch.glauser.gestionstock.machine.dto.MachineDto;
 import ch.glauser.gestionstock.machine.service.MachineApplicationService;
-import ch.glauser.gestionstock.machine.service.ServiceApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

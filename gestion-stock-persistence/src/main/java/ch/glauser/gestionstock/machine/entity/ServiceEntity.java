@@ -1,7 +1,6 @@
 package ch.glauser.gestionstock.machine.entity;
 
 import ch.glauser.gestionstock.common.entity.ModelEntity;
-import ch.glauser.gestionstock.machine.model.ChangementPiece;
 import ch.glauser.gestionstock.machine.model.Service;
 import jakarta.persistence.*;
 import lombok.Getter;

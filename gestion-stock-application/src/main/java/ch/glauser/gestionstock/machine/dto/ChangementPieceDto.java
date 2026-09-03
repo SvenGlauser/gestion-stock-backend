@@ -2,15 +2,12 @@ package ch.glauser.gestionstock.machine.dto;
 
 import ch.glauser.gestionstock.common.dto.ModelDto;
 import ch.glauser.gestionstock.machine.model.ChangementPiece;
-import ch.glauser.gestionstock.machine.model.Service;
 import ch.glauser.gestionstock.piece.dto.PieceDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Getter

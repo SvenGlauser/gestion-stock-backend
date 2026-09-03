@@ -1,4 +1,4 @@
-package ch.glauser.gestionstock.batch.localite;
+package ch.glauser.gestionstock.batch.localite.batch;
 
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.localite.repository.LocaliteRepository;
