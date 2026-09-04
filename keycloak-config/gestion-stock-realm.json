@@ -362,6 +362,29 @@
         "clientRole": false,
         "containerId": "c72ce2d1-5907-435f-85de-9cd71c2028b2",
         "attributes": {}
+      },
+      {
+        "id": "01a06d9a-2a0f-7001-abee-af33decbe0d9",
+        "name": "R_SERVICE_LECTEUR",
+        "description": "",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "c72ce2d1-5907-435f-85de-9cd71c2028b2",
+        "attributes": {}
+      },
+      {
+        "id": "01a06d9a-5770-74d5-9e30-1c9a771af147",
+        "name": "R_SERVICE_EDITEUR",
+        "description": "",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "R_SERVICE_LECTEUR"
+          ]
+        },
+        "clientRole": false,
+        "containerId": "c72ce2d1-5907-435f-85de-9cd71c2028b2",
+        "attributes": {}
       }
     ],
     "client": {
@@ -703,6 +726,7 @@
         "R_EXCEPTION_EDITEUR",
         "R_FOURNISSEUR_EDITEUR",
         "R_MACHINE_EDITEUR",
+        "R_SERVICE_EDITEUR",
         "R_TECHNIQUE_EDITEUR"
       ],
       "clientRoles": {}
@@ -726,7 +750,8 @@
         "R_PIECE_LECTEUR",
         "R_PAYS_EDITEUR",
         "R_FOURNISSEUR_EDITEUR",
-        "R_MACHINE_EDITEUR"
+        "R_MACHINE_EDITEUR",
+        "R_SERVICE_EDITEUR"
       ],
       "clientRoles": {}
     }
