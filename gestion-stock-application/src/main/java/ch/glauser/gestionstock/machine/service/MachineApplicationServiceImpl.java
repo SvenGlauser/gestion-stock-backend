@@ -20,7 +20,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MachineApplicatifServiceImpl implements MachineApplicatifService {
+public class MachineApplicationServiceImpl implements MachineApplicationService {
 
     public static final String FIELD_MACHINE = "machine";
     public static final String FIELD_ID = "id";
@@ -31,7 +31,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     @Override
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_LECTEUR.name())")
     public MachineDto get(Long id) {
-        Validation.of(MachineApplicatifServiceImpl.class)
+        Validation.of(MachineApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 
@@ -56,7 +56,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     @Transactional
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_EDITEUR.name())")
     public MachineDto create(MachineDto machine) {
-        Validation.of(MachineApplicatifServiceImpl.class)
+        Validation.of(MachineApplicationServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
                 .execute();
 
@@ -71,7 +71,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     @Transactional
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_EDITEUR.name())")
     public MachineDto modify(MachineDto machine) {
-        Validation.of(MachineApplicatifServiceImpl.class)
+        Validation.of(MachineApplicationServiceImpl.class)
                 .validateNotNull(machine, FIELD_MACHINE)
                 .execute();
 
@@ -86,7 +86,7 @@ public class MachineApplicatifServiceImpl implements MachineApplicatifService {
     @Transactional
     @PreAuthorize("hasRole(T(ch.glauser.gestionstock.security.SecurityRoles).MACHINE_EDITEUR.name())")
     public void delete(Long id) {
-        Validation.of(MachineApplicatifServiceImpl.class)
+        Validation.of(MachineApplicationServiceImpl.class)
                 .validateNotNull(id, FIELD_ID)
                 .execute();
 

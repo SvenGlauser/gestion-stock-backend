@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -43,15 +44,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private static final String API_V1_ROUTE = "/api/v1/**";
+    private static final String ACTUATOR_ROUTE = "/actuator/**";
+
     private final BatchProperties batchProperties;
     private final SecurityProperties securityProperties;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(configurer -> configurer.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, ACTUATOR_ROUTE).permitAll()
+                        //
+                        .requestMatchers(HttpMethod.GET, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.POST, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.PUT, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.DELETE, API_V1_ROUTE).authenticated()
+                        .requestMatchers(HttpMethod.OPTIONS, API_V1_ROUTE).authenticated()
+                        //
+                        .anyRequest().denyAll())
                 .oauth2ResourceServer(ressourceServer -> ressourceServer
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
         return httpSecurity.build();
@@ -68,7 +81,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
         return config.getAuthenticationManager();
     }
 

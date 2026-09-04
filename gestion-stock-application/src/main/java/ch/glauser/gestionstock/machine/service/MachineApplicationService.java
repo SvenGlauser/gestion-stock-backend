@@ -7,7 +7,7 @@ import ch.glauser.gestionstock.machine.dto.MachineDto;
 /**
  * Service applicatif de gestion des machines
  */
-public interface MachineApplicatifService {
+public interface MachineApplicationService {
     /**
      * Récupère une machine
      *

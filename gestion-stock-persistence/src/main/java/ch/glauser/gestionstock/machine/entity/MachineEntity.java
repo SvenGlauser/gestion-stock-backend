@@ -25,14 +25,16 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Entity(name = "Machine")
 @Table(
-        name = "MACHINE",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"NOM", "PROPRIETAIRE_ID"})})
+    name = "MACHINE",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"NOM", "PROPRIETAIRE_ID"})})
 public class MachineEntity extends ModelEntity<Machine> {
     @Column(name = "NOM", nullable = false)
     private String nom;
     @Column(name = "DESCRIPTION")
     private String description;
+    @Column(name = "NUMERO_CHASSIS")
+    private String numeroChassis;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "PROPRIETAIRE_ID", nullable = false)
@@ -48,6 +50,7 @@ public class MachineEntity extends ModelEntity<Machine> {
     public MachineEntity(Machine machine) {
         super(machine);
         this.nom = machine.getNom();
+        this.numeroChassis = machine.getNumeroChassis();
         this.description = machine.getDescription();
         this.proprietaire = Optional
                 .ofNullable(machine.getProprietaire())
@@ -64,6 +67,7 @@ public class MachineEntity extends ModelEntity<Machine> {
     protected Machine toDomainChild() {
         Machine machine = new Machine();
         machine.setNom(this.nom);
+        machine.setNumeroChassis(this.numeroChassis);
         machine.setDescription(this.description);
         machine.setProprietaire(Optional.ofNullable(this.proprietaire).map(ModelEntity::toDomain).orElse(null));
         machine.setPieces(CollectionUtils.emptyIfNull(this.pieces).stream().map(ModelEntity::toDomain).collect(Collectors.toCollection(LinkedList::new)));

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping(path = "/technique", produces="application/json")
+@RequestMapping(path = "/api/v1/technique", produces="application/json")
 @RequiredArgsConstructor
 public class TechniqueController {
 

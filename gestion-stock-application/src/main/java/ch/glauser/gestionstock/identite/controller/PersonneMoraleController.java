@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/identite/morale", produces="application/json")
+@RequestMapping(path = "/api/v1/identite/morale", produces="application/json")
 @RequiredArgsConstructor
 public class PersonneMoraleController {
 

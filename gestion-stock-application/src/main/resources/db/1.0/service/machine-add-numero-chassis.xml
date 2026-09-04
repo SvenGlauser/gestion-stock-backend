@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="svenglauser" id="machine-add-numero-chassis">
+        <addColumn tableName="MACHINE">
+            <column name="NUMERO_CHASSIS" type="VARCHAR(256)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="svenglauser" id="machine-add-numero-chassis-populate-numero-chassis">
+        <preConditions onFail="CONTINUE">
+            <dbms type="postgresql" />
+        </preConditions>
+        <sql>
+            UPDATE machine
+            SET numero_chassis = SUBSTRING(description FROM 'N° (?:|d |de )chassis[ :]\s*((?:(?!Année|[,;.]).)*)')
+            WHERE description LIKE '%chassis%';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

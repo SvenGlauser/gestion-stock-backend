@@ -1,31 +1,30 @@
-package ch.glauser.gestionstock.batch.localite;
+package ch.glauser.gestionstock.batch.localite.batch;
 
+import ch.glauser.gestionstock.batch.localite.model.LocaliteApiDto;
 import ch.glauser.gestionstock.localite.model.Localite;
 import ch.glauser.gestionstock.pays.model.Pays;
 import ch.glauser.gestionstock.pays.service.PaysService;
 import ch.glauser.utilities.exception.TechnicalException;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.Objects;
 
 @Component("localiteItemProcessor")
 @RequiredArgsConstructor
-public class LocaliteItemProcessor implements ItemProcessor<Object, Localite> {
+public class LocaliteItemProcessor implements ItemProcessor<LocaliteApiDto, Localite> {
 
     private static final String ABREVIATION_SUISSE = "CH";
     private static final String ERROR_IMPORT_LOCALITE_PAYS_SUISSE_INTROUVABLE = "Impossible de récupérer le pays : Suisse";
-    private static final String MAP_LOCALITE_NAME = "name";
-    private static final String MAP_LOCALITE_POSTAL_CODE = "postalCode";
 
     private final PaysService paysService;
 
     private Pays suisse;
 
     @Override
-    public Localite process(Object item) {
+    public Localite process(@NonNull LocaliteApiDto item) {
         if (Objects.isNull(this.suisse)) {
             this.suisse = this.paysService.getByAbreviation(ABREVIATION_SUISSE);
 
@@ -34,15 +33,11 @@ public class LocaliteItemProcessor implements ItemProcessor<Object, Localite> {
             }
         }
 
-        if (item instanceof Map<?,?> mapItem) {
-            Localite localite = new Localite();
-            localite.setNom(mapItem.get(MAP_LOCALITE_NAME).toString());
-            localite.setNpa(mapItem.get(MAP_LOCALITE_POSTAL_CODE).toString());
-            localite.setPays(this.suisse);
+        Localite localite = new Localite();
+        localite.setNom(item.getName());
+        localite.setNpa(item.getPostalCode());
+        localite.setPays(this.suisse);
 
-            return localite;
-        }
-
-        return null;
+        return localite;
     }
 }

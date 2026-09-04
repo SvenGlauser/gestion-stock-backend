@@ -25,6 +25,9 @@ public class Machine extends Model {
     @MaxLength(4096)
     private String description;
 
+    @MaxLength(255)
+    private String numeroChassis;
+
     @NotNull
     private Identite proprietaire;
 

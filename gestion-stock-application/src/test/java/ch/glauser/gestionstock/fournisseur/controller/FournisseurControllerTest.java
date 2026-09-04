@@ -25,7 +25,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = TestSecurityConfiguration.class)
@@ -243,12 +243,14 @@ class FournisseurControllerTest {
 
         fournisseurController.delete(fournisseur.getId());
 
-        FournisseurDto finalFournisseur1 = fournisseur;
-        assertThatThrownBy(() -> fournisseurController.get(finalFournisseur1.getId()))
+        Long fournisseurId = fournisseur.getId();
+        assertThatException()
+                .isThrownBy(() -> fournisseurController.get(fournisseurId))
                 .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        assertThatThrownBy(() -> fournisseurController.delete(1000L))
+        assertThatException()
+                .isThrownBy(() -> fournisseurController.delete(1000L))
                 .isInstanceOf(DeleteWithInexistingIdException.class);
 
         FournisseurDto fournisseur2 = new FournisseurDto();

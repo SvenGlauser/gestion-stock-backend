@@ -22,4 +22,8 @@
 
     <include file="batch/batch-create-tables.xml" relativeToChangelogFile="true"/>
 
+    <include file="service/machine-add-numero-chassis.xml" relativeToChangelogFile="true"/>
+    <include file="service/service-create-table.xml" relativeToChangelogFile="true"/>
+    <include file="service/changement-piece-create-table.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

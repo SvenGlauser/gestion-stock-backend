@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/piece", produces="application/json")
+@RequestMapping(path = "/api/v1/piece", produces="application/json")
 @RequiredArgsConstructor
 public class PieceController {
 

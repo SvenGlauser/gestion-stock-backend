@@ -20,7 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatException;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(classes = TestSecurityConfiguration.class)
@@ -169,12 +169,14 @@ class PersonnePhysiqueControllerTest {
 
         personnePhysiqueController.delete(contact.getId());
 
-        PersonnePhysiqueDto finalContact = contact;
-        assertThatThrownBy(() -> personnePhysiqueController.get(finalContact.getId()))
+        Long contactId = contact.getId();
+        assertThatException()
+                .isThrownBy(() -> personnePhysiqueController.get(contactId))
                 .isInstanceOf(SearchWithInexistingIdExceptionPerform.class);
 
         // Suppression inexistant
-        assertThatThrownBy(() -> personnePhysiqueController.delete(1000L))
+        assertThatException()
+                .isThrownBy(() -> personnePhysiqueController.delete(1000L))
                 .isInstanceOf(DeleteWithInexistingIdException.class);
     }
 }
