@@ -13,4 +13,6 @@ ARG VERSION
 
 COPY --from=build /gestion-stock/gestion-stock-application/target/gestion-stock-application-${VERSION}.jar /gestion-stock-application.jar
 
+RUN apt-get update && apt-get install -y curl
+
 ENTRYPOINT ["java","-jar","/gestion-stock-application.jar"]
