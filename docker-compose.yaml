@@ -1,6 +1,6 @@
 services:
   backend:
-    image: 'gestion-stock-backend:1.0-SNAPSHOT'
+    image: 'ghcr.io/svenglauser/gestion-stock-backend:latest'
     build:
       context: .
       args:
@@ -30,7 +30,7 @@ services:
     restart: always
 
   frontend:
-    image: 'gestion-stock-frontend:1.0-SNAPSHOT'
+    image: 'ghcr.io/svenglauser/gestion-stock-frontend:latest'
     build:
       context: ../gestion-stock-frontend
     container_name: gestion-stock-frontend
@@ -51,7 +51,7 @@ services:
     restart: always
 
   database:
-    image: 'gestion-stock-postgres:1.0-SNAPSHOT'
+    image: 'ghcr.io/svenglauser/gestion-stock-database:latest'
     build:
       context: .
       dockerfile: db.Dockerfile
@@ -79,7 +79,7 @@ services:
 
   # https://stackoverflow.com/questions/79816427/keycloak-frontend-backend-network-configuraion-in-docker-compose-for-localhost
   keycloak:
-    image: 'quay.io/keycloak/keycloak:26.4.2'
+    image: 'quay.io/keycloak/keycloak:26.4.7'
     container_name: gestion-stock-keycloak
     networks:
       gestion-stock-network:
